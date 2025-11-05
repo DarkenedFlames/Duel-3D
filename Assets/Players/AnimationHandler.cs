@@ -20,6 +20,4 @@ public class AnimationHandler : MonoBehaviour
     public void TriggerAttack(string triggerName) => animator.SetTrigger(triggerName);
 
     public void TriggerAbility(string triggerName) => animator.SetTrigger(triggerName);
-    
-
 }
