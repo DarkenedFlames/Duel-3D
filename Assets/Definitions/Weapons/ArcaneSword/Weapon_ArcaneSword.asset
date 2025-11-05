@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b5f16a09cbce194cb5d76134680edd6, type: 3}
+  m_Name: Weapon_ArcaneSword
+  m_EditorClassIdentifier: Assembly-CSharp::WeaponDefinition
+  weaponPrefab: {fileID: 3970288745387636526, guid: 54c998da6b469904fbf848905ce5bfef, type: 3}
+  weaponName: Arcane Sword
+  behaviors:
+  - {fileID: 11400000, guid: c9e3d3ba66738e74ca569220e7269a36, type: 2}
+  - {fileID: 11400000, guid: 1c44a7bda5973ca42a9bbe6a6d4704b6, type: 2}
+  - {fileID: 11400000, guid: a0d952144b104024581fa9aa6927e7a4, type: 2}
+  - {fileID: 11400000, guid: b0cf1ebb6ada6e3449830250fc3d56f0, type: 2}
+  - {fileID: 11400000, guid: bd13362dbad862f44b4aa0cc8e0ca626, type: 2}
