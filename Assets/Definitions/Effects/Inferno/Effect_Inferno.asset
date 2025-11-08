@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Effect_Inferno
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Inferno
+  stackingType: 2
+  expireType: 1
+  maxStacks: 3
+  duration: 5
   behaviors:
   - {fileID: 11400000, guid: 90d32a7c7b2eb2345ad9bc81da078c59, type: 2}
-  - {fileID: 11400000, guid: 09f155630cee41547b435a55aafe5373, type: 2}

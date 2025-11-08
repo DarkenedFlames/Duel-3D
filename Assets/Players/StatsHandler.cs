@@ -1,82 +1,124 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+
+public enum StatType
+{
+    Health,
+    MaxHealth,
+    Stamina,
+    MaxStamina,
+    Mana,
+    MaxMana,
+    Speed
+}
 
 public class StatsHandler : MonoBehaviour
 {
     [Header("Sliders")]
     [Tooltip("Do not add for AI players")]
-    [SerializeField] private ResourceBarUI healthBarUI;
-    [Tooltip("Do not add for AI players")]
-    [SerializeField] private ResourceBarUI staminaBarUI;
-    [Tooltip("Do not add for AI players")]
-    [SerializeField] private ResourceBarUI manaBarUI;
+    [SerializeField] ResourceBarUI healthBarUI;
 
-    [Header("Max Stats")]
-    public float maxHealth = 100f;
-    public float maxStamina = 100f;
-    public float maxMana = 100f;
+    [Tooltip("Do not add for AI players")]
+    [SerializeField] ResourceBarUI staminaBarUI;
 
-    [NonSerialized] public float health;
-    [NonSerialized] public float stamina;
-    [NonSerialized] public float mana;
+    [Tooltip("Do not add for AI players")]
+    [SerializeField] ResourceBarUI manaBarUI;
+
+    readonly Dictionary<StatType, float> _values = new();
 
     void Awake()
     {
-        RefillHealth();
-        RefillStamina();
-        RefillMana();
-        ClampStats();
+        // Initialize all stats to 100 by default
+        foreach (StatType stat in Enum.GetValues(typeof(StatType)))
+            _values[stat] = 100f;
+
+        // Ensure current values match their max
+        RefillStat(StatType.Health, StatType.MaxHealth);
+        RefillStat(StatType.Stamina, StatType.MaxStamina);
+        RefillStat(StatType.Mana, StatType.MaxMana);
     }
 
-    // Update is called once per frame
     void Update()
     {
-        ClampStats();
-        if (health <= 0) Die();
+        // Clamp current stats to their max limits
+        ClampStat(StatType.Health, StatType.MaxHealth);
+        ClampStat(StatType.Stamina, StatType.MaxStamina);
+        ClampStat(StatType.Mana, StatType.MaxMana);
+
+        // Check death
+        if (_values[StatType.Health] <= 0f)
+            Die();
+
         UpdateUI();
     }
 
-    public void ClampStats()
+    public bool TryGetStat(StatType type, out float val) =>
+        _values.TryGetValue(type, out val);
+    
+
+    public bool TrySetStat(StatType type, float val)
     {
-        health = Mathf.Clamp(health, 0, maxHealth);
-        stamina = Mathf.Clamp(stamina, 0, maxStamina);       
+        if (!_values.ContainsKey(type)) return false;
+
+        _values[type] = val;
+        return true;
+    }
+
+    bool ClampStat(StatType type, StatType maxType)
+    {
+        if (!TryGetStat(type, out float current) || !TryGetStat(maxType, out float maxVal))
+            return false;
+
+        float clamped = Mathf.Clamp(current, 0f, maxVal);
+        return TrySetStat(type, clamped);
+    }
+
+    public bool TryDecreaseStat(StatType type, float amount)
+    {
+        if (amount <= 0f)
+            return false;
+
+        if (!TryGetStat(type, out float current))
+            return false;
+
+        float newVal = Mathf.Max(0f, current - amount);
+        if (!TrySetStat(type, newVal))
+            return false;
+
+        Debug.Log($"{gameObject.name}'s {type} decreased by {amount}!");
+        return true;
+    }
+
+    public bool RefillStat(StatType type, StatType maxType)
+    {
+        if (!TryGetStat(maxType, out float maxVal))
+            return false;
+
+        return TrySetStat(type, maxVal);
     }
 
     public void TakeDamage(float amount)
     {
         if (amount <= 0) return;
-        health -= amount;
-        Debug.Log($"{gameObject.name} took {amount} damage!");
+        TryDecreaseStat(StatType.Health, amount);
     }
 
-    public void SpendStamina(float amount)
-    {
-        if (amount <= 0) return;
-        stamina -= amount;
-        Debug.Log($"{gameObject.name} spent {amount} stamina!");
-    }
-
-    public void SpendMana(float amount)
-    {
-        if (amount <= 0) return;
-        mana -= amount;
-        Debug.Log($"{gameObject.name} spent {amount} mana!");
-    }
-
-    public void RefillHealth() => health = maxHealth;
-    public void RefillStamina() => stamina = maxStamina;
-    public void RefillMana() => mana = maxMana;
-    
-    private void Die()
+    void Die()
     {
         Debug.Log($"{gameObject.name} died!");
         Destroy(gameObject);
     }
 
-    private void UpdateUI()
+    void UpdateUI()
     {
-        if (healthBarUI != null) healthBarUI.SetValue(health, maxHealth);
-        if (staminaBarUI != null) staminaBarUI.SetValue(stamina, maxStamina);
-        if (manaBarUI != null) manaBarUI.SetValue(mana, maxMana);
+        if (healthBarUI != null)
+            healthBarUI.SetValue(_values[StatType.Health], _values[StatType.MaxHealth]);
+
+        if (staminaBarUI != null)
+            staminaBarUI.SetValue(_values[StatType.Stamina], _values[StatType.MaxStamina]);
+
+        if (manaBarUI != null)
+            manaBarUI.SetValue(_values[StatType.Mana], _values[StatType.MaxMana]);
     }
 }

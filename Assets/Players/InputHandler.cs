@@ -89,9 +89,9 @@ public class InputHandler : MonoBehaviour
         if (weaponHandler != null) weaponHandler.Attack();
     }
 
-    private void OnPrimaryCastStarted(InputAction.CallbackContext ctx) => abilityHandler.Cast(AbilityType.Primary);
-    private void OnSecondaryCastStarted(InputAction.CallbackContext ctx) => abilityHandler.Cast(AbilityType.Secondary);
-    private void OnUtilityCastStarted(InputAction.CallbackContext ctx) => abilityHandler.Cast(AbilityType.Utility);
-    private void OnSpecialCastStarted(InputAction.CallbackContext ctx) => abilityHandler.Cast(AbilityType.Special);
+    private void OnPrimaryCastStarted(InputAction.CallbackContext ctx) => abilityHandler.TryActivateByType(AbilityType.Primary);
+    private void OnSecondaryCastStarted(InputAction.CallbackContext ctx) => abilityHandler.TryActivateByType(AbilityType.Secondary);
+    private void OnUtilityCastStarted(InputAction.CallbackContext ctx) => abilityHandler.TryActivateByType(AbilityType.Utility);
+    private void OnSpecialCastStarted(InputAction.CallbackContext ctx) => abilityHandler.TryActivateByType(AbilityType.Special);
 
 }

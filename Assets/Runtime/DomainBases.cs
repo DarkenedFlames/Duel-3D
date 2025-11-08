@@ -1,17 +1,7 @@
 using UnityEngine;
 
-#region NonGenericBehaviorBases
 
-// Ability
-public abstract class AbilityBehavior
-{
-    public abstract void OnCast();
-    public abstract void OnUpdate(float deltaTime);
-}
-public abstract class AbilityBehaviorDefinition : ScriptableObject
-{
-    public abstract AbilityBehavior CreateRuntimeInstance(Ability owner);
-}
+
 
 // Projectile
 public abstract class ProjectileBehavior
@@ -52,47 +42,7 @@ public abstract class PickupBehaviorDefinition : ScriptableObject
     public abstract PickupBehavior CreateRuntimeInstance(Pickup owner);
 }
 
-// Effect
-public abstract class EffectBehavior
-{
-    public virtual void OnApply() { }
-    public virtual void OnUpdate(float deltaTime) { }
-    public virtual void OnExpire() { }
-}
-public abstract class EffectBehaviorDefinition : ScriptableObject
-{
-    public abstract EffectBehavior CreateRuntimeInstance(Effect owner);
-}
 
-#endregion
-
-
-#region GenericBehaviorBases
-
-// Ability
-public abstract class AbilityBehavior<TDefinition> : AbilityBehavior
-    where TDefinition : AbilityBehaviorDefinition
-{
-    protected readonly TDefinition Definition;
-    protected readonly Ability Owner;
-
-    protected AbilityBehavior(TDefinition definition, Ability owner)
-    {
-        Definition = definition;
-        Owner = owner;
-    }
-}
-
-// Generic typed ability definition
-public abstract class AbilityBehaviorDefinition<TBehavior, TDefinition> : AbilityBehaviorDefinition
-    where TBehavior : AbilityBehavior<TDefinition>
-    where TDefinition : AbilityBehaviorDefinition<TBehavior, TDefinition>
-{
-    public override AbilityBehavior CreateRuntimeInstance(Ability owner) => CreateTypedInstance(owner);
-    protected abstract TBehavior CreateTypedInstance(Ability owner);
-}
-
-// Projectile
 public abstract class ProjectileBehavior<TDefinition> : ProjectileBehavior
     where TDefinition : ProjectileBehaviorDefinition
 {
@@ -157,27 +107,3 @@ public abstract class PickupBehaviorDefinition<TBehavior, TDefinition> : PickupB
     public override PickupBehavior CreateRuntimeInstance(Pickup owner) => CreateTypedInstance(owner);
     protected abstract TBehavior CreateTypedInstance(Pickup owner);
 }
-
-// Effect
-public abstract class EffectBehavior<TDefinition> : EffectBehavior
-    where TDefinition : EffectBehaviorDefinition
-{
-    protected readonly TDefinition Definition;
-    protected readonly Effect Owner;
-
-    protected EffectBehavior(TDefinition definition, Effect owner)
-    {
-        Definition = definition;
-        Owner = owner;
-    }
-}
-
-public abstract class EffectBehaviorDefinition<TBehavior, TDefinition> : EffectBehaviorDefinition
-    where TBehavior : EffectBehavior<TDefinition>
-    where TDefinition : EffectBehaviorDefinition<TBehavior, TDefinition>
-{
-    public override EffectBehavior CreateRuntimeInstance(Effect owner) => CreateTypedInstance(owner);
-    protected abstract TBehavior CreateTypedInstance(Effect owner);
-}
-
-#endregion
