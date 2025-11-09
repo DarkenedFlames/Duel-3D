@@ -88,4 +88,13 @@ public class SpawnerController : MonoBehaviour
         if (handler != null) handler.Spawn();
         return handler;
     }
+
+    public Area SpawnArea(GameObject areaPrefab, Vector3 position, Quaternion rotation, GameObject source = null, GameObject target = null)
+    {
+        Area area = SpawnValidated<Area>(areaPrefab, position, rotation);
+        area.SetSource(source);
+        area.SetTarget(target);
+        return area;
+    }
+
 }

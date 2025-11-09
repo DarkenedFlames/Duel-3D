@@ -18,7 +18,7 @@ public abstract class AreaBehavior
 
     public virtual void OnStart() { }
     public virtual void OnTick(float deltaTime) { }
-    public virtual void OnTargetEnter(Collider target) { }
-    public virtual void OnTargetExit(Collider target) { }
+    public virtual void OnTargetEnter(GameObject target) { }
+    public virtual void OnTargetExit(GameObject target) { }
     public virtual void OnExpire() { }
 }

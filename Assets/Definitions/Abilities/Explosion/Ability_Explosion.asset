@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Ability_Explosion
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Explosion
+  icon: {fileID: 0}
+  abilityType: 1
+  castAnimationTrigger: 1
+  manaCost: 25
+  cooldown: 10
+  castTime: 0
+  activationConditions:
+  - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
+  behaviorDefinitions:
+  - {fileID: 11400000, guid: cc2d41116afaa0044a974460f35e6ac6, type: 2}

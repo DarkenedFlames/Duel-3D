@@ -3,6 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New Effect Damage Behavior", menuName = "Duel/Effects/Behaviors/Damage")]
 public class EffectDamageDefinition : EffectBehaviorDefinition
 {
+    [Tooltip("Period (s) of damage for OnTick.")]
+    public float period = 1f;
 
     [Header("Damage Configs")]
     public DamageConfig[] targetConfigs;
@@ -16,6 +18,7 @@ public class EffectDamageDefinition : EffectBehaviorDefinition
 public class EffectDamage : EffectBehavior
 {
     private new EffectDamageDefinition Definition => (EffectDamageDefinition)base.Definition;
+    private float _pulseTimer;
 
     public EffectDamage(EffectDamageDefinition definition, Effect effect) : base(definition, effect) { }
 
@@ -28,33 +31,26 @@ public class EffectDamage : EffectBehavior
     public override void OnApply()
     {
         foreach (DamageConfig config in Definition.targetConfigs)
-        {
             if (config.hookType.HasFlag(HookType.OnApply))
-            {
                 ApplyDamage(config.amount);
-            }
-        }
     }
 
     public override void OnTick(float deltaTime)
     {
-        foreach (DamageConfig config in Definition.targetConfigs)
+        _pulseTimer += deltaTime;
+        if (_pulseTimer >= Definition.period)
         {
-            if (config.hookType.HasFlag(HookType.OnTick))
-            {
-                ApplyDamage(config.amount * deltaTime);
-            }
+            _pulseTimer = 0f;
+            foreach (DamageConfig config in Definition.targetConfigs)
+                if (config.hookType.HasFlag(HookType.OnTick))
+                    ApplyDamage(config.amount);
         }
     }
     
     public override void OnExpire()
     {
         foreach (DamageConfig config in Definition.targetConfigs)
-        {
             if (config.hookType.HasFlag(HookType.OnExpire))
-            {
                 ApplyDamage(config.amount);
-            }
-        }
     }
 }

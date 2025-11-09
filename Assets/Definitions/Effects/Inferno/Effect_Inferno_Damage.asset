@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0033350df5b7a5945b66b8589d9303c9, type: 3}
   m_Name: Effect_Inferno_Damage
   m_EditorClassIdentifier: Assembly-CSharp::EffectDamageDefinition
+  period: 0.25
   targetConfigs:
   - hookType: 2
-    amount: 10
+    amount: 1

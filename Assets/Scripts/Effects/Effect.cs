@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class Effect
 {
@@ -10,91 +11,92 @@ public class Effect
     private float _timer;
     public int CurrentStacks { get; private set; } = 1;
 
+    public bool ZeroStacks => CurrentStacks <= 0;
+    public bool ZeroTime => _timer <= 0;
+
     public Effect(EffectDefinition definition, EffectHandler handler)
     {
         Definition = definition;
         Handler = handler;
         _timer = definition.duration;
 
-        // instantiate runtime behaviors
         Behaviors = definition.behaviors
             .Select(b => b.CreateRuntimeBehavior(this))
             .ToList();
 
-        foreach (var behavior in Behaviors)
-            behavior.OnApply();
+        Behaviors.ForEach(b => b.OnApply());
     }
 
     public bool Tick(float deltaTime)
     {
-        foreach (var behavior in Behaviors)
-            behavior.OnTick(deltaTime);
-
+        Behaviors.ForEach(b => b.OnTick(deltaTime));
         _timer -= deltaTime;
-
-        if (_timer <= 0f)
-        {
-            switch (Definition.expireType)
-            {
-                case ExpireType.FullRemove:
-                    Expire();
-                    return true;
-
-                case ExpireType.LoseOneStackAndRefresh:
-                    CurrentStacks--;
-                    if (CurrentStacks <= 0)
-                    {
-                        Expire();
-                        return true;
-                    }
-                    _timer = Definition.duration;
-                    break;
-
-                case ExpireType.LoseOneStackNoRefresh:
-                    CurrentStacks--;
-                    if (CurrentStacks <= 0)
-                    {
-                        Expire();
-                        return true;
-                    }
-                    break;
-            }
-        }
-
-        return false;
+        return TryExpire();
     }
 
-    private void Expire()
+    private void RefreshTimer()
     {
-        foreach (var behavior in Behaviors)
-            behavior.OnExpire();
+        _timer = Definition.duration;
+        Behaviors.ForEach(b => b.OnRefresh());
+    }
+
+    private bool AddStack()
+    {
+        if (CurrentStacks >= Definition.maxStacks) return false;
+        CurrentStacks++;
+        if (CurrentStacks > 1)
+            Behaviors.ForEach(b => b.OnStackGained());
+        return true;
     }
 
     public void ApplyStacking()
     {
-        switch (Definition.stackingType)
+        if (Definition.stackingType.HasFlag(StackingType.Refresh)) RefreshTimer();
+        if (Definition.stackingType.HasFlag(StackingType.AddStack)) AddStack();
+    }
+
+    public void RemoveStack()
+    {
+        if (CurrentStacks > 1)
+            Behaviors.ForEach(b => b.OnStackLost());
+
+        CurrentStacks = Mathf.Max(0, CurrentStacks - 1);
+    }
+
+    /// <summary>
+    /// Checks if the effect should expire without expiring it.
+    /// </summary>
+    public bool IsExpired()
+    {
+        if (ZeroStacks) return true;
+        if (Definition.expiryType == ExpiryType.LoseAllStacks && ZeroTime) return true;
+        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && ZeroTime) return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Attempts to expire the effect. Returns true if the effect expired.
+    /// </summary>
+    public bool TryExpire()
+    {
+        if (!IsExpired()) return false;
+
+        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && ZeroTime && CurrentStacks > 1)
         {
-            case StackingType.None:
-                // do nothing
-                break;
-
-            case StackingType.RefreshDuration:
-                _timer = Definition.duration;
-                foreach (var behavior in Behaviors)
-                    behavior.OnApply();
-                break;
-
-            case StackingType.AddStacks:
-                if (CurrentStacks < Definition.maxStacks)
-                    CurrentStacks++;
-                _timer = Definition.duration;
-                foreach (var behavior in Behaviors)
-                    behavior.OnApply();
-                break;
-
-            case StackingType.Ignore:
-                // do absolutely nothing
-                break;
+            CurrentStacks--;
+            RefreshTimer();
+            Behaviors.ForEach(b => b.OnStackLost());
+            return false;
         }
+
+        Expire();
+        return true;
+    }
+
+    public void Expire()
+    {
+        Debug.Log($"{Handler.gameObject.name}'s {Definition.effectName} effect has expired.");
+        Behaviors.ForEach(b => b.OnExpire());
+        CurrentStacks = 0;
     }
 }

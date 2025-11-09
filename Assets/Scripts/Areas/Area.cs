@@ -1,21 +1,28 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
-[RequireComponent(typeof(SphereCollider))]
+[RequireComponent(typeof(SphereCollider), typeof(Rigidbody), typeof(MeshRenderer))]
 public class Area : MonoBehaviour
 {
+    [Header("Area Settings")]
     public List<AreaBehaviorDefinition> behaviorDefinitions;
+    public GameObject sourceActor;
+    public GameObject targetActor;
     public float radius = 5f;
     public float duration = 5f;
-    public GameObject sourceActor;
 
-    // Live list of actors currently inside the area (excluding source if needed)
-    private readonly HashSet<GameObject> currentTargets = new();
-    public IReadOnlyCollection<GameObject> CurrentTargets => currentTargets;
+    // Runtime tracking
+    readonly List<GameObject> currentTargets = new();
+    readonly HashSet<GameObject> previousTargets = new();
+    readonly List<AreaBehavior> behaviors = new();
+    float lifetime;
+    bool expired;
 
-    private readonly List<AreaBehavior> behaviors = new();
-    private float lifetime;
-    private bool expired;
+    public IReadOnlyList<GameObject> CurrentTargets => currentTargets;
+
+    public void SetSource(GameObject source) => sourceActor = source;
+    public void SetTarget(GameObject source) => targetActor = source;
 
     private void Awake()
     {
@@ -23,47 +30,67 @@ public class Area : MonoBehaviour
         col.isTrigger = true;
         col.radius = radius;
 
+        var mesh = GetComponent<MeshRenderer>();
+        float diameter = radius * 2f;
+        mesh.transform.localScale = new Vector3(diameter, diameter, diameter);
+
+        var rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+
         foreach (var def in behaviorDefinitions)
         {
             if (def != null)
                 behaviors.Add(def.CreateRuntimeBehavior(this));
-            else
-                Debug.LogWarning($"{name} has a null AreaBehaviorDefinition slot.");
         }
 
         lifetime = duration;
     }
 
-    public void SetSource(GameObject source) => sourceActor = source;
-
-    private void Start() => behaviors.ForEach(b => b.OnStart());
-
-    private void Update()
+    void Start() => behaviors.ForEach(b => b.OnStart());
+    
+    void Update()
     {
         float dt = Time.deltaTime;
-
         lifetime -= dt;
-        behaviors.ForEach(b => b.OnTick(dt));
+
+        UpdateCurrentTargets();
+
+        foreach (var behavior in behaviors) behavior.OnTick(dt);
 
         if (lifetime <= 0f && !expired) Expire();
     }
 
-    private void OnTriggerEnter(Collider other)
+    void UpdateCurrentTargets()
     {
-        // Make sure to check if its an actor
-        if (!currentTargets.Contains(other.gameObject))
-            currentTargets.Add(other.gameObject);
+        // Rebuild current
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius);
+        currentTargets.Clear();
 
-        behaviors.ForEach(b => b.OnTargetEnter(other));
+        foreach (var col in hits)
+        {
+            GameObject root = col.transform.root.gameObject;
+            if (!root.CompareTag("Actor")) continue;
+
+            currentTargets.Add(root);
+        }
+
+        // Entry: in current but not in previous
+        foreach (var actor in currentTargets)
+            if (!previousTargets.Contains(actor))
+                behaviors.ForEach(b => b.OnTargetEnter(actor));
+        
+        // Exit: in previous but not in current
+        foreach (var actor in previousTargets)
+            if (!currentTargets.Contains(actor))
+                behaviors.ForEach(b => b.OnTargetExit(actor));
+
+        // Set current equal to previous
+        previousTargets.Clear();
+        foreach (var actor in currentTargets)
+            previousTargets.Add(actor);
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        currentTargets.Remove(other.gameObject);
-        behaviors.ForEach(b => b.OnTargetExit(other));
-    }
-
-    private void Expire()
+    void Expire()
     {
         expired = true;
         behaviors.ForEach(b => b.OnExpire());

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum StatType
 {
@@ -53,15 +54,17 @@ public class StatsHandler : MonoBehaviour
         UpdateUI();
     }
 
-    public bool TryGetStat(StatType type, out float val) =>
-        _values.TryGetValue(type, out val);
+    public bool TryGetStat(StatType type, out float val) => _values.TryGetValue(type, out val);
     
-
-    public bool TrySetStat(StatType type, float val)
+    public bool TrySetStat(StatType type, float newVal)
     {
         if (!_values.ContainsKey(type)) return false;
 
-        _values[type] = val;
+        float oldVal = _values[type];
+        _values[type] = newVal;
+
+        if (newVal != oldVal)
+            Debug.Log($"{gameObject.name}'s {type} changed from {oldVal} to {newVal}!");
         return true;
     }
 
@@ -112,6 +115,7 @@ public class StatsHandler : MonoBehaviour
 
     void UpdateUI()
     {
+        
         if (healthBarUI != null)
             healthBarUI.SetValue(_values[StatType.Health], _values[StatType.MaxHealth]);
 

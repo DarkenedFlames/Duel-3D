@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Abilities/Conditions/EffectsCondition")]
+[CreateAssetMenu(menuName = "Duel/Abilities/Conditions/EffectsCondition")]
 public class EffectsCondition : ActivationCondition
 {
     [Header("Whitelist")]

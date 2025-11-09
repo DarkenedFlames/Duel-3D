@@ -8,6 +8,7 @@ TagManager:
   - Weapon
   - Projectile
   - Pickup
+  - Actor
   layers:
   - Default
   - TransparentFX

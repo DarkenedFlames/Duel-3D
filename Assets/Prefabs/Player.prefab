@@ -474,9 +474,10 @@ GameObject:
   - component: {fileID: 7923905574634288884}
   - component: {fileID: 6120086274028814773}
   - component: {fileID: 3517945138264299491}
+  - component: {fileID: 3549026730212811760}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Player
+  m_TagString: Actor
   m_Icon: {fileID: 2800000, guid: 0ac55f9f886d827408c102bdf33c5ff7, type: 3}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -584,10 +585,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 16d303f1566562541af6acf94b0b0c89, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  initialPrimary: {fileID: 11400000, guid: b04ef89c27fa2194db9fb4eba0b7f22f, type: 2}
-  initialSecondary: {fileID: 0}
-  initialUtility: {fileID: 0}
-  initialSpecial: {fileID: 0}
+  initialAbilities:
+  - {fileID: 11400000, guid: b04ef89c27fa2194db9fb4eba0b7f22f, type: 2}
 --- !u!114 &6120086274028814773
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -600,12 +599,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 941e649e87b69f84f8e02c4c3a890814, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatsHandler
-  health: 100
-  maxHealth: 100
-  stamina: 100
-  maxStamina: 100
-  mana: 100
-  maxMana: 100
+  healthBarUI: {fileID: 0}
+  staminaBarUI: {fileID: 0}
+  manaBarUI: {fileID: 0}
 --- !u!114 &3517945138264299491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +614,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28472d42f5c4b134581ae260accd32a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectHandler
+--- !u!114 &3549026730212811760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcb2ebddd866a5b4989715726f622ca2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatusHandler
 --- !u!1 &1684831763471223180
 GameObject:
   m_ObjectHideFlags: 0

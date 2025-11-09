@@ -12,7 +12,10 @@ public abstract class EffectBehavior
     }
 
     public virtual void OnApply() { }
+    public virtual void OnStackGained() { }
+    public virtual void OnRefresh() { }
     public virtual void OnTick(float deltaTime) { }
+    public virtual void OnStackLost() { }
     public virtual void OnExpire() { }
 }
 

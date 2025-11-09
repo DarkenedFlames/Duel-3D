@@ -16,8 +16,7 @@ public class AbilitySpawnsProjectileDefinition : AbilityBehaviorDefinition
 
 public class AbilitySpawnsProjectile : AbilityBehavior
 {
-    AbilitySpawnsProjectileDefinition def;
-
+    readonly AbilitySpawnsProjectileDefinition def;
     public AbilitySpawnsProjectile(AbilitySpawnsProjectileDefinition d) => def = d;
 
     public override void OnActivate()
@@ -29,10 +28,6 @@ public class AbilitySpawnsProjectile : AbilityBehavior
         var spawnPos = handler.transform.TransformPoint(def.spawnOffset);
         var rot = handler.transform.rotation * Quaternion.Euler(def.localEulerRotation);
 
-        // You can pass Execution or other context as userContext if the projectile needs to know the source execution.
         SpawnerController.Instance.SpawnProjectile(def.projectilePrefab, spawnPos, rot, caster);
     }
-
-    public override void OnTick(float dt) { /* no tick needed for simple spawn */ }
-    public override void OnEnd() { /* nothing */ }
 }
