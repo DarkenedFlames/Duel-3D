@@ -29,10 +29,8 @@ public class EffectBarUI : MonoBehaviour
         effectHandler.OnEffectRefreshed += HandleEffectRefreshed;
     }
 
-    private void OnDisable()
+    void OnDestroy()
     {
-        if (effectHandler == null) return;
-
         effectHandler.OnEffectApplied -= HandleEffectApplied;
         effectHandler.OnEffectExpired -= HandleEffectExpired;
         effectHandler.OnEffectStackChange -= HandleEffectStackChange;

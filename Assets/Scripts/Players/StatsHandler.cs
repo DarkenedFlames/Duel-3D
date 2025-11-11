@@ -12,21 +12,33 @@ public enum StatType
 
 public class StatsHandler : MonoBehaviour
 {
-    private Dictionary<StatType, (float, float)> _values = new();
+    private Dictionary<StatType, (float current, float max)> _values = new();
     public event Action<StatType, float, float> OnStatChanged;
 
-    void Awake()
+    private void Awake()
     {
-        // Initialize all stats
-        _values[StatType.Health]  = (100f, 100f);
-        _values[StatType.Mana]    = (100f, 100f);
-        _values[StatType.Stamina] = (100f, 100f);
-        _values[StatType.Speed]   = (100f, 100f);
+        foreach (StatType type in Enum.GetValues(typeof(StatType)))
+            _values[type] = (0f, 0f);
     }
 
-    void Update()
+    private void Start()
     {
-        (float current, float _) = _values[StatType.Health];
+        SetDefaultStat(StatType.Health, 100f);
+        SetDefaultStat(StatType.Stamina, 100f);
+        SetDefaultStat(StatType.Mana, 100f);
+        SetDefaultStat(StatType.Speed, 100f);
+    }
+
+    private void SetDefaultStat(StatType type, float value)
+    {
+        TrySetStat(type, setMax: true, value);
+        TrySetStat(type, setMax: false, value);
+    }
+
+
+    private void Update()
+    {
+        (float current, _) = _values[StatType.Health];
         if (current <= 0f) Die();
     }
 
@@ -53,17 +65,13 @@ public class StatsHandler : MonoBehaviour
             _values[type] = (newCurrent, max);
         }
 
-        // Only trigger event if it changed
-        if (Mathf.Approximately(newVal, oldVal)) 
+        if (Mathf.Approximately(newVal, oldVal))
             return false;
 
         (float finalCurrent, float finalMax) = _values[type];
-        Debug.Log($"{gameObject.name}'s {(setMax ? "maximum" : "")} {type} changed from {oldVal} to {newVal}!");
         OnStatChanged?.Invoke(type, finalCurrent, finalMax);
-
         return true;
     }
-
 
     public bool TryModifyStat(StatType type, bool modifyMax, float delta)
     {
@@ -75,20 +83,19 @@ public class StatsHandler : MonoBehaviour
     public void RefillStat(StatType type)
     {
         (float _, float max) = _values[type];
-        _values[type] = (max, max);
+        TrySetStat(type, setMax: false, max);
     }
 
     public void TakeDamage(float amount)
     {
         if (amount <= 0) return;
-        (float current, float _) = _values[StatType.Health];
+        (float current, _) = _values[StatType.Health];
         TrySetStat(StatType.Health, setMax: false, current - amount);
     }
 
-    void Die()
+    private void Die()
     {
         Debug.Log($"{gameObject.name} died!");
         Destroy(gameObject);
     }
-
 }

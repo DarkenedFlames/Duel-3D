@@ -10,23 +10,19 @@ public class ResourceBarUI : MonoBehaviour
 
     private StatsHandler trackedStats;
 
-    public void Initialize(StatsHandler stats)
+    public void SubscribeToHandler(StatsHandler stats)
+    {
+        if (stats != null)
+        {
+            trackedStats = stats;
+            trackedStats.OnStatChanged += HandleStatChanged;
+        }
+    }
+
+    private void OnDestroy()
     {
         if (trackedStats != null)
             trackedStats.OnStatChanged -= HandleStatChanged;
-
-        trackedStats = stats;
-        trackedStats.OnStatChanged += HandleStatChanged;
-
-        // Sync initial values
-        healthBar.maxValue = stats.GetStat(StatType.Health, true);
-        healthBar.value = stats.GetStat(StatType.Health, false);
-
-        staminaBar.maxValue = stats.GetStat(StatType.Stamina, true);
-        staminaBar.value = stats.GetStat(StatType.Stamina, false);
-
-        manaBar.maxValue = stats.GetStat(StatType.Mana, true);
-        manaBar.value = stats.GetStat(StatType.Mana, false);
     }
 
     private void HandleStatChanged(StatType type, float current, float max)
