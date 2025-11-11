@@ -45,11 +45,6 @@ public class SpawnerController : MonoBehaviour
                 invalid = true;
                 break;
 
-            case ProjectileHandler projectile when projectile.projectileDefinition == null:
-                Debug.LogError($"Spawned projectile {prefab.name} is missing its ProjectileDefinition. Destroying instance.");
-                invalid = true;
-                break;
-
             case PickupHandler pickup when pickup.pickupDefinition == null:
                 Debug.LogError($"Spawned pickup {prefab.name} is missing its PickupDefinition. Destroying instance.");
                 invalid = true;
@@ -74,12 +69,11 @@ public class SpawnerController : MonoBehaviour
         return handler;
     }
 
-    public ProjectileHandler SpawnProjectile(GameObject projectilePrefab, Vector3 position,
-                                             Quaternion rotation, GameObject source)
+    public Projectile SpawnProjectile(GameObject projectilePrefab, Vector3 position, Quaternion rotation, GameObject source = null)
     {
-        ProjectileHandler handler = SpawnValidated<ProjectileHandler>(projectilePrefab, position, rotation);
-        if (handler != null) handler.Spawn(source);
-        return handler;
+        Projectile projectile = SpawnValidated<Projectile>(projectilePrefab, position, rotation);
+        projectile.SetSource(source);
+        return projectile;
     }
 
     public PickupHandler SpawnPickup(GameObject pickupPrefab, Vector3 position, Quaternion rotation)
@@ -89,11 +83,10 @@ public class SpawnerController : MonoBehaviour
         return handler;
     }
 
-    public Area SpawnArea(GameObject areaPrefab, Vector3 position, Quaternion rotation, GameObject source = null, GameObject target = null)
+    public Area SpawnArea(GameObject areaPrefab, Vector3 position, Quaternion rotation, GameObject source = null)
     {
         Area area = SpawnValidated<Area>(areaPrefab, position, rotation);
         area.SetSource(source);
-        area.SetTarget(target);
         return area;
     }
 

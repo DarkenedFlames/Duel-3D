@@ -5,14 +5,14 @@ using UnityEngine;
 public class Effect
 {
     public EffectDefinition Definition { get; private set; }
-    public List<EffectBehavior> Behaviors { get; private set; }
+    private readonly List<EffectBehavior> Behaviors;
     public EffectHandler Handler { get; private set; }
 
     private float _timer;
     public int CurrentStacks { get; private set; } = 1;
 
-    public bool ZeroStacks => CurrentStacks <= 0;
-    public bool ZeroTime => _timer <= 0;
+    private bool ZeroStacks => CurrentStacks <= 0;
+    private bool ZeroTime => _timer <= 0;
 
     public Effect(EffectDefinition definition, EffectHandler handler)
     {
@@ -27,6 +27,8 @@ public class Effect
         Behaviors.ForEach(b => b.OnApply());
     }
 
+    public float RemainingTime() => _timer;
+
     public bool Tick(float deltaTime)
     {
         Behaviors.ForEach(b => b.OnTick(deltaTime));
@@ -34,13 +36,13 @@ public class Effect
         return TryExpire();
     }
 
-    private void RefreshTimer()
+    public void RefreshTimer()
     {
         _timer = Definition.duration;
         Behaviors.ForEach(b => b.OnRefresh());
     }
 
-    private bool AddStack()
+    public bool AddStack()
     {
         if (CurrentStacks >= Definition.maxStacks) return false;
         CurrentStacks++;
@@ -49,29 +51,15 @@ public class Effect
         return true;
     }
 
-    public void ApplyStacking()
-    {
-        if (Definition.stackingType.HasFlag(StackingType.Refresh)) RefreshTimer();
-        if (Definition.stackingType.HasFlag(StackingType.AddStack)) AddStack();
-    }
-
-    public void RemoveStack()
+    public bool RemoveStack()
     {
         if (CurrentStacks > 1)
             Behaviors.ForEach(b => b.OnStackLost());
 
-        CurrentStacks = Mathf.Max(0, CurrentStacks - 1);
-    }
-
-    /// <summary>
-    /// Checks if the effect should expire without expiring it.
-    /// </summary>
-    public bool IsExpired()
-    {
-        if (ZeroStacks) return true;
-        if (Definition.expiryType == ExpiryType.LoseAllStacks && ZeroTime) return true;
-        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && ZeroTime) return true;
-        return false;
+        int newCount = Mathf.Max(0, CurrentStacks - 1);
+        bool changed = newCount != CurrentStacks;
+        CurrentStacks = newCount;
+        return changed;
     }
 
     /// <summary>
@@ -79,24 +67,32 @@ public class Effect
     /// </summary>
     public bool TryExpire()
     {
-        if (!IsExpired()) return false;
-
-        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && ZeroTime && CurrentStacks > 1)
+        // Lose-one-stack behavior is special: we only partially expire
+        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && ZeroTime)
         {
-            CurrentStacks--;
-            RefreshTimer();
-            Behaviors.ForEach(b => b.OnStackLost());
-            return false;
+            if (CurrentStacks > 1)
+            {
+                CurrentStacks--;
+                RefreshTimer();
+                Behaviors.ForEach(b => b.OnStackLost());
+                return false;
+            }
         }
 
-        Expire();
-        return true;
-    }
+        // General expiry conditions
+        bool shouldExpire = ZeroStacks
+            || (ZeroTime && Definition.expiryType == ExpiryType.LoseAllStacks)
+            || (ZeroTime && Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && CurrentStacks <= 1);
 
-    public void Expire()
-    {
-        Debug.Log($"{Handler.gameObject.name}'s {Definition.effectName} effect has expired.");
-        Behaviors.ForEach(b => b.OnExpire());
-        CurrentStacks = 0;
+        // Expire effect if it should expire
+        if (!shouldExpire)
+            return false;
+        else
+        {
+            Debug.Log($"{Handler.gameObject.name}'s {Definition.effectName} effect has expired.");
+            Behaviors.ForEach(b => b.OnExpire());
+            CurrentStacks = 0;
+            return true;
+        }
     }
 }

@@ -3,15 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Duel/Abilities/Behaviors/SpawnsProjectile")]
 public class AbilitySpawnsProjectileDefinition : AbilityBehaviorDefinition
 {
-    [Tooltip("Projectile prefab to spawn. Should have a ProjectileHandler component.")]
-    public GameObject projectilePrefab;
-    [Tooltip("Local spawn offset from caster transform")]
-    public Vector3 spawnOffset = Vector3.zero;
-    [Tooltip("Initial rotation relative to caster")]
-    public Vector3 localEulerRotation = Vector3.zero;
+    [Header("Projectile Configs")]
+    public ProjectileConfig[] configs;
 
     public override AbilityBehavior CreateRuntimeBehavior() => new AbilitySpawnsProjectile(this);
-    
 }
 
 public class AbilitySpawnsProjectile : AbilityBehavior
@@ -21,13 +16,17 @@ public class AbilitySpawnsProjectile : AbilityBehavior
 
     public override void OnActivate()
     {
-        var handler = Execution.Handler;
-        var caster = handler.gameObject;
-        if (def.projectilePrefab == null) return;
+        Transform casterTransform = Execution.Handler.transform;
+        GameObject caster = Execution.Handler.gameObject;
 
-        var spawnPos = handler.transform.TransformPoint(def.spawnOffset);
-        var rot = handler.transform.rotation * Quaternion.Euler(def.localEulerRotation);
-
-        SpawnerController.Instance.SpawnProjectile(def.projectilePrefab, spawnPos, rot, caster);
+        foreach (ProjectileConfig config in def.configs)
+        {
+            if (config.hookType.HasFlag(HookType.OnActivate))
+            {
+                Vector3 spawnPosition = casterTransform.TransformPoint(config.spawnOffset);
+                Quaternion spawnRotation = casterTransform.rotation * Quaternion.Euler(config.localEulerRotation);
+                SpawnerController.Instance.SpawnProjectile(config.projectilePrefab, spawnPosition, spawnRotation, caster);                
+            }
+        }
     }
 }

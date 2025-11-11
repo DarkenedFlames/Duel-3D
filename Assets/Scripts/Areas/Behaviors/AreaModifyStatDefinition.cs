@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New Area Modify Stat Behavior", menuName = "Duel/Areas/ModifyStat")]
@@ -11,64 +12,45 @@ public class AreaModifyStatDefinition : AreaBehaviorDefinition
     public StatConfig[] targetConfigs;
     public StatConfig[] otherConfigs;
 
-    public override AreaBehavior CreateRuntimeBehavior(Area area)
-    {
-        return new AreaModifyStat(area, this);
-    }
+    public override AreaBehavior CreateRuntimeBehavior(Area area) => new AreaModifyStat(area, this);
 }
 
 public class AreaModifyStat : AreaBehavior
 {
     private new AreaModifyStatDefinition Definition => (AreaModifyStatDefinition)base.Definition;
-    private float _pulseTimer;
-
     public AreaModifyStat(Area area, AreaModifyStatDefinition definition) : base(area, definition) { }
 
-    private StatConfig[] GetConfigsByActor(GameObject actor)
+    private float _pulseTimer;
+    private void ModifyStat(GameObject actor, HookType type)
     {
-        if (actor == Area.sourceActor) return Definition.sourceConfigs;
-        else if (actor == Area.targetActor) return Definition.targetConfigs;
-        else return Definition.otherConfigs;
+        StatConfig[] configs = actor switch
+        {
+            _ when actor == Area.sourceActor => Definition.sourceConfigs,
+            _ when actor == Area.targetActor => Definition.targetConfigs,
+            _ => Definition.otherConfigs
+        };
+
+        foreach (StatConfig config in configs)
+            if (config.hookType.HasFlag(type) && actor.TryGetComponent(out StatsHandler stats))
+                stats.TryModifyStat(config.statType, config.modifyMax, config.amount);
     }
 
-    private void ModifyStat(GameObject target, StatType type, float amount)
-    {
-        if (target.TryGetComponent(out StatsHandler stats) && stats.TryGetStat(type, out float val))
-            stats.TrySetStat(type, val + amount);
-    }
-
-    public override void OnTargetEnter(GameObject target)
-    {
-        foreach (StatConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetEnter))
-                ModifyStat(target, config.statType, config.amount);
-        
-    }
-    public override void OnTargetExit(GameObject target)
-    {
-        foreach (StatConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetExit))
-                ModifyStat(target, config.statType, config.amount);
-    }
+    public override void OnTargetEnter(GameObject target) => ModifyStat(target, HookType.OnTargetEnter);
+    public override void OnTargetExit(GameObject target) => ModifyStat(target, HookType.OnTargetExit);
 
     public override void OnTick(float deltaTime)
     {
         _pulseTimer += deltaTime;
-        if (_pulseTimer >= Definition.period)
-        {
-            _pulseTimer = 0f;
-            foreach (GameObject target in Area.CurrentTargets)
-                foreach (StatConfig config in GetConfigsByActor(target))
-                    if (config.hookType.HasFlag(HookType.OnTick))
-                        ModifyStat(target, config.statType, config.amount);
-        }
+        if (_pulseTimer < Definition.period) return;
+        
+        _pulseTimer = 0f;
+        foreach (GameObject actor in Area.CurrentTargets)
+            ModifyStat(actor, HookType.OnTick);
     }
     
     public override void OnExpire()
     {
-        foreach (GameObject target in Area.CurrentTargets)
-            foreach (StatConfig config in GetConfigsByActor(target))
-                if (config.hookType.HasFlag(HookType.OnExpire))
-                    ModifyStat(target, config.statType, config.amount);
+        foreach (GameObject actor in Area.CurrentTargets)
+            ModifyStat(actor, HookType.OnExpire);
     }
 }

@@ -20,58 +20,43 @@ public class AreaModifyEffectDefinition : AreaBehaviorDefinition
 public class AreaModifyEffect : AreaBehavior
 {
     private new AreaModifyEffectDefinition Definition => (AreaModifyEffectDefinition)base.Definition;
-    private float _pulseTimer;
-
     public AreaModifyEffect(Area area, AreaModifyEffectDefinition definition) : base(area, definition) { }
+    
+    private float _pulseTimer;
+    private void ModifyEffect(GameObject actor, HookType type)
+    {
+        EffectConfig[] configs = actor switch
+        {
+            _ when actor == Area.sourceActor => Definition.sourceConfigs,
+            _ when actor == Area.targetActor => Definition.targetConfigs,
+            _ => Definition.otherConfigs
+        };
 
-    private EffectConfig[] GetConfigsByActor(GameObject actor)
-    {
-        if (actor == Area.sourceActor) return Definition.sourceConfigs;
-        else if (actor == Area.targetActor) return Definition.targetConfigs;
-        else return Definition.otherConfigs;
+        foreach (EffectConfig config in configs)
+            if (config.hookType.HasFlag(type))
+                if (actor.TryGetComponent(out EffectHandler handler))
+                    if (config.mode)
+                        handler.ApplyEffect(config.effectDefinition, config.stacks);
+                    else
+                        handler.RemoveStacks(config.effectDefinition.effectName, config.stacks);
     }
 
-    private void ModifyEffect(GameObject target, bool mode, EffectDefinition def, int stacks)
-    {
-        if (target.TryGetComponent(out EffectHandler handler))
-            if (mode)
-                handler.ApplyEffect(def, stacks);
-            else
-                handler.RemoveStacks(def.effectName, stacks);
-    }
-
-    public override void OnTargetEnter(GameObject target)
-    {
-        foreach (EffectConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetEnter))
-                ModifyEffect(target, config.mode, config.effectDefinition, config.stacks);
-        
-    }
-    public override void OnTargetExit(GameObject target)
-    {
-        foreach (EffectConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetExit))
-                ModifyEffect(target, config.mode, config.effectDefinition, config.stacks);
-    }
+    public override void OnTargetEnter(GameObject target) => ModifyEffect(target, HookType.OnTargetEnter);
+    public override void OnTargetExit(GameObject target) => ModifyEffect(target, HookType.OnTargetExit);
 
     public override void OnTick(float deltaTime)
     {
         _pulseTimer += deltaTime;
-        if (_pulseTimer >= Definition.period)
-        {
-            _pulseTimer = 0f;
-            foreach (GameObject target in Area.CurrentTargets)
-                foreach (EffectConfig config in GetConfigsByActor(target))
-                    if (config.hookType.HasFlag(HookType.OnTick))
-                        ModifyEffect(target, config.mode, config.effectDefinition, config.stacks);
-        }
+        if (_pulseTimer < Definition.period) return;
+        
+        _pulseTimer = 0f;
+        foreach (GameObject actor in Area.CurrentTargets)
+            ModifyEffect(actor, HookType.OnTick);
     }
     
     public override void OnExpire()
     {
-        foreach (GameObject target in Area.CurrentTargets)
-            foreach (EffectConfig config in GetConfigsByActor(target))
-                if (config.hookType.HasFlag(HookType.OnExpire))
-                    ModifyEffect(target, config.mode, config.effectDefinition, config.stacks);
+        foreach (GameObject actor in Area.CurrentTargets)
+            ModifyEffect(actor, HookType.OnTick);
     }
 }

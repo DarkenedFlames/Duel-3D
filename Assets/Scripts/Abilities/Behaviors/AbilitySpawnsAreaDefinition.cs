@@ -3,12 +3,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Duel/Abilities/Behaviors/SpawnsArea")]
 public class AbilitySpawnsAreaDefinition : AbilityBehaviorDefinition
 {
-    [Tooltip("Area prefab to spawn. Should have a Area component.")]
-    public GameObject areaPrefab;
-    [Tooltip("Local spawn offset from caster transform")]
-    public Vector3 spawnOffset = Vector3.zero;
-    [Tooltip("Initial rotation relative to caster")]
-    public Vector3 localEulerRotation = Vector3.zero;
+    [Header("Area configs")]
+    public AreaConfig[] configs;
 
     public override AbilityBehavior CreateRuntimeBehavior() => new AbilitySpawnsArea(this);
     
@@ -21,13 +17,14 @@ public class AbilitySpawnsArea : AbilityBehavior
 
     public override void OnActivate()
     {
-        var handler = Execution.Handler;
-        var caster = handler.gameObject;
-        if (def.areaPrefab == null) return;
+        Transform casterTransform = Execution.Handler.transform;
+        GameObject caster = Execution.Handler.gameObject;
 
-        var spawnPos = handler.transform.TransformPoint(def.spawnOffset);
-        var rot = handler.transform.rotation * Quaternion.Euler(def.localEulerRotation);
-
-        SpawnerController.Instance.SpawnArea(def.areaPrefab, spawnPos, rot, caster);
+        foreach (AreaConfig config in def.configs)
+        {
+            Vector3 spawnPosition = casterTransform.TransformPoint(config.spawnOffset);
+            Quaternion spawnRotation = casterTransform.rotation * Quaternion.Euler(config.localEulerRotation);
+            SpawnerController.Instance.SpawnArea(config.areaPrefab, spawnPosition, spawnRotation, caster);
+        }
     }
 }

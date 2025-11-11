@@ -15,6 +15,8 @@ MonoBehaviour:
   defaultPriority: 100
   requiredTags: 0
   forbiddenTags: 0
-  areaPrefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
-  spawnOffset: {x: 0, y: 0, z: 0}
-  localEulerRotation: {x: 0, y: 0, z: 0}
+  configs:
+  - hookType: 256
+    areaPrefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
+    spawnOffset: {x: 0, y: 0, z: 0}
+    localEulerRotation: {x: 0, y: 0, z: 0}

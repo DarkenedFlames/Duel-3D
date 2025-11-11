@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
-[System.Flags]
+[Flags]
 public enum StackingType
 {
     None = 0,
@@ -20,8 +20,10 @@ public class EffectHandler : MonoBehaviour
 {
     public List<Effect> Effects { get; private set; } = new();
 
-    public bool HasEffect(string effectName) =>
-        Effects.Any(e => e.Definition.effectName == effectName);
+    public event Action<Effect> OnEffectApplied;
+    public event Action<Effect> OnEffectExpired;
+    public event Action<Effect> OnEffectStackChange;
+    public event Action<Effect> OnEffectRefreshed;
 
     public bool TryGetEffect(string effectName, out Effect effect)
     {
@@ -29,33 +31,37 @@ public class EffectHandler : MonoBehaviour
         return effect != null;
     }
 
-
     /// <summary>
-    /// Apply a certain number of stacks of an effect (according to StackingType)
+    /// Applies a new effect or stacks onto an existing one.
     /// </summary>
-    public void ApplyEffect(EffectDefinition def, int stacks = 1)
+    public Effect ApplyEffect(EffectDefinition def, int stacks = 1)
     {
-        if (stacks <= 0) return;
+        if (stacks <= 0) return null;
 
+        // Already have this effect
         if (TryGetEffect(def.effectName, out Effect existing))
         {
             for (int i = 0; i < stacks; i++)
-                existing.ApplyStacking();
+                ApplyStacking(existing);
+            return existing;
         }
-        else
-        {
-            var effect = new Effect(def, this);
-            Effects.Add(effect);
-            Debug.Log($"{gameObject.name} has gained {effect.Definition.effectName} for {effect.Definition.duration} seconds.");
 
-            // If more than 1 stack requested, apply the rest as stack gains
-            for (int i = 1; i < stacks; i++)
-                effect.ApplyStacking();
-        }
+        // Create new effect
+        var effect = new Effect(def, this);
+        Effects.Add(effect);
+        OnEffectApplied?.Invoke(effect);
+
+        Debug.Log($"{gameObject.name} has gained {effect.Definition.effectName} for {effect.Definition.duration} seconds.");
+
+        // If more than 1 stack requested, apply the rest
+        for (int i = 1; i < stacks; i++)
+            ApplyStacking(effect);
+
+        return effect;
     }
 
     /// <summary>
-    /// Tick effects, expiring each one if it IsExpired()
+    /// Called each frame to tick down effect durations.
     /// </summary>
     private void Update()
     {
@@ -66,24 +72,52 @@ public class EffectHandler : MonoBehaviour
             effect.Tick(dt);
 
             if (effect.TryExpire())
+            {
                 Effects.RemoveAt(i);
+                OnEffectExpired?.Invoke(effect);
+            }
         }
     }
 
+    public void ApplyStacking(Effect effect)
+    {
+        bool refreshed = false;
+        bool stacked = false;
+
+        if (effect.Definition.stackingType.HasFlag(StackingType.Refresh))
+        {
+            effect.RefreshTimer();
+            refreshed = true;
+            OnEffectRefreshed?.Invoke(effect);
+        }
+
+        if (effect.Definition.stackingType.HasFlag(StackingType.AddStack))
+        {
+            if (effect.AddStack())
+            {
+                stacked = true;
+                OnEffectStackChange?.Invoke(effect);
+            }
+        }
+
+        if (!stacked && !refreshed)
+            Debug.Log($"{effect.Definition.effectName} cannot stack or refresh (StackingType.None).");
+    }
+
     /// <summary>
-    /// Force an effect to expire by name, ignoring whether it IsExpired()
+    /// Cleanse an effect instantly without expiration.
     /// </summary>
-    public void ForceExpire(string effectName)
+    public void CleanseEffect(string effectName)
     {
         if (TryGetEffect(effectName, out Effect effect))
         {
-            effect.Expire();
-            Effects.Remove(effect);   
+            Effects.Remove(effect);
+            Debug.Log($"{gameObject.name}'s {effect.Definition.effectName} was cleansed.");
         }
     }
 
     /// <summary>
-    /// Remove stacks from an effect by name.
+    /// Remove a number of stacks from an effect, expiring it if depleted.
     /// </summary>
     public void RemoveStacks(string effectName, int stacks = 1)
     {
@@ -92,12 +126,14 @@ public class EffectHandler : MonoBehaviour
             for (int i = 0; i < stacks; i++)
             {
                 effect.RemoveStack();
+                OnEffectStackChange?.Invoke(effect);
                 if (effect.TryExpire())
                 {
                     Effects.Remove(effect);
+                    OnEffectExpired?.Invoke(effect);
                     break;
                 }
-            }           
+            }
         }
     }
 }

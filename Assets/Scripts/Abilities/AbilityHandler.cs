@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using System.Linq;
+using System;
 
 public enum AbilityAnimationTrigger { None, Cast, Channel }
 
@@ -19,7 +19,7 @@ public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] List<AbilityDefinition> initialAbilities;
 
-    readonly Dictionary<AbilityType, Ability> abilities = new();
+    public readonly Dictionary<AbilityType, Ability> abilities = new();
     public HashSet<AbilityExecution> activeExecutions = new();
 
     public StatsHandler StatsHandler { get; private set; }
@@ -27,14 +27,21 @@ public class AbilityHandler : MonoBehaviour
     public AnimationHandler AnimationHandler { get; private set; }
     public StatusHandler StatusHandler { get; private set; }
 
+    public event Action<Ability, AbilityExecution> OnAbilityActivated;
+    public event Action<Ability> OnAbilityLearned;
+
     void Awake()
     {
         StatsHandler = GetComponent<StatsHandler>();
         EffectHandler = GetComponent<EffectHandler>();
         AnimationHandler = GetComponent<AnimationHandler>();
         StatusHandler = GetComponent<StatusHandler>();
+    }
 
-        foreach (AbilityDefinition definition in initialAbilities) LearnAbility(definition);
+    void Start()
+    {
+        foreach (AbilityDefinition definition in initialAbilities) 
+            LearnAbility(definition);
     }
 
     void Update()
@@ -46,7 +53,12 @@ public class AbilityHandler : MonoBehaviour
 
     #region Ability Management
 
-    public void LearnAbility(AbilityDefinition def) => abilities[def.abilityType] = new(def, this);
+    public void LearnAbility(AbilityDefinition def)
+    {
+        Ability newAbility = new(def, this);
+        abilities[def.abilityType] = newAbility;
+        OnAbilityLearned?.Invoke(newAbility);
+    }
 
     public bool TryGetAbility(AbilityType type, out Ability ability) => abilities.TryGetValue(type, out ability);
 
@@ -73,7 +85,7 @@ public class AbilityHandler : MonoBehaviour
             if (!condition.IsMet(this, ability)) return false;
         }
 
-        StatsHandler.TryDecreaseStat(StatType.Mana, def.manaCost);
+        StatsHandler.TryModifyStat(StatType.Mana, modifyMax: false, -1f * def.manaCost);
         ability.cooldownRemaining = def.cooldown;
 
         Vector3 aimDirection = Vector3.forward;
@@ -86,6 +98,7 @@ public class AbilityHandler : MonoBehaviour
         else exec.Activate();
 
         AnimationHandler.TriggerAbility(def.castAnimationTrigger.ToString());
+        OnAbilityActivated?.Invoke(ability, exec);
 
         return true;
     }

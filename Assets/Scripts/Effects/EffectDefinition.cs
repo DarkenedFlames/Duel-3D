@@ -7,6 +7,7 @@ using System.Collections.Generic;
 public class EffectDefinition : ScriptableObject
 {
     public string effectName;
+    public Sprite icon;
     public StackingType stackingType = StackingType.Refresh;
     public ExpiryType expiryType = ExpiryType.LoseAllStacks;
     public int maxStacks = 1;

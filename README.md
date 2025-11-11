@@ -7,7 +7,7 @@
 =================================
 Count Lines
 =================================
-$paths = @(".\Assets\Players", ".\Assets\Runtime") 
+$paths = @(".\Assets\Players", ".\Assets\Scripts") 
 $files = $paths | % { gci -Path $_ -Recurse -Include *.cs }
 $results = $files | % {
     $count = (Get-Content $_.FullName | Measure-Object -Line).Lines

@@ -12,4 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c497f3b2b254b4c458cb35af6a157a41, type: 3}
   m_Name: Projectile_MagicMissile_Damage
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileDamageDefinition
-  impactDamage: 5
+  sourceConfigs: []
+  targetConfigs:
+  - hookType: 512
+    amount: 10
+  otherConfigs: []

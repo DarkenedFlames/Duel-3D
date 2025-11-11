@@ -101,6 +101,7 @@ GameObject:
   - component: {fileID: 3269722624432983106}
   - component: {fileID: 7842211112478624757}
   - component: {fileID: 8119047232208711670}
+  - component: {fileID: 1237335682743688445}
   m_Layer: 0
   m_Name: MagicMissileProjectile
   m_TagString: Projectile
@@ -186,5 +187,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55328ede9c280c41a45fed60a41a593, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileHandler
-  projectileDefinition: {fileID: 11400000, guid: 22fcf30bc2e1ee345bef3038c7acbad6, type: 2}
-  source: {fileID: 0}
+  behaviorDefinitions:
+  - {fileID: 11400000, guid: db29ed26a336ba841b09832b845f7b97, type: 2}
+--- !u!114 &1237335682743688445
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c21d79d48b8bc614aba3439fc356b745, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NonActorController
+  movementType: 3
+  speed: 10
+  turnSpeed: 360
+  homingRange: 15
+  sourceIsTargetable: 0

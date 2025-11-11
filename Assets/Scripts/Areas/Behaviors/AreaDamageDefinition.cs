@@ -11,65 +11,45 @@ public class AreaDamageDefinition : AreaBehaviorDefinition
     public DamageConfig[] targetConfigs;
     public DamageConfig[] otherConfigs;
 
-    public override AreaBehavior CreateRuntimeBehavior(Area area)
-    {
-        return new AreaDamage(area, this);
-    }
+    public override AreaBehavior CreateRuntimeBehavior(Area area) => new AreaDamage(area, this);
 }
 
 public class AreaDamage : AreaBehavior
 {
     private new AreaDamageDefinition Definition => (AreaDamageDefinition)base.Definition;
-    private float _pulseTimer;
-
     public AreaDamage(Area area, AreaDamageDefinition definition) : base(area, definition) { }
 
-    private DamageConfig[] GetConfigsByActor(GameObject actor)
+    private float _pulseTimer;
+    private void ApplyDamage(GameObject actor, HookType type)
     {
-        if (actor == Area.sourceActor) return Definition.sourceConfigs;
-        else if (actor == Area.targetActor) return Definition.targetConfigs;
-        else return Definition.otherConfigs;
+        DamageConfig[] configs = actor switch
+        {
+            _ when actor == Area.sourceActor => Definition.sourceConfigs,
+            _ when actor == Area.targetActor => Definition.targetConfigs,
+            _ => Definition.otherConfigs
+        };
+
+        foreach (DamageConfig config in configs)
+            if (config.hookType.HasFlag(type) && actor.TryGetComponent(out StatsHandler stats))
+                stats.TakeDamage(config.amount);
     }
 
-    private void ApplyDamage(GameObject target, float damage)
-    {
-        if (target.TryGetComponent(out StatsHandler stats))
-            stats.TakeDamage(damage);
-    }
-
-    public override void OnTargetEnter(GameObject target)
-    {
-        foreach (DamageConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetEnter))
-                ApplyDamage(target, config.amount);
-        
-    }
-    public override void OnTargetExit(GameObject target)
-    {
-        foreach (DamageConfig config in GetConfigsByActor(target))
-            if (config.hookType.HasFlag(HookType.OnTargetExit))
-                ApplyDamage(target, config.amount);
-        
-    }
+    public override void OnTargetEnter(GameObject target) => ApplyDamage(target, HookType.OnTargetEnter);
+    public override void OnTargetExit(GameObject target) => ApplyDamage(target, HookType.OnTargetExit);
 
     public override void OnTick(float deltaTime)
     {
         _pulseTimer += deltaTime;
-        if (_pulseTimer >= Definition.period)
-        {
-            _pulseTimer = 0f;
-            foreach (GameObject target in Area.CurrentTargets)
-                foreach (DamageConfig config in GetConfigsByActor(target))
-                    if (config.hookType.HasFlag(HookType.OnTick))
-                        ApplyDamage(target, config.amount);
-        }
+        if (_pulseTimer < Definition.period) return;
+
+        _pulseTimer = 0f;
+        foreach (GameObject actor in Area.CurrentTargets)
+            ApplyDamage(actor, HookType.OnTick);
     }
     
     public override void OnExpire()
     {
-        foreach (GameObject target in Area.CurrentTargets)
-            foreach (DamageConfig config in GetConfigsByActor(target))
-                if (config.hookType.HasFlag(HookType.OnExpire))
-                    ApplyDamage(target, config.amount);
+        foreach (GameObject actor in Area.CurrentTargets)
+            ApplyDamage(actor, HookType.OnExpire);
     }
 }

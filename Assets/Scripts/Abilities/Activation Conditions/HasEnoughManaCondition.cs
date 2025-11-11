@@ -5,8 +5,8 @@ public class HasEnoughManaCondition : ActivationCondition
 {
     public override bool IsMet(AbilityHandler handler, Ability ability)
     {
-        if (!handler.StatsHandler.TryGetStat(StatType.Mana, out var val)) return false;
-        else return val >= ability.Definition.manaCost; 
+        float currentMana = handler.StatsHandler.GetStat(StatType.Mana, getMax: false);
+        return currentMana >= ability.Definition.manaCost; 
     }
 
 }

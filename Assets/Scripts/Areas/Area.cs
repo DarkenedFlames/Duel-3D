@@ -1,23 +1,26 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 using System;
 
 [RequireComponent(typeof(SphereCollider), typeof(Rigidbody), typeof(MeshRenderer))]
 public class Area : MonoBehaviour
 {
     [Header("Area Settings")]
-    public List<AreaBehaviorDefinition> behaviorDefinitions;
-    public GameObject sourceActor;
-    public GameObject targetActor;
     public float radius = 5f;
     public float duration = 5f;
+    public LayerMask targetLayers;
+    public List<AreaBehaviorDefinition> behaviorDefinitions;
+
+    [NonSerialized] public GameObject sourceActor;
+    [NonSerialized] public GameObject targetActor;
 
     // Runtime tracking
     readonly List<GameObject> currentTargets = new();
     readonly HashSet<GameObject> previousTargets = new();
-    readonly List<AreaBehavior> behaviors = new();
-    float lifetime;
-    bool expired;
+    List<AreaBehavior> behaviors = new();
+    float _timer;
+    bool ZeroTime => _timer <= 0;
 
     public IReadOnlyList<GameObject> CurrentTargets => currentTargets;
 
@@ -37,13 +40,11 @@ public class Area : MonoBehaviour
         var rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
 
-        foreach (var def in behaviorDefinitions)
-        {
-            if (def != null)
-                behaviors.Add(def.CreateRuntimeBehavior(this));
-        }
-
-        lifetime = duration;
+        behaviors = behaviorDefinitions
+            .Select(b => b.CreateRuntimeBehavior(this))
+            .ToList();
+        
+        _timer = duration;
     }
 
     void Start() => behaviors.ForEach(b => b.OnStart());
@@ -51,26 +52,22 @@ public class Area : MonoBehaviour
     void Update()
     {
         float dt = Time.deltaTime;
-        lifetime -= dt;
+        _timer -= dt;
 
         UpdateCurrentTargets();
-
-        foreach (var behavior in behaviors) behavior.OnTick(dt);
-
-        if (lifetime <= 0f && !expired) Expire();
+        behaviors.ForEach(b => b.OnTick(dt));
+        TryExpire();
     }
 
     void UpdateCurrentTargets()
     {
         // Rebuild current
-        Collider[] hits = Physics.OverlapSphere(transform.position, radius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, radius, targetLayers, QueryTriggerInteraction.Collide);
         currentTargets.Clear();
 
         foreach (var col in hits)
         {
             GameObject root = col.transform.root.gameObject;
-            if (!root.CompareTag("Actor")) continue;
-
             currentTargets.Add(root);
         }
 
@@ -84,16 +81,18 @@ public class Area : MonoBehaviour
             if (!currentTargets.Contains(actor))
                 behaviors.ForEach(b => b.OnTargetExit(actor));
 
-        // Set current equal to previous
+        // Set previous equal to current
         previousTargets.Clear();
         foreach (var actor in currentTargets)
             previousTargets.Add(actor);
     }
 
-    void Expire()
+    bool TryExpire()
     {
-        expired = true;
+        if (!ZeroTime) return false;
+
         behaviors.ForEach(b => b.OnExpire());
         Destroy(gameObject);
+        return true;
     }
 }

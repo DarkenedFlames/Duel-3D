@@ -2,20 +2,6 @@ using UnityEngine;
 
 
 
-
-// Projectile
-public abstract class ProjectileBehavior
-{
-    public virtual void OnSpawn() { }
-    public virtual void OnUpdate(float deltaTime) { }
-    public virtual void OnExpire() { }
-    public virtual void OnTrigger(Collider collider) { }
-}
-public abstract class ProjectileBehaviorDefinition : ScriptableObject
-{
-    public abstract ProjectileBehavior CreateRuntimeInstance(Projectile owner);
-}
-
 // Weapon
 public abstract class WeaponBehavior
 {
@@ -43,26 +29,7 @@ public abstract class PickupBehaviorDefinition : ScriptableObject
 }
 
 
-public abstract class ProjectileBehavior<TDefinition> : ProjectileBehavior
-    where TDefinition : ProjectileBehaviorDefinition
-{
-    protected readonly TDefinition Definition;
-    protected readonly Projectile Owner;
 
-    protected ProjectileBehavior(TDefinition definition, Projectile owner)
-    {
-        Definition = definition;
-        Owner = owner;
-    }
-}
-
-public abstract class ProjectileBehaviorDefinition<TBehavior, TDefinition> : ProjectileBehaviorDefinition
-    where TBehavior : ProjectileBehavior<TDefinition>
-    where TDefinition : ProjectileBehaviorDefinition<TBehavior, TDefinition>
-{
-    public override ProjectileBehavior CreateRuntimeInstance(Projectile owner) => CreateTypedInstance(owner);
-    protected abstract TBehavior CreateTypedInstance(Projectile owner);
-}
 
 // Weapon
 public abstract class WeaponBehavior<TDefinition> : WeaponBehavior

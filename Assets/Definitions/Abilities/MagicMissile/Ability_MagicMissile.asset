@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Ability_MagicMissile
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Magic Missile
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3a86a96326b75d849b8c01b0ad9ca02b, type: 3}
   abilityType: 0
   castAnimationTrigger: 1
   manaCost: 5

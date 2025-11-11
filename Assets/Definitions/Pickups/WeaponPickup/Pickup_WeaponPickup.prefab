@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1815504746628024461}
   - component: {fileID: -1057976007786460374}
   - component: {fileID: 2526242970005828714}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Pickup_WeaponPickup
   m_TagString: Pickup
   m_Icon: {fileID: 0}
@@ -126,4 +126,3 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupHandler
   pickupDefinition: {fileID: 11400000, guid: fb61ba3a922c5244ea7bf28b5363a33b, type: 2}
-  pickupCollider: {fileID: 0}
