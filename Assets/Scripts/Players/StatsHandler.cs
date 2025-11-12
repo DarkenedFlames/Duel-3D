@@ -21,6 +21,7 @@ public class StatsHandler : MonoBehaviour
             _values[type] = (0f, 0f);
     }
 
+    // UI Relies on the OnStatChanged invocations from this. Keep in Start().
     private void Start()
     {
         SetDefaultStat(StatType.Health, 100f);

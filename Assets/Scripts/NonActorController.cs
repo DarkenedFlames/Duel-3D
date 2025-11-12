@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum MovementType
@@ -39,12 +40,12 @@ public class NonActorController : MonoBehaviour
     private GameObject GetSource()
     {
         if (TryGetComponent(out Area area))
-            return area.sourceActor;
+            return area.SourceActor;
         else if (TryGetComponent(out Projectile projectile))
             return projectile.SourceActor;
         else
         {
-            Debug.LogWarning($"{name} has NonActorController but neither Area nor Projectile.");
+            Debug.LogError($"{name} has NonActorController but neither Area nor Projectile.");
             return null;
         }
     }
@@ -90,6 +91,7 @@ public class NonActorController : MonoBehaviour
         }
 
         // Reacquire if Relentless and lost target
+        // This is a good check, otherwise we would constantly query for new targets
         if (HomingTarget == null && persistent)
             AcquireClosestTarget();
 
@@ -118,14 +120,10 @@ public class NonActorController : MonoBehaviour
     private void AcquireClosestTarget()
     {
         GameObject[] allObjects = FindObjectsByType<GameObject>(FindObjectsSortMode.None);
-        List<GameObject> potentialTargets = new();
-
-        foreach (GameObject obj in allObjects)
-        {
-            GameObject rootObj = obj.transform.root.gameObject;
-            if (!potentialTargets.Contains(rootObj) && rootObj.layer == LayerMask.NameToLayer("Actors"))
-                potentialTargets.Add(rootObj);
-        }
+        HashSet<GameObject> potentialTargets = allObjects
+                .Select(go => go.transform.root.gameObject)
+                .Where(go => go.layer == LayerMask.NameToLayer("Actors"))
+                .ToHashSet();
 
         if (potentialTargets.Count == 0) return;
 

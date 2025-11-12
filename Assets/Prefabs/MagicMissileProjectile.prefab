@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3578246022787383102}
   - component: {fileID: 3323832345785090872}
   - component: {fileID: 395507527581967454}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -102,7 +102,7 @@ GameObject:
   - component: {fileID: 7842211112478624757}
   - component: {fileID: 8119047232208711670}
   - component: {fileID: 1237335682743688445}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: MagicMissileProjectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
@@ -189,6 +189,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileHandler
   behaviorDefinitions:
   - {fileID: 11400000, guid: db29ed26a336ba841b09832b845f7b97, type: 2}
+  - {fileID: 11400000, guid: 017a99767fc23b14989b55115b6eebd2, type: 2}
+  collidesWithSource: 0
+  piercingAmount: 1
+  duration: 0
 --- !u!114 &1237335682743688445
 MonoBehaviour:
   m_ObjectHideFlags: 0

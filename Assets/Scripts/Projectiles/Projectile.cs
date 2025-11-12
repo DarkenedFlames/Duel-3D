@@ -11,7 +11,6 @@ public class Projectile : MonoBehaviour
     public GameObject TargetActor => controller.HomingTarget;
 
     [SerializeField] private bool collidesWithSource;
-    [SerializeField] private bool collidesWithTerrain;
     [SerializeField] private int piercingAmount;
     private int _pierced;
     private bool ZeroPierce => _pierced <= 0;
@@ -20,13 +19,12 @@ public class Projectile : MonoBehaviour
     private float _timer;
     private bool ZeroTime => _timer <= 0;
 
-
     private NonActorController controller;
 
     public void SetSource(GameObject source)
     {
-        if (source.layer != LayerMask.NameToLayer("Actors")) return;
-        SourceActor = source;
+        if (source.layer == LayerMask.NameToLayer("Actors"))
+            SourceActor = source;
     }
 
     void Awake()
@@ -49,17 +47,13 @@ public class Projectile : MonoBehaviour
         behaviors.ForEach(b => b.OnTick(dt));
     }
 
+    // Only collides with actors and terrain (layer collision matrix)
     void OnTriggerEnter(Collider other)
     {
         GameObject target = other.transform.root.gameObject;
-        bool targetIsActor = target.layer == LayerMask.NameToLayer("Actors");
-        bool targetIsTerrain = target.CompareTag("Ground");
-
-        if (!targetIsActor && !targetIsTerrain) return;
-
+        
+        if (target == null) return;
         if (target == SourceActor && !collidesWithSource) return;
-
-        if (targetIsTerrain && !collidesWithTerrain) return;
 
         _pierced--;
         behaviors.ForEach(b => b.OnCollide(target));
@@ -67,7 +61,7 @@ public class Projectile : MonoBehaviour
     }
 
     // Expiring occurs when zero time or zero pierces left.
-    public bool TryExpire()
+    bool TryExpire()
     {
         if (!ZeroPierce && !ZeroTime) return false;
 

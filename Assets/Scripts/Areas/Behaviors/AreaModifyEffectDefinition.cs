@@ -27,8 +27,8 @@ public class AreaModifyEffect : AreaBehavior
     {
         EffectConfig[] configs = actor switch
         {
-            _ when actor == Area.sourceActor => Definition.sourceConfigs,
-            _ when actor == Area.targetActor => Definition.targetConfigs,
+            _ when actor == Area.SourceActor => Definition.sourceConfigs,
+            _ when actor == Area.TargetActor => Definition.targetConfigs,
             _ => Definition.otherConfigs
         };
 

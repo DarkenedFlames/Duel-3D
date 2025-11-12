@@ -8,6 +8,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float sprintModifier = 2f;
     [SerializeField] private float jumpHeight = 2f;
     [SerializeField] private float gravity = -9.81f;
+    [SerializeField] private float externalDamping = 5f;
 
     private CharacterController controller;
     private AnimationHandler animationHandler;
@@ -15,6 +16,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 velocity;
     private bool isGrounded;
+    private Vector3 externalForce;
+
 
     public Vector2 Look { get; private set; }
 
@@ -37,16 +40,23 @@ public class PlayerMovement : MonoBehaviour
         float speed = isSprinting ? walkSpeed * sprintModifier : walkSpeed;
 
         Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        controller.Move(speed * Time.deltaTime * move);
+        Vector3 totalMove = (speed * move) + externalForce;
 
+        // Apply both the input and the force
+        controller.Move(totalMove * Time.deltaTime);
+
+        // Apply gravity as usual
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        // Dampen external forces gradually
+        externalForce = Vector3.Lerp(externalForce, Vector3.zero, Time.deltaTime * externalDamping);
 
         animationHandler.UpdateMovement(moveInput, isSprinting, isGrounded);
     }
 
     public void ProcessLook(Vector2 lookInput) => Look = lookInput;
-    
+    public void ApplyExternalForce(Vector3 force) => externalForce += force;
 
     public void TryJump()
     {
@@ -55,5 +65,5 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
             animationHandler.TriggerJump();
         }
-    }
+    }    
 }

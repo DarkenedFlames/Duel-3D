@@ -23,10 +23,12 @@ public class AreaModifyStat : AreaBehavior
     private float _pulseTimer;
     private void ModifyStat(GameObject actor, HookType type)
     {
+        if (actor == null) return;
+
         StatConfig[] configs = actor switch
         {
-            _ when actor == Area.sourceActor => Definition.sourceConfigs,
-            _ when actor == Area.targetActor => Definition.targetConfigs,
+            _ when actor == Area.SourceActor => Definition.sourceConfigs,
+            _ when actor == Area.TargetActor => Definition.targetConfigs,
             _ => Definition.otherConfigs
         };
 

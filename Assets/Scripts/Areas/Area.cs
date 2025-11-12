@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-[RequireComponent(typeof(SphereCollider), typeof(Rigidbody), typeof(MeshRenderer))]
+[RequireComponent(typeof(SphereCollider), typeof(MeshRenderer), typeof(NonActorController))]
 public class Area : MonoBehaviour
 {
     [Header("Area Settings")]
@@ -11,21 +11,20 @@ public class Area : MonoBehaviour
     public float duration = 5f;
     public LayerMask targetLayers;
     public List<AreaBehaviorDefinition> behaviorDefinitions;
-
-    [NonSerialized] public GameObject sourceActor;
-    [NonSerialized] public GameObject targetActor;
+    List<AreaBehavior> behaviors = new();
 
     // Runtime tracking
-    readonly List<GameObject> currentTargets = new();
-    readonly HashSet<GameObject> previousTargets = new();
-    List<AreaBehavior> behaviors = new();
+    private HashSet<GameObject> currentTargets = new();
+    private HashSet<GameObject> previousTargets = new();
+    public IReadOnlyList<GameObject> CurrentTargets => currentTargets.ToList();
     float _timer;
     bool ZeroTime => _timer <= 0;
 
-    public IReadOnlyList<GameObject> CurrentTargets => currentTargets;
+    NonActorController controller;
 
-    public void SetSource(GameObject source) => sourceActor = source;
-    public void SetTarget(GameObject source) => targetActor = source;
+    public GameObject SourceActor { get; private set; }
+    public GameObject TargetActor => controller.HomingTarget;
+    public void SetSource(GameObject source) => SourceActor = source;
 
     private void Awake()
     {
@@ -37,8 +36,7 @@ public class Area : MonoBehaviour
         float diameter = radius * 2f;
         mesh.transform.localScale = new Vector3(diameter, diameter, diameter);
 
-        var rb = GetComponent<Rigidbody>();
-        rb.isKinematic = true;
+        controller = GetComponent<NonActorController>();
 
         behaviors = behaviorDefinitions
             .Select(b => b.CreateRuntimeBehavior(this))
@@ -62,14 +60,10 @@ public class Area : MonoBehaviour
     void UpdateCurrentTargets()
     {
         // Rebuild current
-        Collider[] hits = Physics.OverlapSphere(transform.position, radius, targetLayers, QueryTriggerInteraction.Collide);
         currentTargets.Clear();
-
-        foreach (var col in hits)
-        {
-            GameObject root = col.transform.root.gameObject;
-            currentTargets.Add(root);
-        }
+        currentTargets = Physics.OverlapSphere(transform.position, radius, targetLayers, QueryTriggerInteraction.Collide)
+            .Select(col => col.transform.root.gameObject)
+            .ToHashSet();
 
         // Entry: in current but not in previous
         foreach (var actor in currentTargets)

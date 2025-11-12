@@ -1,6 +1,7 @@
 // File: AbilityExecution.cs
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 /// <summary>
@@ -53,6 +54,11 @@ public class AbilityExecution
     /// <summary>Initialize runtime behaviors from definitions.</summary>
     public void InitializeBehaviors(IEnumerable<AbilityBehaviorDefinition> defs)
     {
+        if (defs.Count() == 0)
+        {
+            Debug.LogError($"{Handler.gameObject.name}'s {Ability.Definition.abilityName} has no behavior definitions.");
+            return;
+        }
         foreach (var def in defs)
         {
             var runtime = def.CreateRuntimeBehavior();

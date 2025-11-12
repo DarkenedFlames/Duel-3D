@@ -22,9 +22,12 @@ public class AbilitySpawnsArea : AbilityBehavior
 
         foreach (AreaConfig config in def.configs)
         {
-            Vector3 spawnPosition = casterTransform.TransformPoint(config.spawnOffset);
-            Quaternion spawnRotation = casterTransform.rotation * Quaternion.Euler(config.localEulerRotation);
-            SpawnerController.Instance.SpawnArea(config.areaPrefab, spawnPosition, spawnRotation, caster);
+            if (config.hookType.HasFlag(HookType.OnActivate))
+            {
+                Vector3 spawnPosition = casterTransform.TransformPoint(config.spawnOffset);
+                Quaternion spawnRotation = casterTransform.rotation * Quaternion.Euler(config.localEulerRotation);
+                SpawnerController.Instance.SpawnArea(config.areaPrefab, spawnPosition, spawnRotation, caster);                
+            }
         }
     }
 }
