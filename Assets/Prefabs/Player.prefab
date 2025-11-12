@@ -468,13 +468,13 @@ GameObject:
   m_Component:
   - component: {fileID: 6135929124715125190}
   - component: {fileID: 3581662296272136017}
-  - component: {fileID: 2803009230561441656}
   - component: {fileID: 3538320555304346363}
-  - component: {fileID: 6061866845271902381}
   - component: {fileID: 7923905574634288884}
   - component: {fileID: 6120086274028814773}
   - component: {fileID: 3517945138264299491}
   - component: {fileID: 3549026730212811760}
+  - component: {fileID: 1015973529592231348}
+  - component: {fileID: 492538571319324056}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -523,22 +523,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!114 &2803009230561441656
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518875661120736659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 034fdc6ec4dcf9c4ab109198414c2137, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  speedStatConversionModifier: 0.05
-  sprintModifier: 2
-  jumpHeight: 2
-  gravity: -9.81
 --- !u!114 &3538320555304346363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -552,27 +536,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationHandler
   animator: {fileID: 1340247454522026225}
---- !u!114 &6061866845271902381
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518875661120736659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 685c25d04806b3e4dba8bfb397fee442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: '::'
-  moveAction: {fileID: 812108953428268323, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  lookAction: {fileID: 1715970660528617424, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  jumpAction: {fileID: 4913211416646836620, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  sprintAction: {fileID: 5128944551220700427, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  attackAction: {fileID: -5911304640806276753, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  castPrimaryAction: {fileID: 5382526297396852362, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  castSecondaryAction: {fileID: 1339803158373243684, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  castUtilityAction: {fileID: 623402112534731840, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
-  castSpecialAction: {fileID: -7830554980138712855, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
 --- !u!114 &7923905574634288884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -624,6 +587,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2ebddd866a5b4989715726f622ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusHandler
+--- !u!114 &1015973529592231348
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3a4cf9ce387d446a9d57990d2902a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerInputProvider
+  moveAction: {fileID: 812108953428268323, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  lookAction: {fileID: 1715970660528617424, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  jumpAction: {fileID: 4913211416646836620, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  sprintAction: {fileID: 5128944551220700427, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  attackAction: {fileID: -5911304640806276753, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  abilityActions:
+  - {fileID: 5382526297396852362, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  - {fileID: 1339803158373243684, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  - {fileID: 623402112534731840, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+  - {fileID: -7830554980138712855, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+--- !u!114 &492538571319324056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c685fdcb33747f548a4a8d13bc10f3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterMovement
+  speedStatConversionModifier: 0.05
+  sprintModifier: 2
+  jumpHeight: 2
+  gravity: -9.81
+  externalDamping: 5
 --- !u!1 &1684831763471223180
 GameObject:
   m_ObjectHideFlags: 0

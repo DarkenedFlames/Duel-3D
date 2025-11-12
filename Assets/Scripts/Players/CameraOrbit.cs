@@ -11,14 +11,14 @@ public class CameraOrbit : MonoBehaviour
     [SerializeField] private float minY = -30f;
     [SerializeField] private float maxY = 60f;
 
-    private PlayerMovement playerMovement;
+    private IInputProvider input;
     private float _yaw;
     private float _pitch;
     private Collider[] playerColliders;
 
     private void Awake()
     {
-        playerMovement = target.GetComponent<PlayerMovement>();
+        input = target.GetComponent<IInputProvider>();
         playerColliders = target.GetComponentsInChildren<Collider>();
     }
 
@@ -44,7 +44,7 @@ public class CameraOrbit : MonoBehaviour
     private void LateUpdate()
     {
         // Read camera input
-        Vector2 look = playerMovement.Look;
+        Vector2 look = input.LookInput;
         _yaw += look.x * sensitivityX;
         _pitch -= look.y * sensitivityY;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);

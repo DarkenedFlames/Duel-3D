@@ -4,13 +4,13 @@ using UnityEngine;
 [Serializable]
 public class EffectConfig
 {
-    [Tooltip("When this applies")]
+    [Tooltip("When this to modify the effect.")]
     public HookType hookType;
 
-    [Tooltip("Apply if true, remove if false")]
+    [Tooltip("Apply if true, remove if false.")]
     public bool mode;
 
-    [Tooltip("Effect to modify")]
+    [Tooltip("The effect to modify.")]
     public EffectDefinition effectDefinition;
 
     [Tooltip("Number of stacks to apply/remove.")]

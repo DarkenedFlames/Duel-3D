@@ -4,9 +4,9 @@ using UnityEngine;
 [Serializable]
 public class DamageConfig
 {
-    [Tooltip("When this damage applies (e.g., OnApply, OnTick, OnExpire)")]
+    [Tooltip("When to deal damage.")]
     public HookType hookType;
 
-    [Tooltip("How much damage to deal (per second if OnTick).")]
+    [Tooltip("The amount of damage to deal.")]
     public float amount;
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 [Serializable]
 public class MoveActorConfig
 {
-    [Tooltip("When this applies")]
+    [Tooltip("When to move the actor.")]
     public HookType hookType;
 
     [Tooltip("Direction to move the actor, relative to the projectile's transform.")]

@@ -14,15 +14,15 @@ public class AbilityMovesActor : AbilityBehavior
     readonly AbilityMovesActorDefinition def;
     public AbilityMovesActor(AbilityMovesActorDefinition d) => def = d;
     
-    private void MovesActor(HookType type)
+    private void MoveActor(HookType type)
     {
         foreach (MoveActorConfig config in def.configs)
-            if (config.hookType.HasFlag(type) && Execution.Handler.TryGetComponent(out PlayerMovement movement))
+            if (config.hookType.HasFlag(type) && Execution.Handler.TryGetComponent(out CharacterMovement movement))
             {
-                Vector3 pushDirection = (Execution.Handler.transform.forward + config.direction).normalized;
+                Vector3 pushDirection = Execution.Handler.transform.TransformDirection(Vector3.forward + config.direction).normalized;
                 movement.ApplyExternalForce(pushDirection * config.forceStrength);
             }
     }
 
-    public override void OnActivate() => MovesActor(HookType.OnActivate);
+    public override void OnActivate() => MoveActor(HookType.OnActivate);
 }

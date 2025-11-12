@@ -18,11 +18,11 @@ public class EffectDamage : EffectBehavior
     public EffectDamage(EffectDamageDefinition definition, Effect effect) : base(definition, effect) { }
 
     private float _pulseTimer;
-    private void ApplyDamage(HookType type)
+    private void ApplyDamage(HookType type, bool multipliedByStacks = false)
     {
         foreach (DamageConfig config in Definition.targetConfigs)
             if (config.hookType.HasFlag(type) && Effect.Handler.TryGetComponent(out StatsHandler stats))
-                stats.TakeDamage(config.amount);
+                stats.TakeDamage(config.amount * (multipliedByStacks ? Effect.CurrentStacks : 1f));
     }
 
     public override void OnApply() => ApplyDamage(HookType.OnApply);
@@ -35,7 +35,7 @@ public class EffectDamage : EffectBehavior
         if (_pulseTimer < Definition.period) return;
 
         _pulseTimer = 0f;
-        ApplyDamage(HookType.OnTick);
+        ApplyDamage(HookType.OnTick, multipliedByStacks: true);
     }
 
     public override void OnStackLost() => ApplyDamage(HookType.OnStackLost);

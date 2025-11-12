@@ -26,6 +26,7 @@ public class AbilityHandler : MonoBehaviour
     public EffectHandler EffectHandler { get; private set; }
     public AnimationHandler AnimationHandler { get; private set; }
     public StatusHandler StatusHandler { get; private set; }
+    private IInputProvider input;
 
     public event Action<Ability, AbilityExecution> OnAbilityActivated;
     public event Action<Ability> OnAbilityLearned;
@@ -36,6 +37,7 @@ public class AbilityHandler : MonoBehaviour
         EffectHandler = GetComponent<EffectHandler>();
         AnimationHandler = GetComponent<AnimationHandler>();
         StatusHandler = GetComponent<StatusHandler>();
+        input = GetComponent<IInputProvider>();
     }
 
     void Start()
@@ -49,6 +51,12 @@ public class AbilityHandler : MonoBehaviour
         float dt = Time.deltaTime;       
         foreach (var ability in abilities.Values) ability.TickCooldown(dt);
         foreach (var exec in activeExecutions) exec.Tick(dt);
+
+        var abilityInputs = input.AbilityPressed;
+        if (abilityInputs[0]) TryActivateByType(AbilityType.Primary);
+        if (abilityInputs[1]) TryActivateByType(AbilityType.Secondary);
+        if (abilityInputs[2]) TryActivateByType(AbilityType.Utility);
+        if (abilityInputs[3]) TryActivateByType(AbilityType.Special);
     }
 
     #region Ability Management

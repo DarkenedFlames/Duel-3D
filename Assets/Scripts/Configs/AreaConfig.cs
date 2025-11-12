@@ -4,15 +4,15 @@ using UnityEngine;
 [Serializable]
 public class AreaConfig
 {
-    [Tooltip("When this applies")]
+    [Tooltip("When to spawn the area.")]
     public HookType hookType;
 
-    [Tooltip("Area to spawn")]
+    [Tooltip("The area to spawn.")]
     public GameObject areaPrefab;
 
-    [Tooltip("Local spawn offset from caster transform")]
+    [Tooltip("Local spawn offset from caster transform.")]
     public Vector3 spawnOffset = Vector3.zero;
 
-    [Tooltip("Initial rotation relative to caster")]
+    [Tooltip("Initial rotation relative to caster.")]
     public Vector3 localEulerRotation = Vector3.zero;
 }

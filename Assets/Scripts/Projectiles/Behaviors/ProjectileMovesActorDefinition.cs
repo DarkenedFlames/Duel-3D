@@ -17,7 +17,7 @@ public class ProjectileMovesActor : ProjectileBehavior
     private new ProjectileMovesActorDefinition Definition => (ProjectileMovesActorDefinition)base.Definition;
     public ProjectileMovesActor(Projectile projectile, ProjectileMovesActorDefinition definition) : base(projectile, definition) { }
 
-    private void MovesActor(GameObject actor, HookType type)
+    private void MoveActor(GameObject actor, HookType type)
     {
         MoveActorConfig[] configs = actor switch
         {
@@ -27,13 +27,13 @@ public class ProjectileMovesActor : ProjectileBehavior
         };
 
         foreach (MoveActorConfig config in configs)
-            if (config.hookType.HasFlag(type) && actor.TryGetComponent(out PlayerMovement movement))
+            if (config.hookType.HasFlag(type) && actor.TryGetComponent(out CharacterMovement movement))
             {
-                Vector3 pushDirection = (Projectile.transform.forward + config.direction).normalized;
+                Vector3 pushDirection = Projectile.transform.TransformDirection(Vector3.forward + config.direction).normalized;
                 movement.ApplyExternalForce(pushDirection * config.forceStrength);
             }
     }
 
-    public override void OnCollide(GameObject target) => MovesActor(target, HookType.OnCollide);
+    public override void OnCollide(GameObject target) => MoveActor(target, HookType.OnCollide);
 
 }

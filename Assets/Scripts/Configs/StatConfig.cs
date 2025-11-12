@@ -4,15 +4,15 @@ using UnityEngine;
 [Serializable]
 public class StatConfig
 {
-    [Tooltip("When this applies")]
+    [Tooltip("When to modify the stat.")]
     public HookType hookType;
     
-    [Tooltip("Which stat to modify.")]
+    [Tooltip("The stat to modify.")]
     public StatType statType;
 
-    [Tooltip("If true, modify the max stat, otherwise, modify the current stat.")]
+    [Tooltip("If true, modify the 'max' stat, otherwise, modify the 'current' stat.")]
     public bool modifyMax;
 
-    [Tooltip("How much to modify by.")]
+    [Tooltip("The amount by which to modify.")]
     public float amount;
 }
