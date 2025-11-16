@@ -37,32 +37,11 @@ public class SpawnerController : MonoBehaviour
         }
 
         // --- Definition validation section ---
-        bool invalid = false;
-        switch (component)
-        {
-            case WeaponHandler weapon when weapon.weaponDefinition == null:
-                Debug.LogError($"Spawned weapon {prefab.name} is missing its WeaponDefinition. Destroying instance.");
-                invalid = true;
-                break;
-        }
-
-        if (invalid)
-        {
-            Destroy(instance);
-            return null;
-        }
-
         return component;
     }
 
     // --- Specialized spawn methods ---
     // Make these validate source/wielder as well.
-    public WeaponHandler SpawnWeapon(GameObject weaponPrefab, GameObject wielder)
-    {
-        WeaponHandler handler = SpawnValidated<WeaponHandler>(weaponPrefab, wielder.transform.position, Quaternion.identity);
-        if (handler != null) handler.Spawn(wielder);
-        return handler;
-    }
 
     public Projectile SpawnProjectile(GameObject projectilePrefab, Vector3 position, Quaternion rotation, GameObject source = null)
     {

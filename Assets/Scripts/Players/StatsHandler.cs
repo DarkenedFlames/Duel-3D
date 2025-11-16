@@ -10,15 +10,22 @@ public enum StatType
     Speed
 }
 
+[RequireComponent(typeof(AbilityHandler))]
 public class StatsHandler : MonoBehaviour
 {
     private Dictionary<StatType, (float current, float max)> _values = new();
     public event Action<StatType, float, float> OnStatChanged;
+    public event Action<GameObject> OnDeath;
+
+    private AbilityHandler abilities;
 
     private void Awake()
     {
         foreach (StatType type in Enum.GetValues(typeof(StatType)))
             _values[type] = (0f, 0f);
+
+        abilities = GetComponent<AbilityHandler>();
+
     }
 
     // UI Relies on the OnStatChanged invocations from this. Keep in Start().
@@ -34,6 +41,16 @@ public class StatsHandler : MonoBehaviour
     {
         TrySetStat(type, setMax: true, value);
         TrySetStat(type, setMax: false, value);
+    }
+
+    void OnEnable()
+    {
+        abilities.OnAbilityActivated += HandleAbilityActivated;
+    }
+
+    void Osable()
+    {
+        abilities.OnAbilityActivated -= HandleAbilityActivated;
     }
 
 
@@ -69,6 +86,8 @@ public class StatsHandler : MonoBehaviour
         if (Mathf.Approximately(newVal, oldVal))
             return false;
 
+        Debug.Log($"{gameObject.name}'s {type} changed from {oldVal} to {newVal}");
+
         (float finalCurrent, float finalMax) = _values[type];
         OnStatChanged?.Invoke(type, finalCurrent, finalMax);
         return true;
@@ -78,25 +97,29 @@ public class StatsHandler : MonoBehaviour
     {
         (float current, float max) = _values[type];
         float oldVal = modifyMax ? max : current;
-        return TrySetStat(type, setMax: modifyMax, oldVal + delta);
+        float newVal = oldVal + delta;
+
+        return TrySetStat(type, setMax: modifyMax, newVal);
     }
 
-    public void RefillStat(StatType type)
-    {
-        (float _, float max) = _values[type];
-        TrySetStat(type, setMax: false, max);
-    }
+    public void RefillStat(StatType type) =>
+        TrySetStat(type, setMax: false, GetStat(type, getMax: true));
+    
 
     public void TakeDamage(float amount)
     {
         if (amount <= 0) return;
-        (float current, _) = _values[StatType.Health];
-        TrySetStat(StatType.Health, setMax: false, current - amount);
+        TryModifyStat(StatType.Health, modifyMax: false, -1f * amount);
     }
 
     private void Die()
     {
         Debug.Log($"{gameObject.name} died!");
+        OnDeath?.Invoke(gameObject);
         Destroy(gameObject);
     }
+
+    private void HandleAbilityActivated(Ability ability) =>
+        TryModifyStat(StatType.Mana, modifyMax: false, -1f * ability.Definition.manaCost);
+    
 }

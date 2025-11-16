@@ -16,6 +16,8 @@ GameObject:
   - component: {fileID: 8064729694790611771}
   - component: {fileID: 5197156686741604175}
   - component: {fileID: 9139813842098127096}
+  - component: {fileID: 963031592115016344}
+  - component: {fileID: 5995702107323288291}
   m_Layer: 6
   m_Name: Dummy
   m_TagString: Actor
@@ -180,3 +182,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2ebddd866a5b4989715726f622ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusHandler
+--- !u!114 &963031592115016344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112349980033806447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 16d303f1566562541af6acf94b0b0c89, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityHandler
+  initialAbilities: []
+--- !u!114 &5995702107323288291
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112349980033806447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d5a5e6f0ee224a4280364e3a8865205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AIInputProvider

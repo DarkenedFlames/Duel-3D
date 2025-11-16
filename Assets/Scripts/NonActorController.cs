@@ -26,7 +26,15 @@ public class NonActorController : MonoBehaviour
 
     private Rigidbody rb;
     public GameObject HomingTarget { get; private set; }
-    private GameObject SourceActor => GetSource();
+    private GameObject SourceActor
+    {
+        get
+        {
+            return TryGetComponent(out IHasSourceActor hasSource)
+                ? hasSource.SourceActor
+                : null;
+        }
+    }
     private Vector3 currentDirection;
 
     void Awake()
@@ -35,19 +43,6 @@ public class NonActorController : MonoBehaviour
         rb.useGravity = false;
         rb.isKinematic = false;
         currentDirection = transform.forward;
-    }
-
-    private GameObject GetSource()
-    {
-        if (TryGetComponent(out Area area))
-            return area.SourceActor;
-        else if (TryGetComponent(out Projectile projectile))
-            return projectile.SourceActor;
-        else
-        {
-            Debug.LogError($"{name} has NonActorController but neither Area nor Projectile.");
-            return null;
-        }
     }
 
     void FixedUpdate()

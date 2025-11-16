@@ -35,7 +35,7 @@ public class AbilityBarUI : MonoBehaviour
         }
     }
 
-    private void HandleAbilityUsed(Ability ability, AbilityExecution exec)
+    private void HandleAbilityUsed(Ability ability)
     {
         if (slotLookup.TryGetValue(ability.Definition.abilityType, out AbilitySlotUI slot))
             slot.StartCooldown(ability.Definition.cooldown);

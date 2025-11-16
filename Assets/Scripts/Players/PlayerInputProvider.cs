@@ -17,7 +17,7 @@ public class PlayerInputProvider : MonoBehaviour, IInputProvider
     public Vector2 MoveInput => moveAction.action.ReadValue<Vector2>();
     public Vector2 LookInput => lookAction.action.ReadValue<Vector2>();
     public bool JumpPressed => jumpAction.action.triggered;
-    public bool Sprinting => sprintAction.action.IsPressed() && MoveInput.y > 0;
+    public bool SprintPressed => sprintAction.action.IsPressed() && MoveInput.y > 0;
     public bool AttackPressed => attackAction.action.triggered;
     public bool[] AbilityPressed => abilityActions.Select(a => a.action.triggered).ToArray();
 

@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
@@ -43,7 +44,6 @@ public class CameraOrbit : MonoBehaviour
 
     private void LateUpdate()
     {
-        // Read camera input
         Vector2 look = input.LookInput;
         _yaw += look.x * sensitivityX;
         _pitch -= look.y * sensitivityY;
@@ -51,24 +51,22 @@ public class CameraOrbit : MonoBehaviour
 
         Quaternion rotation = Quaternion.Euler(_pitch, _yaw, 0f);
         Vector3 desiredPosition = target.position - (rotation * Vector3.forward * distance);
+        Vector3 direction = (desiredPosition - target.position).normalized;
 
-        // Camera collision (keep this separate)
-        if (RaycastWithoutPlayer(target.position, (desiredPosition - target.position).normalized, out RaycastHit hit, distance))
+        if (RaycastWithoutPlayer(target.position, direction, out RaycastHit hit, distance))
         {
             float targetDistance = Mathf.Clamp(hit.distance * 0.9f, 0.5f, distance);
             desiredPosition = target.position - (rotation * Vector3.forward * targetDistance);
         }
 
         transform.position = desiredPosition;
-        transform.LookAt(target.position + Vector3.up * 1f); // look at a point slightly above target for better framing
+        transform.LookAt(target.position + Vector3.up * 1f);
 
-        // --- Rotate player horizontally to match camera yaw ---
-        Vector3 forward = rotation * Vector3.forward;  // rotate forward by the quaternion
-        forward.y = 0;                                // ignore vertical component
-        forward.Normalize();                           // make it a proper direction
+        Vector3 forward = rotation * Vector3.forward;
+        forward.y = 0;
 
         if (forward.sqrMagnitude > 0.001f)
-            target.rotation = Quaternion.LookRotation(forward);
+            target.rotation = Quaternion.LookRotation(forward.normalized);
 
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController), typeof(AnimationHandler), typeof(StatsHandler))]
@@ -13,65 +14,66 @@ public class CharacterMovement : MonoBehaviour
     private CharacterController controller;
     private AnimationHandler animationHandler;
     private StatsHandler statsHandler;
+    private IInputProvider input;
 
     private Vector3 velocity;
-    private bool isGrounded;
-    private Vector3 externalForce;
+    private Vector3 verticalVelocity;
+    private Vector3 horizontalVelocity;
+    private Vector3 externalVelocity;
+    private bool isGrounded => controller.isGrounded;
 
-
-    public Vector2 Look { get; private set; }
-
-    IInputProvider input;
+    public Action OnJumped;
 
     private void Awake()
     {
-        input = GetComponent<IInputProvider>();
         controller = GetComponent<CharacterController>();
         animationHandler = GetComponent<AnimationHandler>();
         statsHandler = GetComponent<StatsHandler>();
+
+        input = GetComponent<IInputProvider>();
+        if (input == null)
+            Debug.LogError($"No IInputProvider found on {name}");
     }
 
-    void Update()
+    private void Update()
     {
-        ProcessMovement(input.MoveInput, input.Sprinting);
-        if (input.JumpPressed) TryJump();
-    }
+        UpdateGroundState();
+        HandleJumping();
+        HandleHorizontalMovement();
+        ApplyGravity();
+        ApplyExternalVelocity();
 
-
-    public void ProcessMovement(Vector2 moveInput, bool sprintIsPressed)
-    {
-        isGrounded = controller.isGrounded;
-        if (isGrounded && velocity.y < 0)
-            velocity.y = -2f;
-
-        float speedStat = statsHandler.GetStat(StatType.Speed, getMax: false);
-
-        float walkSpeed = speedStat * speedStatConversionModifier;
-        float speed = sprintIsPressed ? walkSpeed * sprintModifier : walkSpeed;
-
-        Vector3 move = transform.right * moveInput.x + transform.forward * moveInput.y;
-        Vector3 totalMove = (speed * move) + externalForce;
-
-        // Apply both the input and the force
-        controller.Move(totalMove * Time.deltaTime);
-
-        // Apply gravity as usual
-        velocity.y += gravity * Time.deltaTime;
+        velocity = horizontalVelocity + verticalVelocity + externalVelocity;
         controller.Move(velocity * Time.deltaTime);
-
-        // Dampen external forces gradually
-        externalForce = Vector3.Lerp(externalForce, Vector3.zero, Time.deltaTime * externalDamping);
     }
 
-    public void ProcessLook(Vector2 lookInput) => Look = lookInput;
-    public void ApplyExternalForce(Vector3 force) => externalForce += force;
-
-    public void TryJump()
+    private void UpdateGroundState()
     {
-        if (isGrounded)
+        if (isGrounded && verticalVelocity.y < 0) verticalVelocity.y = -2f;
+    }
+
+    private void HandleHorizontalMovement()
+    {
+        float baseSpeed = statsHandler.GetStat(StatType.Speed, getMax: false) * speedStatConversionModifier;
+
+        float finalSpeed = input.SprintPressed ? baseSpeed * sprintModifier : baseSpeed;
+
+        Vector3 moveDir = transform.right * input.MoveInput.x + transform.forward * input.MoveInput.y;
+
+        horizontalVelocity = moveDir.normalized * finalSpeed;
+    }
+
+    private void HandleJumping()
+    {
+        if (isGrounded && input.JumpPressed)
         {
-            velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
-            animationHandler.TriggerJump();
+            OnJumped?.Invoke();
+            verticalVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-    }    
+    }
+
+    private void ApplyGravity() => verticalVelocity.y += gravity * Time.deltaTime;
+    public void ApplyExternalVelocity(Vector3 amount) => externalVelocity += amount;
+    private void ApplyExternalVelocity() => externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, Time.deltaTime * externalDamping);
+    
 }
