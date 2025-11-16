@@ -54,7 +54,7 @@ public class EffectHandler : MonoBehaviour
         for (int i = Effects.Count - 1; i >= 0; i--)
         {
             Effect effect = Effects[i];
-            effect.Tick();
+            effect.Update();
 
             if (effect.TryExpire())
             {
