@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 5148062300437154371}
   - component: {fileID: -2909770985952263376}
   - component: {fileID: 5809491550362521416}
+  - component: {fileID: 1954448448322250912}
   m_Layer: 9
   m_Name: Area_ManaDrain
-  m_TagString: Untagged
+  m_TagString: Area
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,23 +157,7 @@ MonoBehaviour:
   radius: 5
   duration: 5
   period: 1
-  affectsSource: 0
-  targetLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  bindings:
-  - Hook: 2
-    Instruction:
-      rid: 1013435596028510361
-  references:
-    version: 2
-    RefIds:
-    - rid: 1013435596028510361
-      type: {class: ModifyStatInstruction, ns: , asm: Assembly-CSharp}
-      data:
-        type: 2
-        modifyMax: 0
-        amount: -5
+  affectsSource: 1
 --- !u!114 &5809491550362521416
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,3 +175,27 @@ MonoBehaviour:
   turnSpeed: 360
   homingRange: 15
   sourceIsTargetable: 0
+--- !u!114 &1954448448322250912
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031326259091706934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e53b65e0a456684fb7f27e580ab7560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalEventListener
+  reaction:
+    rid: 1013435636988248186
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435636988248186
+      type: {class: LModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        Events: 03000000
+        type: 2
+        modifyMax: 0
+        amount: -5

@@ -21,16 +21,15 @@ MonoBehaviour:
   castTime: 0
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
-  bindings:
-  - Hook: 0
-    Instruction:
-      rid: 1013435617952399449
+  reactions:
+  - rid: 1013435636988248201
   references:
     version: 2
     RefIds:
-    - rid: 1013435617952399449
-      type: {class: SpawnProjectileInstruction, ns: , asm: Assembly-CSharp}
+    - rid: 1013435636988248201
+      type: {class: LSpawnProjectile, ns: , asm: Assembly-CSharp}
       data:
+        Events: 0a000000
         prefab: {fileID: 4286046279312439979, guid: 81138e8592f950d4590afe38f9ba869a, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

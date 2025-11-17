@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1815504746628024461}
   - component: {fileID: -1057976007786460374}
   - component: {fileID: 5574013215246372416}
+  - component: {fileID: 3761944040955952755}
   m_Layer: 10
   m_Name: Pickup_WeaponPickup
   m_TagString: Pickup
@@ -126,14 +127,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Pickup
   duration: 100
-  bindings:
-  - Hook: 0
-    Instruction:
-      rid: 1013435617952399491
+--- !u!114 &3761944040955952755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367643029821559675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e53b65e0a456684fb7f27e580ab7560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalEventListener
+  reaction:
+    rid: 1013435636988248188
   references:
     version: 2
     RefIds:
-    - rid: 1013435617952399491
-      type: {class: GivesWeaponInstruction, ns: , asm: Assembly-CSharp}
+    - rid: 1013435636988248188
+      type: {class: LGiveWeapon, ns: , asm: Assembly-CSharp}
       data:
+        Events: 04000000
         weaponPrefab: {fileID: 3970288745387636526, guid: 54c998da6b469904fbf848905ce5bfef, type: 3}

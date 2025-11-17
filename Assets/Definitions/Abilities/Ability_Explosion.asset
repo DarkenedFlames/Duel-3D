@@ -21,16 +21,15 @@ MonoBehaviour:
   castTime: 0
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
-  bindings:
-  - Hook: 0
-    Instruction:
-      rid: 1013435617952399458
+  reactions:
+  - rid: 1013435636988248200
   references:
     version: 2
     RefIds:
-    - rid: 1013435617952399458
-      type: {class: SpawnAreaInstruction, ns: , asm: Assembly-CSharp}
+    - rid: 1013435636988248200
+      type: {class: LSpawnArea, ns: , asm: Assembly-CSharp}
       data:
+        Events: 0a000000
         prefab: {fileID: 2031326259091706934, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

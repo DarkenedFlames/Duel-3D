@@ -19,14 +19,13 @@ MonoBehaviour:
   maxStacks: 3
   duration: 3
   period: 0.25
-  bindings:
-  - Hook: 3
-    Instruction:
-      rid: 1013435617952399487
+  reactions:
+  - rid: 1013435636988248204
   references:
     version: 2
     RefIds:
-    - rid: 1013435617952399487
-      type: {class: DamageInstruction, ns: , asm: Assembly-CSharp}
+    - rid: 1013435636988248204
+      type: {class: LDamage, ns: , asm: Assembly-CSharp}
       data:
+        Events: 03000000
         amount: 1

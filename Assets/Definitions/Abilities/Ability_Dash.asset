@@ -21,15 +21,14 @@ MonoBehaviour:
   castTime: 0
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
-  bindings:
-  - Hook: 0
-    Instruction:
-      rid: 1013435617952399459
+  reactions:
+  - rid: 1013435636988248202
   references:
     version: 2
     RefIds:
-    - rid: 1013435617952399459
-      type: {class: MovesActorInstruction, ns: , asm: Assembly-CSharp}
+    - rid: 1013435636988248202
+      type: {class: LMoveActor, ns: , asm: Assembly-CSharp}
       data:
+        Events: 0a000000
         direction: {x: 0, y: 0, z: 1}
         forceStrength: 50

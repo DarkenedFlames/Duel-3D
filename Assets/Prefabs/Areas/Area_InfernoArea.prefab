@@ -15,9 +15,10 @@ GameObject:
   - component: {fileID: 5148062300437154371}
   - component: {fileID: -2909770985952263376}
   - component: {fileID: 1158388464970174665}
+  - component: {fileID: 398351141761885060}
   m_Layer: 9
   m_Name: Area_InfernoArea
-  m_TagString: Untagged
+  m_TagString: Area
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -154,25 +155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   radius: 5
-  duration: 5
+  duration: 100
   period: 1
   affectsSource: 0
-  targetLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  bindings:
-  - Hook: 2
-    Instruction:
-      rid: 1013435617952399435
-  references:
-    version: 2
-    RefIds:
-    - rid: 1013435617952399435
-      type: {class: ModifyEffectInstruction, ns: , asm: Assembly-CSharp}
-      data:
-        effectDefinition: {fileID: 11400000, guid: c2dd640064d8cc84eab5ac0b1f5d31f6, type: 2}
-        mode: 1
-        stacks: 1
 --- !u!114 &1158388464970174665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,3 +175,27 @@ MonoBehaviour:
   turnSpeed: 360
   homingRange: 15
   sourceIsTargetable: 0
+--- !u!114 &398351141761885060
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031326259091706934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e53b65e0a456684fb7f27e580ab7560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalEventListener
+  reaction:
+    rid: 1013435636988248185
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435636988248185
+      type: {class: LModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        Events: 03000000
+        effectDefinition: {fileID: 11400000, guid: c2dd640064d8cc84eab5ac0b1f5d31f6, type: 2}
+        mode: 1
+        stacks: 1

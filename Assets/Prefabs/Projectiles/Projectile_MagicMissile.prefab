@@ -102,6 +102,8 @@ GameObject:
   - component: {fileID: 7842211112478624757}
   - component: {fileID: 8119047232208711670}
   - component: {fileID: 1237335682743688445}
+  - component: {fileID: 4180062845775552387}
+  - component: {fileID: 8227951211699146152}
   m_Layer: 8
   m_Name: Projectile_MagicMissile
   m_TagString: Projectile
@@ -190,26 +192,6 @@ MonoBehaviour:
   collidesWithSource: 0
   piercingAmount: 1
   duration: 5
-  bindings:
-  - Hook: 1
-    Instruction:
-      rid: 1013435607351296001
-  - Hook: 1
-    Instruction:
-      rid: 1013435617952399450
-  references:
-    version: 2
-    RefIds:
-    - rid: 1013435607351296001
-      type: {class: DamageInstruction, ns: , asm: Assembly-CSharp}
-      data:
-        amount: 5
-    - rid: 1013435617952399450
-      type: {class: SpawnAreaInstruction, ns: , asm: Assembly-CSharp}
-      data:
-        prefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
-        spawnOffset: {x: 0, y: 0, z: 0}
-        localEulerRotation: {x: 0, y: 0, z: 0}
 --- !u!114 &1237335682743688445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,3 +209,49 @@ MonoBehaviour:
   turnSpeed: 360
   homingRange: 15
   sourceIsTargetable: 0
+--- !u!114 &4180062845775552387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e53b65e0a456684fb7f27e580ab7560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalEventListener
+  reaction:
+    rid: 1013435636988248182
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435636988248182
+      type: {class: LDamage, ns: , asm: Assembly-CSharp}
+      data:
+        Events: 04000000
+        amount: 5
+--- !u!114 &8227951211699146152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e53b65e0a456684fb7f27e580ab7560, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::LocalEventListener
+  reaction:
+    rid: 1013435636988248184
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435636988248184
+      type: {class: LSpawnArea, ns: , asm: Assembly-CSharp}
+      data:
+        Events: 04000000
+        prefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

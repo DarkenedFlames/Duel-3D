@@ -22,10 +22,7 @@ public class ActorWeaponHandler : MonoBehaviour
     }
 
     public void EquipWeapon(GameObject weaponPrefab)
-    {
-        if (currentWeapon != null)
-            Destroy(currentWeapon);
-        
+    {        
         currentWeapon = Instantiate(weaponPrefab, WeaponSlot.position, WeaponSlot.localRotation, WeaponSlot);
 
         if (!currentWeapon.TryGetComponent(out Weapon weapon))
