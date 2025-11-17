@@ -107,7 +107,7 @@ public class Effect
 
     public void Invoke(Event evt, EventContext ctx)
     {
-        foreach (var r in Definition.reactions)
+        foreach (EventReaction r in Definition.reactions)
             if (r.Events.Contains(evt))
                 r.OnEvent(ctx);
     }

@@ -2,17 +2,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Linq;
 
-[RequireComponent(typeof(CharacterMovement))]
-[RequireComponent(typeof(AbilityHandler))]
 public class PlayerInputProvider : MonoBehaviour, IInputProvider
 {
     [Header("Input Actions")]
-    [SerializeField] private InputActionReference moveAction;
-    [SerializeField] private InputActionReference lookAction;
-    [SerializeField] private InputActionReference jumpAction;
-    [SerializeField] private InputActionReference sprintAction;
-    [SerializeField] private InputActionReference attackAction;
-    [SerializeField] private InputActionReference[] abilityActions;
+    [SerializeField] InputActionReference moveAction;
+    [SerializeField] InputActionReference lookAction;
+    [SerializeField] InputActionReference jumpAction;
+    [SerializeField] InputActionReference sprintAction;
+    [SerializeField] InputActionReference attackAction;
+    [SerializeField] InputActionReference[] abilityActions;
 
     public Vector2 MoveInput => moveAction.action.ReadValue<Vector2>();
     public Vector2 LookInput => lookAction.action.ReadValue<Vector2>();
@@ -28,7 +26,7 @@ public class PlayerInputProvider : MonoBehaviour, IInputProvider
         jumpAction.action.Enable();
         sprintAction.action.Enable();
         attackAction.action.Enable();
-        foreach (var action in abilityActions) action.action.Enable();
+        foreach (InputActionReference action in abilityActions) action.action.Enable();
     }
 
     private void OnDisable()
@@ -38,6 +36,6 @@ public class PlayerInputProvider : MonoBehaviour, IInputProvider
         jumpAction.action.Disable();
         sprintAction.action.Disable();
         attackAction.action.Disable();
-        foreach (var action in abilityActions) action.action.Disable();
+        foreach (InputActionReference action in abilityActions) action.action.Disable();
     }
 }

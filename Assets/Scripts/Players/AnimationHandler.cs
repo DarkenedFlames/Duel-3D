@@ -6,30 +6,28 @@ using UnityEngine;
 [RequireComponent(typeof(AbilityHandler))]
 public class AnimationHandler : MonoBehaviour
 {
-    [SerializeField] private Animator animator;
+    [SerializeField] Animator animator;
+    [SerializeField] CharacterMovement movement;
+    [SerializeField] CharacterController controller;
+    [SerializeField] AbilityHandler abilities;
+    [SerializeField] ActorWeaponHandler weapons;
+    IInputProvider input; // Interface cannot be seralized
 
-    private CharacterMovement movement;
-    private IInputProvider input;
-    private CharacterController controller;
-    private AbilityHandler abilities;
+    readonly float damping = 0.1f;
 
-    private readonly float damping = 0.1f;
-
-    private void Awake()
+    void Awake()
     {
-        movement = GetComponent<CharacterMovement>();
         input = GetComponent<IInputProvider>();
-        controller = GetComponent<CharacterController>();
-        abilities = GetComponent<AbilityHandler>();
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         movement.OnJumped += HandleJumped;
         abilities.OnAbilityActivated += HandleAbilityActivated;
+        weapons.OnSwing += HandleSwing;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         movement.OnJumped -= HandleJumped;
     }
@@ -40,7 +38,7 @@ public class AnimationHandler : MonoBehaviour
         animator.SetBool("IsGrounded", controller.isGrounded);
     }
 
-    private void HandleMovement()
+    void HandleMovement()
     {
         Vector2 animInput = input.MoveInput;
         if (input.SprintPressed)
@@ -50,8 +48,7 @@ public class AnimationHandler : MonoBehaviour
         animator.SetFloat("MoveY", animInput.y, damping, Time.deltaTime);
     }
 
-    private void HandleJumped() => animator.SetTrigger("Jumped");
-    
-    public void TriggerAttack(string triggerName) => animator.SetTrigger(triggerName);
-    public void HandleAbilityActivated(Ability _) => animator.SetTrigger(AbilityAnimationTrigger.Cast.ToString());
+    void HandleJumped() => animator.SetTrigger("Jumped");
+    void HandleAbilityActivated(Ability _) => animator.SetTrigger(AbilityAnimationTrigger.Cast.ToString());
+    void HandleSwing(Weapon weaponComponent) => animator.SetTrigger(weaponComponent.animationTrigger);
 }

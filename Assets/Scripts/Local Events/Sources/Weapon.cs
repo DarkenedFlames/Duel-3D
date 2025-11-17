@@ -1,38 +1,49 @@
-using System;
 using System.Collections;
 using UnityEngine;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(ActorTargeting))]
 public class Weapon : LocalEventSource, IHasSourceActor
 {
     [Header("Weapon Stats")]
     public float staminaCost = 10f;
     [SerializeField] float cooldownTime = 5f;
     [SerializeField] float swingDuration = 1f;
-    [SerializeField] int piercesPerSwing = 1;
+    [SerializeField] int hitsPerSwing = 1;
     public string animationTrigger = "AttackTrigger";
 
     public GameObject SourceActor { get; set; }
 
     private Collider col;
+    private ActorTargeting targeting;
 
     private float _cooldownTimer;
-    private float _pierces;
-
-    readonly HashSet<GameObject> CurrentTargets = new();
+    private int _hits;
 
     void Awake()
     {
         col = GetComponent<Collider>();
-        col.isTrigger = true;
         col.enabled = false;
+
+        targeting = GetComponent<ActorTargeting>();
+    }
+
+    void OnEnable()
+    {
+        targeting.OnActorEnter += HandleActorEnter;
+    }
+
+    void OnDisable()
+    {
+        targeting.OnActorEnter -= HandleActorEnter;
     }
 
     public void SetSource(GameObject source)
     {
         SourceActor = source;
-        Physics.IgnoreCollision(source.GetComponent<Collider>(), col, true);
+
+        if (source.TryGetComponent(out Collider srcCol))
+            Physics.IgnoreCollision(srcCol, col, true);
     }
 
     void Update()
@@ -42,35 +53,43 @@ public class Weapon : LocalEventSource, IHasSourceActor
 
     public bool TrySwing()
     {
-        if (_cooldownTimer > 0f) return false;
+        if (_cooldownTimer > 0f) 
+            return false;
 
-        CurrentTargets.Clear();
         _cooldownTimer = cooldownTime;
-        _pierces = piercesPerSwing;
+        _hits = 0;
+
         col.enabled = true;
 
-        Fire(Event.OnSwing, new NullContext(){});
+        Fire(Event.OnSwing, new NullContext());
+
         StartCoroutine(SwingRoutine());
-        col.enabled = false;
         return true;
     }
 
     private IEnumerator SwingRoutine()
     {
         yield return new WaitForSeconds(swingDuration);
+
+        // End swing
+        col.enabled = false;
     }
 
-    void OnTriggerEnter(Collider other)
+    private void HandleActorEnter(GameObject actor)
     {
-        GameObject targetObj = other.gameObject;
-        if (targetObj.layer != LayerMask.NameToLayer("Actors")) return;
-        if (CurrentTargets.Contains(targetObj)) return;
+        // Ignore source actor
+        if (actor == SourceActor)
+            return;
 
-        CurrentTargets.Add(targetObj);
-        Fire(Event.OnCollide, new PositionContext() {target = targetObj, localTransform = transform});
+        Fire(Event.OnCollide, new PositionContext()
+        {
+            target = actor,
+            localTransform = transform
+        });
 
-        _pierces--;
-        if (_pierces <= 0)
+        _hits++;
+
+        if (_hits >= hitsPerSwing)
             col.enabled = false;
     }
 }

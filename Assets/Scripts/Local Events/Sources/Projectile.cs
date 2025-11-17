@@ -1,13 +1,14 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Collider), typeof(NonActorController))]
+[RequireComponent(typeof(ActorTargeting))]
 public class Projectile : LocalEventSource, IHasSourceActor
 {
-    [SerializeField] bool collidesWithSource;
-    [SerializeField] int pierces;
-    [SerializeField] float duration;
+    [SerializeField] bool collidesWithSource = false;
+    [SerializeField] int hitsAllowed = 1;
+    [SerializeField] float duration = 10f;
 
-    int _pierced;
+    int _hits;
     float _timer;
 
     ActorTargeting targeting;
@@ -23,24 +24,39 @@ public class Projectile : LocalEventSource, IHasSourceActor
     void Awake()
     {
         _timer = duration;
-        _pierced = pierces;
+        _hits = 0;
+        Debug.Log($"{_hits} / {hitsAllowed} hits spent.");
+
+        targeting = GetComponent<ActorTargeting>();
+    }
+
+    void OnEnable()
+    {
+        targeting.OnActorEnter += HandleActorEnter;
+    }
+
+    void OnDisable()
+    {
+        targeting.OnActorEnter -= HandleActorEnter;
     }
 
     void Update()
     {
         _timer -= Time.deltaTime;
 
-        foreach (GameObject actor in targeting.EnteringTargets)
-            if (actor != SourceActor || collidesWithSource)
-            {
-                _pierced--;
-                Fire(Event.OnCollide, new PositionContext() {target = actor, localTransform = transform});
-            }
-
-        if (_pierced <= 0 || _timer <=0)
+        if (_hits >= hitsAllowed || _timer <= 0)
         {
             Fire(Event.OnExpire, new NullContext());
             Destroy(gameObject);
+        }
+    }
+
+    void HandleActorEnter(GameObject actor)
+    {
+        if (actor != SourceActor || collidesWithSource)
+        {
+            _hits++;
+            Fire(Event.OnCollide, new PositionContext() {target = actor, localTransform = transform});
         }
     }
 }

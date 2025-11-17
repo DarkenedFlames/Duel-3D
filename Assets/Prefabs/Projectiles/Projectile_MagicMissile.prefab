@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 7842211112478624757}
   - component: {fileID: 8119047232208711670}
   - component: {fileID: 1237335682743688445}
+  - component: {fileID: -5651539684393973736}
   - component: {fileID: 4180062845775552387}
   - component: {fileID: 8227951211699146152}
   m_Layer: 8
@@ -190,7 +191,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ProjectileHandler
   collidesWithSource: 0
-  piercingAmount: 1
+  hitsAllowed: 1
   duration: 5
 --- !u!114 &1237335682743688445
 MonoBehaviour:
@@ -209,6 +210,18 @@ MonoBehaviour:
   turnSpeed: 360
   homingRange: 15
   sourceIsTargetable: 0
+--- !u!114 &-5651539684393973736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 911709e7a4a6e1f4b8711032adde00f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActorTargeting
 --- !u!114 &4180062845775552387
 MonoBehaviour:
   m_ObjectHideFlags: 0

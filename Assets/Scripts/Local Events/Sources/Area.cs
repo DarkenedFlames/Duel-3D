@@ -1,5 +1,4 @@
 using UnityEngine;
-using System.Collections.Generic;
 
 [RequireComponent(typeof(MeshRenderer), typeof(NonActorController))]
 [RequireComponent(typeof(ActorTargeting))]
@@ -25,41 +24,55 @@ public class Area : LocalEventSource, IHasSourceActor
         col.radius = radius;
 
         var mesh = GetComponent<MeshRenderer>();
-        float diameter = radius * 2f;
-        mesh.transform.localScale = new Vector3(diameter, diameter, diameter);
+        mesh.transform.localScale = 2f * radius * Vector3.one;
 
         targeting = GetComponent<ActorTargeting>();
 
         _timer = duration;
         _pulseTimer = period;
     }
-    
+
+    void OnEnable()
+    {
+        targeting.OnActorEnter += HandleActorEnter;
+        targeting.OnActorStay += HandleActorStay;
+        targeting.OnActorExit += HandleActorExit;
+    }
+
+    void OnDisable()
+    {
+        targeting.OnActorEnter -= HandleActorEnter;
+        targeting.OnActorStay -= HandleActorStay;
+        targeting.OnActorExit -= HandleActorExit;
+    }
+
     void Update()
     {
         float dt = Time.deltaTime;
-        _timer -= dt;
+
         _pulseTimer -= dt;
-
-        SignalGroupEvent(targeting.EnteringTargets, Event.OnTargetEnter);
-        SignalGroupEvent(targeting.ExitingTargets, Event.OnTargetExit);
-
         if (_pulseTimer <= 0)
-        {
             _pulseTimer = period;
-            SignalGroupEvent(targeting.CurrentTargets, Event.OnPulse);
-        }
-
+        
+        _timer -= dt;
         if(_timer <= 0)
-        {
-            SignalGroupEvent(targeting.CurrentTargets, Event.OnExpire);
             Destroy(gameObject);
-        }
     }
 
-    void SignalGroupEvent(IEnumerable<GameObject> actors, Event evt)
+    void InvokeGenericEvent(GameObject actor, Event evt)
     {
-        foreach (GameObject actor in actors)
-            if (actor != SourceActor || affectsSource)
-               Fire(evt, new PositionContext() {target = actor, localTransform = transform});
+        if (actor != SourceActor || affectsSource)
+            Fire(evt, new PositionContext() {target = actor, localTransform = transform});
     }
+
+    void HandleActorEnter(GameObject actor) => InvokeGenericEvent(actor, Event.OnTargetEnter);
+
+    void HandleActorExit(GameObject actor) => InvokeGenericEvent(actor, Event.OnTargetExit);
+    
+    void HandleActorStay(GameObject actor)
+    {
+        if (_pulseTimer <= 0) InvokeGenericEvent(actor, Event.OnPulse);
+        if (_timer <= 0) InvokeGenericEvent(actor, Event.OnExpire);
+    }
+
 }

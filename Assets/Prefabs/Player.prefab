@@ -467,15 +467,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6135929124715125190}
-  - component: {fileID: 3581662296272136017}
   - component: {fileID: 4536649286122611172}
+  - component: {fileID: 3581662296272136017}
   - component: {fileID: 1015973529592231348}
+  - component: {fileID: 492538571319324056}
   - component: {fileID: 3538320555304346363}
-  - component: {fileID: 7923905574634288884}
   - component: {fileID: 6120086274028814773}
+  - component: {fileID: 7923905574634288884}
   - component: {fileID: 3517945138264299491}
   - component: {fileID: 3549026730212811760}
-  - component: {fileID: 492538571319324056}
   - component: {fileID: 3272784339679890099}
   m_Layer: 6
   m_Name: Player
@@ -500,6 +500,29 @@ Transform:
   - {fileID: 1518621856691002795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &4536649286122611172
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!143 &3581662296272136017
 CharacterController:
   m_ObjectHideFlags: 0
@@ -525,29 +548,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.75, z: 0}
---- !u!136 &4536649286122611172
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518875661120736659}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 1
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1015973529592231348
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -570,6 +570,25 @@ MonoBehaviour:
   - {fileID: 1339803158373243684, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
   - {fileID: 623402112534731840, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
   - {fileID: -7830554980138712855, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}
+--- !u!114 &492538571319324056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c685fdcb33747f548a4a8d13bc10f3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterMovement
+  controller: {fileID: 3581662296272136017}
+  statsHandler: {fileID: 6120086274028814773}
+  speedStatConversionModifier: 0.05
+  sprintModifier: 2
+  jumpHeight: 2
+  gravity: -9.81
+  externalDamping: 5
 --- !u!114 &3538320555304346363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -583,6 +602,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationHandler
   animator: {fileID: 1340247454522026225}
+  movement: {fileID: 492538571319324056}
+  controller: {fileID: 3581662296272136017}
+  abilities: {fileID: 7923905574634288884}
+  weapons: {fileID: 3272784339679890099}
+--- !u!114 &6120086274028814773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1518875661120736659}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 941e649e87b69f84f8e02c4c3a890814, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StatsHandler
+  abilities: {fileID: 7923905574634288884}
 --- !u!114 &7923905574634288884
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -598,18 +634,6 @@ MonoBehaviour:
   initialAbilities:
   - {fileID: 11400000, guid: b04ef89c27fa2194db9fb4eba0b7f22f, type: 2}
   - {fileID: 11400000, guid: 66efe22906fa1764a9361cfae1b7ec40, type: 2}
---- !u!114 &6120086274028814773
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518875661120736659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 941e649e87b69f84f8e02c4c3a890814, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StatsHandler
 --- !u!114 &3517945138264299491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -634,23 +658,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bcb2ebddd866a5b4989715726f622ca2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StatusHandler
---- !u!114 &492538571319324056
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1518875661120736659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c685fdcb33747f548a4a8d13bc10f3cf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterMovement
-  speedStatConversionModifier: 0.05
-  sprintModifier: 2
-  jumpHeight: 2
-  gravity: -9.81
-  externalDamping: 5
 --- !u!114 &3272784339679890099
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -663,7 +670,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6302544b854ee34ba70f3414778f33b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActorWeaponHandler
-  currentWeapon: {fileID: 0}
+  stats: {fileID: 6120086274028814773}
+  anim: {fileID: 3538320555304346363}
+  currentWeapon: {fileID: 3970288745387636526, guid: 54c998da6b469904fbf848905ce5bfef, type: 3}
   WeaponSlot: {fileID: 6155865760084266503}
 --- !u!1 &1684831763471223180
 GameObject:

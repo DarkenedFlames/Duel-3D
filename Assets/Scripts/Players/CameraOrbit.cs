@@ -1,29 +1,30 @@
-
 using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
 {
-    [SerializeField] private Transform target;
+    [Header("Camera Target")]
+    [SerializeField] Transform target;
 
     [Header("Orbit Settings")]
-    [SerializeField] private float distance = 6f;
-    [SerializeField] private float sensitivityX = 1f;
-    [SerializeField] private float sensitivityY = 0.5f;
-    [SerializeField] private float minY = -30f;
-    [SerializeField] private float maxY = 60f;
+    [SerializeField] float distance = 6f;
+    [SerializeField] float sensitivityX = 1f;
+    [SerializeField] float sensitivityY = 0.5f;
+    [SerializeField] float minY = -30f;
+    [SerializeField] float maxY = 60f;
 
-    private IInputProvider input;
-    private float _yaw;
-    private float _pitch;
-    private Collider[] playerColliders;
+    IInputProvider actorInput;
 
-    private void Awake()
+    float _yaw;
+    float _pitch;
+    Collider actorCollider;
+
+    void Awake()
     {
-        input = target.GetComponent<IInputProvider>();
-        playerColliders = target.GetComponentsInChildren<Collider>();
+        actorInput = target.GetComponent<IInputProvider>();
+        actorCollider = target.GetComponent<Collider>();
     }
 
-    private void Start()
+    void Start()
     {
         Vector3 angles = transform.eulerAngles;
         _yaw = angles.y;
@@ -33,18 +34,18 @@ public class CameraOrbit : MonoBehaviour
     }
 
     // Should eventually be replaced with a proper layer mask system
-    private bool RaycastWithoutPlayer(Vector3 start, Vector3 dir, out RaycastHit hit, float maxDist)
+    bool RaycastWithoutPlayer(Vector3 start, Vector3 dir, out RaycastHit hit, float maxDist)
     {
         // Temporarily disable player colliders for this raycast
-        foreach (var c in playerColliders) c.enabled = false;
+        actorCollider.enabled = false;
         bool hasHit = Physics.Raycast(start, dir, out hit, maxDist);
-        foreach (var c in playerColliders) c.enabled = true;
+        actorCollider.enabled = true;
         return hasHit;
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
-        Vector2 look = input.LookInput;
+        Vector2 look = actorInput.LookInput;
         _yaw += look.x * sensitivityX;
         _pitch -= look.y * sensitivityY;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);

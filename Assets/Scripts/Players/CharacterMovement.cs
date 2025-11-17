@@ -4,38 +4,36 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController), typeof(AnimationHandler), typeof(StatsHandler))]
 public class CharacterMovement : MonoBehaviour
 {
+    [Header("Actor Components")]
+    [SerializeField] CharacterController controller;
+    [SerializeField] StatsHandler statsHandler;
+    IInputProvider input; // Interface cannot be serialized
+
     [Header("Movement Settings")]
-    [SerializeField] private float speedStatConversionModifier = 0.05f;
-    [SerializeField] private float sprintModifier = 2f;
-    [SerializeField] private float jumpHeight = 2f;
-    [SerializeField] private float gravity = -9.81f;
-    [SerializeField] private float externalDamping = 5f;
+    [SerializeField] float speedStatConversionModifier = 0.05f;
+    [SerializeField] float sprintModifier = 2f;
+    [SerializeField] float jumpHeight = 2f;
+    [SerializeField] float gravity = -9.81f;
+    [SerializeField] float externalDamping = 5f;
 
-    private CharacterController controller;
-    private AnimationHandler animationHandler;
-    private StatsHandler statsHandler;
-    private IInputProvider input;
-
-    private Vector3 velocity;
-    private Vector3 verticalVelocity;
-    private Vector3 horizontalVelocity;
-    private Vector3 externalVelocity;
-    private bool isGrounded => controller.isGrounded;
+    Vector3 velocity;
+    Vector3 verticalVelocity;
+    Vector3 horizontalVelocity;
+    Vector3 externalVelocity;
+    bool IsGrounded => controller.isGrounded;
 
     public Action OnJumped;
 
-    private void Awake()
-    {
-        controller = GetComponent<CharacterController>();
-        animationHandler = GetComponent<AnimationHandler>();
-        statsHandler = GetComponent<StatsHandler>();
 
+
+    public void ApplyExternalVelocity(Vector3 amount) => externalVelocity += amount;
+
+    void Awake()
+    {
         input = GetComponent<IInputProvider>();
-        if (input == null)
-            Debug.LogError($"No IInputProvider found on {name}");
     }
 
-    private void Update()
+    void Update()
     {
         UpdateGroundState();
         HandleJumping();
@@ -47,12 +45,12 @@ public class CharacterMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    private void UpdateGroundState()
+    void UpdateGroundState()
     {
-        if (isGrounded && verticalVelocity.y < 0) verticalVelocity.y = -2f;
+        if (IsGrounded && verticalVelocity.y < 0) verticalVelocity.y = -2f;
     }
 
-    private void HandleHorizontalMovement()
+    void HandleHorizontalMovement()
     {
         float baseSpeed = statsHandler.GetStat(StatType.Speed, getMax: false) * speedStatConversionModifier;
 
@@ -63,17 +61,16 @@ public class CharacterMovement : MonoBehaviour
         horizontalVelocity = moveDir.normalized * finalSpeed;
     }
 
-    private void HandleJumping()
+    void HandleJumping()
     {
-        if (isGrounded && input.JumpPressed)
+        if (IsGrounded && input.JumpPressed)
         {
             OnJumped?.Invoke();
             verticalVelocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
     }
 
-    private void ApplyGravity() => verticalVelocity.y += gravity * Time.deltaTime;
-    public void ApplyExternalVelocity(Vector3 amount) => externalVelocity += amount;
-    private void ApplyExternalVelocity() => externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, Time.deltaTime * externalDamping);
+    void ApplyGravity() => verticalVelocity.y += gravity * Time.deltaTime;
+    void ApplyExternalVelocity() => externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, Time.deltaTime * externalDamping);
     
 }

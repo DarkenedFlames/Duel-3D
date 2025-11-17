@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5148062300437154371}
   - component: {fileID: -2909770985952263376}
   - component: {fileID: 1158388464970174665}
+  - component: {fileID: 1135609320293691922}
   - component: {fileID: 398351141761885060}
   m_Layer: 9
   m_Name: Area_InfernoArea
@@ -175,6 +176,18 @@ MonoBehaviour:
   turnSpeed: 360
   homingRange: 15
   sourceIsTargetable: 0
+--- !u!114 &1135609320293691922
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2031326259091706934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 911709e7a4a6e1f4b8711032adde00f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ActorTargeting
 --- !u!114 &398351141761885060
 MonoBehaviour:
   m_ObjectHideFlags: 0
