@@ -9,8 +9,9 @@ public class LGiveAbility : EventReaction
 
     public override void OnEvent(EventContext context)
     {
-        if (context is TargetContext cxt)
-            if (cxt.target.TryGetComponent(out AbilityHandler abilityHandler))
-                abilityHandler.LearnAbility(abilityDefinition);
+        if (context.defender == null) return;
+
+        if (context.defender.TryGetComponent(out AbilityHandler abilityHandler))
+            abilityHandler.LearnAbility(abilityDefinition);
     }
 }

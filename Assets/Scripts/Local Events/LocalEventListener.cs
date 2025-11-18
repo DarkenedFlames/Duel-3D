@@ -6,14 +6,14 @@ public enum Event
     OnTargetExit,
     OnExpire,
     OnPulse,
-    OnCollide,
     OnSwing,
     OnApply,
     OnStackLost,
     OnStackGained,
     OnRefresh,
     OnActivate,
-    OnEnd
+    OnNoHitsLeft,
+    OnDestroy,
 }
 
 [RequireComponent(typeof(LocalEventSource))]

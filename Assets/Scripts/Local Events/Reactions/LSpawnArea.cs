@@ -15,13 +15,12 @@ public class LSpawnArea : EventReaction
 
     public override void OnEvent(EventContext context)
     {
-        if (context is PositionContext cxt)
-            if (cxt.localTransform.TryGetComponent(out IHasSourceActor hasSource))
-            {
-                Vector3 spawnPosition = cxt.localTransform.TransformPoint(spawnOffset);
-                Quaternion spawnRotation = cxt.localTransform.rotation * Quaternion.Euler(localEulerRotation);
-                SpawnerController.Instance.SpawnArea(prefab, spawnPosition, spawnRotation, hasSource.SourceActor);
-            }
+        if (context.source == null) return;
+        if (context.attacker == null) return;
+
+        Vector3 spawnPosition = context.source.transform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = context.source.transform.rotation * Quaternion.Euler(localEulerRotation);
+        SpawnerController.Instance.SpawnArea(prefab, spawnPosition, spawnRotation, context.attacker);
     }
 }
 

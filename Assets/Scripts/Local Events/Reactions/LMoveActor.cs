@@ -12,11 +12,13 @@ public class LMoveActor : EventReaction
     
     public override void OnEvent(EventContext context)
     {
-        if (context is PositionContext cxt)
-            if (cxt.target.TryGetComponent(out CharacterMovement movement))
-            {
-                Vector3 pushDirection = cxt.localTransform.TransformDirection(Vector3.forward + direction).normalized;
-                movement.ApplyExternalVelocity(pushDirection * forceStrength);
-            }
+        if (context.defender == null) return;
+        if (context.source == null) return;
+
+        if (context.defender.TryGetComponent(out CharacterMovement movement))
+        {
+            Vector3 pushDirection = context.source.transform.TransformDirection(Vector3.forward + direction).normalized;
+            movement.ApplyExternalVelocity(pushDirection * forceStrength);
+        }
     }
 }

@@ -6,12 +6,10 @@ using System.Linq;
 
 public enum AbilityAnimationTrigger { None, Cast, Channel }
 
-public class AbilityHandler : MonoBehaviour, IHasSourceActor
+public class AbilityHandler : MonoBehaviour
 {
     [SerializeField] List<AbilityDefinition> initialAbilities;
     public readonly Dictionary<AbilityType, Ability> abilities = new();
-
-    public GameObject SourceActor { get; set; }
 
     private IInputProvider input;
 
@@ -21,7 +19,6 @@ public class AbilityHandler : MonoBehaviour, IHasSourceActor
     void Awake()
     {
         input = GetComponent<IInputProvider>();
-        SourceActor = gameObject;
     }
 
 

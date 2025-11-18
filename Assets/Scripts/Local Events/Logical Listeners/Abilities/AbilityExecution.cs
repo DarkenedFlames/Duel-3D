@@ -1,26 +1,14 @@
-using System;
-using UnityEngine.UIElements;
+using UnityEngine;
 
-[Serializable]
 public class AbilityExecution
 {
     public Ability Ability { get; private set; }
-    public bool IsActive { get; private set; } = false;
-
     public AbilityExecution(Ability ability) => Ability = ability;
 
     public void Activate()
-    {
-        if (IsActive) return;
-        IsActive = true;
-
-        PositionContext cxt = new()
-        {
-            target = Ability.Handler.gameObject, 
-            localTransform = Ability.Handler.transform
-        };
-
-        Invoke(Event.OnActivate, cxt);
+    {        
+        GameObject target = Ability.Handler.gameObject;
+        Invoke(Event.OnActivate, new EventContext{ source = target, attacker = target, defender = target });
     }
 
     public void Invoke(Event evt, EventContext context)
@@ -29,29 +17,4 @@ public class AbilityExecution
             if (reaction.Events.Contains(evt))
                 reaction.OnEvent(context);
     }
-
-    /*
-    public void Pulse()
-    {
-        PositionContext cxt = new()
-        {
-            target = Ability.Handler.gameObject, 
-            localTransform = Ability.Handler.transform
-        };
-
-        Fire(Event.OnPulse, cxt);
-    }
-    
-    public void End()
-    {
-        PositionContext cxt = new()
-        {
-            target = Ability.Handler.gameObject, 
-            localTransform = Ability.Handler.transform
-        };
-
-        Fire(Event.OnEnd, cxt);
-        IsActive = false;
-    }
-    */
 }

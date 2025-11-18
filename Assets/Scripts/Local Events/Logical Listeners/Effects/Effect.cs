@@ -20,7 +20,7 @@ public class Effect
         _timer = definition.duration;
         _pulse = definition.period;
 
-        Invoke(Event.OnApply, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+        Invoke(Event.OnApply, new EventContext{ defender = Handler.gameObject });
     }
 
     public float RemainingTime() => _timer;
@@ -30,7 +30,7 @@ public class Effect
         if (_pulse > 0) return false;
         
         _pulse = Definition.period;
-        Invoke(Event.OnPulse, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+        Invoke(Event.OnPulse, new EventContext{ defender = Handler.gameObject });
         return true;
     }
 
@@ -48,7 +48,7 @@ public class Effect
     public void RefreshTimer()
     {
         _timer = Definition.duration;
-        Invoke(Event.OnRefresh, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+        Invoke(Event.OnRefresh, new EventContext{ defender = Handler.gameObject });
     }
 
     public bool AddStack()
@@ -56,14 +56,14 @@ public class Effect
         if (CurrentStacks >= Definition.maxStacks) return false;
         CurrentStacks++;
         if (CurrentStacks > 1)
-            Invoke(Event.OnStackGained, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+            Invoke(Event.OnStackGained, new EventContext{ defender = Handler.gameObject });
         return true;
     }
 
     public bool RemoveStack()
     {
         if (CurrentStacks > 1)
-            Invoke(Event.OnStackLost, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+            Invoke(Event.OnStackLost, new EventContext{ defender = Handler.gameObject });
 
         int newCount = Mathf.Max(0, CurrentStacks - 1);
         bool changed = newCount != CurrentStacks;
@@ -83,7 +83,7 @@ public class Effect
             {
                 CurrentStacks--;
                 RefreshTimer();
-                Invoke(Event.OnStackLost, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+                Invoke(Event.OnStackLost, new EventContext{ defender = Handler.gameObject });
                 return false;
             }
         }
@@ -99,7 +99,7 @@ public class Effect
         else
         {
             Debug.Log($"{Handler.gameObject.name}'s {Definition.effectName} effect has expired.");
-            Invoke(Event.OnExpire, new PositionContext(){target = Handler.gameObject, localTransform = Handler.transform});
+            Invoke(Event.OnExpire, new EventContext{ defender = Handler.gameObject });
             CurrentStacks = 0;
             return true;
         }

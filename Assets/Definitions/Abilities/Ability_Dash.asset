@@ -22,13 +22,13 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   reactions:
-  - rid: 1013435636988248202
+  - rid: 1013435681430831178
   references:
     version: 2
     RefIds:
-    - rid: 1013435636988248202
+    - rid: 1013435681430831178
       type: {class: LMoveActor, ns: , asm: Assembly-CSharp}
       data:
-        Events: 0a000000
+        Events: 09000000
         direction: {x: 0, y: 0, z: 1}
         forceStrength: 50

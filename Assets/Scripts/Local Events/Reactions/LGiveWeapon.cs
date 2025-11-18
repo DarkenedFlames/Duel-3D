@@ -9,8 +9,9 @@ public class LGiveWeapon : EventReaction
 
     public override void OnEvent(EventContext context)
     {
-        if (context is TargetContext cxt)
-            if (cxt.target.TryGetComponent(out ActorWeaponHandler weaponHandler))
-                weaponHandler.EquipWeapon(weaponPrefab);
+        if (context.defender == null) return;
+
+        if (context.defender.TryGetComponent(out ActorWeaponHandler weaponHandler))
+            weaponHandler.EquipWeapon(weaponPrefab);
     }
 }

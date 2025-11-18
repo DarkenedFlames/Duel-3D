@@ -12,10 +12,10 @@ public class ActorWeaponHandler : MonoBehaviour
     [SerializeField] GameObject currentWeapon;
     [SerializeField] Transform WeaponSlot;
 
-    Weapon currentWeaponComponent;
+    WeaponSwing swingComponent;
 
-    public event Action<Weapon> OnSwing;
-    public event Action<Weapon> OnEquipWeapon;
+    public event Action<WeaponSwing> OnSwing;
+    public event Action<GameObject> OnEquipWeapon;
 
     /// <summary>
     /// If <see cref="currentWeapon"/> is defined at runtime as a prefab, <see cref="Object.Instantiate()"/> and re-store it.
@@ -34,26 +34,32 @@ public class ActorWeaponHandler : MonoBehaviour
     {        
         currentWeapon = Instantiate(weaponPrefab, WeaponSlot.position, WeaponSlot.localRotation, WeaponSlot);
 
-        if (!currentWeapon.TryGetComponent(out Weapon weapon))
-            Debug.LogError("Weapon Prefab has no Weapon Component");
+        if (!currentWeapon.TryGetComponent(out IHasSourceActor hasSource))
+        {
+            Debug.LogError("Weapon Prefab has no IHasSourceActor Component");
+            return;
+        }
 
-        currentWeaponComponent = weapon;
-        currentWeaponComponent.SetSource(gameObject);
-        OnEquipWeapon?.Invoke(currentWeaponComponent);
+        if (!currentWeapon.TryGetComponent(out WeaponSwing swing))
+        {
+            Debug.LogError("Weapon Prefab has no WeaponSwing Component");
+            return;
+        }
+
+        hasSource.SetSource(gameObject);
+        swingComponent = swing;
+
+        OnEquipWeapon?.Invoke(currentWeapon);
     }
 
-    /// <summary>
-    /// Checks for <see cref="input.AttackPressed"/> and <see cref="currentWeaponComponent.staminaCost"/>.<br/>
-    /// If the confiditions are met, calls <see cref="currentWeaponComponent.TrySwing()"/>
-    /// </summary>
     void Update()
     {
         if (input.AttackPressed
-            && currentWeaponComponent.staminaCost <= stats.GetStat(StatType.Stamina, false)
-            && currentWeaponComponent.TrySwing())
+            && swingComponent.swingStaminaCost <= stats.GetStat(StatType.Stamina, false)
+            && swingComponent.TrySwing())
         {
-            stats.TryModifyStat(StatType.Stamina, false, -1f * currentWeaponComponent.staminaCost);
-            OnSwing?.Invoke(currentWeaponComponent);
+            stats.TryModifyStat(StatType.Stamina, false, -1f * swingComponent.swingStaminaCost);
+            OnSwing?.Invoke(swingComponent);
         }
     }
 }

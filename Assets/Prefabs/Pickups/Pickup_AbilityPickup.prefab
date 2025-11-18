@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 3773882401511032492}
   - component: {fileID: 8793380834661107483}
   - component: {fileID: 7535536919394860543}
-  - component: {fileID: 37644898723819010}
   - component: {fileID: -6365505681594336554}
+  - component: {fileID: 4329930091637985034}
   - component: {fileID: 9179652753956081084}
   m_Layer: 10
   m_Name: Pickup_AbilityPickup
@@ -115,20 +115,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &37644898723819010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6998230261654422049}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2233f7f1a1552da4f92ec0185f7ae7cc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Pickup
-  duration: 100
-  pickups: 1
 --- !u!114 &-6365505681594336554
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -141,6 +127,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911709e7a4a6e1f4b8711032adde00f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActorTargeting
+  pulsePeriod: 0.1
+  hitsAllowed: 1
+  targetsSource: 0
+  duration: 100
+--- !u!114 &4329930091637985034
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6998230261654422049}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4c3eede24b0b84ba13c88a9a8a12b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AreaLocalEventSource
 --- !u!114 &9179652753956081084
 MonoBehaviour:
   m_ObjectHideFlags: 0

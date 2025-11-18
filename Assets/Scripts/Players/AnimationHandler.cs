@@ -50,5 +50,5 @@ public class AnimationHandler : MonoBehaviour
 
     void HandleJumped() => animator.SetTrigger("Jumped");
     void HandleAbilityActivated(Ability _) => animator.SetTrigger(AbilityAnimationTrigger.Cast.ToString());
-    void HandleSwing(Weapon weaponComponent) => animator.SetTrigger(weaponComponent.animationTrigger);
+    void HandleSwing(WeaponSwing swingComponent) => animator.SetTrigger(swingComponent.animationTrigger);
 }

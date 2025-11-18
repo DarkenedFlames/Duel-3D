@@ -42,24 +42,13 @@ public class SpawnerController : MonoBehaviour
 
     // --- Specialized spawn methods ---
     // Make these validate source/wielder as well.
-
-    public Projectile SpawnProjectile(GameObject projectilePrefab, Vector3 position, Quaternion rotation, GameObject source = null)
+    public GameObject SpawnArea(GameObject areaPrefab, Vector3 position, Quaternion rotation, GameObject sourceActor)
     {
-        Projectile projectile = SpawnValidated<Projectile>(projectilePrefab, position, rotation);
-        projectile.SetSource(source);
-        return projectile;
-    }
+        GameObject Area = Instantiate(areaPrefab, position, rotation);
+        if (!Area.TryGetComponent(out IHasSourceActor hasSource))
+            Debug.LogError($"Area: {Area.name} instantiated with no IHasSourceActor");
 
-    public Pickup SpawnPickup(GameObject pickupPrefab, Vector3 position, Quaternion rotation)
-    {
-        return SpawnValidated<Pickup>(pickupPrefab, position, rotation);
+        hasSource.SetSource(sourceActor);
+        return Area;
     }
-
-    public Area SpawnArea(GameObject areaPrefab, Vector3 position, Quaternion rotation, GameObject source = null)
-    {
-        Area area = SpawnValidated<Area>(areaPrefab, position, rotation);
-        area.SetSource(source);
-        return area;
-    }
-
 }

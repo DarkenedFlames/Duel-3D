@@ -15,8 +15,9 @@ public class LModifyStat : EventReaction // MonoBehaviour
 
     public override void OnEvent(EventContext context)
     {
-        if (context is PositionContext cxt)
-            if (cxt.target.TryGetComponent(out StatsHandler stats))
-                stats.TryModifyStat(type, modifyMax: modifyMax, amount);
+        if (context.defender == null) return;
+
+        if (context.defender.TryGetComponent(out StatsHandler stats))
+            stats.TryModifyStat(type, modifyMax: modifyMax, amount);
     }
 }

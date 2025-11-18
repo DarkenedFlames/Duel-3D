@@ -100,9 +100,9 @@ GameObject:
   - component: {fileID: 7500304678123197121}
   - component: {fileID: 3269722624432983106}
   - component: {fileID: 7842211112478624757}
-  - component: {fileID: 8119047232208711670}
   - component: {fileID: 1237335682743688445}
   - component: {fileID: -5651539684393973736}
+  - component: {fileID: -117775083560568135}
   - component: {fileID: 4180062845775552387}
   - component: {fileID: 8227951211699146152}
   m_Layer: 8
@@ -178,21 +178,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &8119047232208711670
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4286046279312439979}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f55328ede9c280c41a45fed60a41a593, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ProjectileHandler
-  collidesWithSource: 0
-  hitsAllowed: 1
-  duration: 5
 --- !u!114 &1237335682743688445
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,6 +207,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911709e7a4a6e1f4b8711032adde00f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActorTargeting
+  pulsePeriod: 0.1
+  hitsAllowed: 1
+  targetsSource: 0
+  duration: 10
+--- !u!114 &-117775083560568135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4c3eede24b0b84ba13c88a9a8a12b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AreaLocalEventSource
 --- !u!114 &4180062845775552387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -242,7 +243,7 @@ MonoBehaviour:
     - rid: 1013435636988248182
       type: {class: LDamage, ns: , asm: Assembly-CSharp}
       data:
-        Events: 04000000
+        Events: 00000000
         amount: 5
 --- !u!114 &8227951211699146152
 MonoBehaviour:
@@ -264,7 +265,7 @@ MonoBehaviour:
     - rid: 1013435636988248184
       type: {class: LSpawnArea, ns: , asm: Assembly-CSharp}
       data:
-        Events: 04000000
+        Events: 00000000
         prefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

@@ -8,10 +8,9 @@ public class LDamage : EventReaction
     float amount;
     public override void OnEvent(EventContext context)
     {
-        if (context is PositionContext cxt)
-        {
-            if (cxt.target.TryGetComponent(out StatsHandler stats))
-                stats.TakeDamage(amount);
-        }
+        if (context.defender == null) return;
+
+        if (context.defender.TryGetComponent(out StatsHandler stats))
+            stats.TakeDamage(amount);
     }
 }

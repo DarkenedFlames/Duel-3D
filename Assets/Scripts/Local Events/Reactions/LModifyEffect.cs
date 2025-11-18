@@ -15,11 +15,12 @@ public class LModifyEffect : EventReaction
     
     public override void OnEvent(EventContext context)
     {
-        if (context is PositionContext cxt)
-            if (cxt.target.TryGetComponent(out EffectHandler effects))
-                if (mode) 
-                    effects.ApplyEffect(effectDefinition, stacks);
-                else
-                    effects.RemoveStacks(effectDefinition.effectName, stacks);        
+        if (context.defender == null) return;
+
+        if (context.defender.TryGetComponent(out EffectHandler effects))
+            if (mode) 
+                effects.ApplyEffect(effectDefinition, stacks);
+            else
+                effects.RemoveStacks(effectDefinition.effectName, stacks);        
     }
 }

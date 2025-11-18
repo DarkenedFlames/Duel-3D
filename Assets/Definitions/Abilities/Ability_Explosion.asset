@@ -22,14 +22,14 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   reactions:
-  - rid: 1013435636988248200
+  - rid: 1013435681430831179
   references:
     version: 2
     RefIds:
-    - rid: 1013435636988248200
+    - rid: 1013435681430831179
       type: {class: LSpawnArea, ns: , asm: Assembly-CSharp}
       data:
-        Events: 0a000000
-        prefab: {fileID: 2031326259091706934, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
+        Events: 09000000
+        prefab: {fileID: 2031326259091706934, guid: 96158c61d45ead244a84e691b7f5c536, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

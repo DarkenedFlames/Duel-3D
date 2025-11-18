@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: -1862197136523160741}
   - component: {fileID: 9180582613733049591}
   - component: {fileID: 6443975543542769696}
+  - component: {fileID: 1905164046299964065}
   - component: {fileID: 191686976683253895}
   - component: {fileID: 7006820831128457919}
   m_Layer: 11
@@ -128,11 +129,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a309fe39cf6347945b4e7962daf6894d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Weapon
-  staminaCost: 5
+  swingStaminaCost: 5
   cooldownTime: 0.3
   swingDuration: 1
   hitsPerSwing: 1
   animationTrigger: AttackTrigger
+--- !u!114 &1905164046299964065
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3970288745387636526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc4c3eede24b0b84ba13c88a9a8a12b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AreaLocalEventSource
 --- !u!114 &191686976683253895
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -145,6 +158,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 911709e7a4a6e1f4b8711032adde00f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ActorTargeting
+  pulsePeriod: 0.1
+  hitsAllowed: 10000
+  targetsSource: 0
+  duration: 10000
 --- !u!114 &7006820831128457919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,5 +182,5 @@ MonoBehaviour:
     - rid: 1013435636988248189
       type: {class: LDamage, ns: , asm: Assembly-CSharp}
       data:
-        Events: 04000000
+        Events: 00000000
         amount: 5
