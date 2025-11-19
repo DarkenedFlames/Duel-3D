@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class RModifyStat : Reaction
+[System.Serializable]
+public class AModifyStat : IGameAction
 {
-    [Header("ModifyStat Configuration")]
+    [Header("Stat Configuration")]
     [Tooltip("Stat to modify."), SerializeField]
     StatType type;
 
@@ -12,7 +13,7 @@ public class RModifyStat : Reaction
     [Tooltip("Amount by which to modify."), SerializeField]
     float amount;
 
-    public void ModifyStat(GameObject target)
+    public void Execute(GameObject target)
     {
         if (target == null) return;
 

@@ -49,7 +49,7 @@ public class AbilityHandler : MonoBehaviour
 
     void TryActivate(Ability ability)
     {
-        var def = ability.Definition;
+        AbilityDefinition def = ability.Definition;
 
         foreach (ActivationCondition condition in def.activationConditions)
             if (!condition.IsMet(ability)) return;

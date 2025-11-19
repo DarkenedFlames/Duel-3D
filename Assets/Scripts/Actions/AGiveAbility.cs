@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class RGiveAbility : Reaction
+[System.Serializable]
+public class AGiveAbility : IGameAction
 {
-    [Header("GiveAbility Configuration")]
+    [Header("Ability Configuration")]
     [Tooltip("Ability to give."), SerializeField]
     AbilityDefinition abilityDefinition;
 
-    public void OnEvent(GameObject target)
+    public void Execute(GameObject target)
     {
         if (target == null) return;
 

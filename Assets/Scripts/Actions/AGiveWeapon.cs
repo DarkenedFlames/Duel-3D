@@ -1,12 +1,13 @@
 using UnityEngine;
 
-public class RGiveWeapon : Reaction
+[System.Serializable]
+public class AGiveWeapon : IGameAction
 {
-    [Header("GiveWeapon Configuration")]
+    [Header("Weapon Configuration")]
     [Tooltip("Weapon to give."), SerializeField]
     GameObject weaponPrefab;
 
-    public void GiveWeapon(GameObject target)
+    public void Execute(GameObject target)
     {
         if (target == null) return;
 

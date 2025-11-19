@@ -1,8 +1,9 @@
 using UnityEngine;
 
-public class RModifyEffect : Reaction
+[System.Serializable]
+public class AModifyEffect : IGameAction
 {
-    [Header("ModifyEffect Configuration")]
+    [Header("Effect Configuration")]
     [Tooltip("Effect to modify."), SerializeField]
     GameObject effectPrefab;
     
@@ -12,7 +13,7 @@ public class RModifyEffect : Reaction
     [Tooltip("The number of stacks to apply or remove."), SerializeField]
     int stacks;
     
-    public void ModifyEffect(GameObject target)
+    public void Execute(GameObject target)
     {
         if (target == null) return;
 

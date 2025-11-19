@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public enum AbilityType { Primary, Secondary, Utility, Special }
 
-[CreateAssetMenu(fileName = "New Ability Definition", menuName = "Duel/Abilities/Definition")]
+[CreateAssetMenu(fileName = "New Ability Definition", menuName = "Duel/AbilityDefinition")]
 public class AbilityDefinition : ScriptableObject
 {
     [Header("General")]
@@ -24,6 +24,6 @@ public class AbilityDefinition : ScriptableObject
     [SerializeReference] public ActivationCondition[] activationConditions;
 
     [Tooltip("Ordered list of behaviors that will run during execution."), SerializeReference]
-    public List<EventReaction> reactions = new();
+    public List<IGameAction> actions = new();
 
 }
