@@ -1,7 +1,6 @@
 using UnityEngine;
 
-[System.Serializable]
-public class LModifyStat : EventReaction // MonoBehaviour
+public class RModifyStat : Reaction
 {
     [Header("ModifyStat Configuration")]
     [Tooltip("Stat to modify."), SerializeField]
@@ -13,11 +12,11 @@ public class LModifyStat : EventReaction // MonoBehaviour
     [Tooltip("Amount by which to modify."), SerializeField]
     float amount;
 
-    public override void OnEvent(EventContext context)
+    public void ModifyStat(GameObject target)
     {
-        if (context.defender == null) return;
+        if (target == null) return;
 
-        if (context.defender.TryGetComponent(out StatsHandler stats))
+        if (target.TryGetComponent(out StatsHandler stats))
             stats.TryModifyStat(type, modifyMax: modifyMax, amount);
     }
 }

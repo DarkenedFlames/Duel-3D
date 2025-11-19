@@ -791,6 +791,18 @@ PrefabInstance:
       value: InfernoAreaPrefab
       objectReference: {fileID: 0}
     - target: {fileID: 2102300147697304498, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102300147697304498, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102300147697304498, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2102300147697304498, guid: 3cbb869c04d9b104d81cdb8d8577f378, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.90076
       objectReference: {fileID: 0}

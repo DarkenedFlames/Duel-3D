@@ -1,6 +1,6 @@
-using UnityEngine;
-using System.Collections.Generic;
 using System;
+using UnityEngine;
+
 
 [Flags]
 public enum StackingType
@@ -16,17 +16,15 @@ public enum ExpiryType
     LoseAllStacks
 }
 
-[CreateAssetMenu(fileName = "New Effect Definition", menuName = "Duel/Effects/Definition")]
-public class EffectDefinition : ScriptableObject
+[RequireComponent(typeof(Expiration))]
+public class EffectData : MonoBehaviour
 {
-    public string effectName;
     public Sprite icon;
     public StackingType stackingType = StackingType.Refresh;
     public ExpiryType expiryType = ExpiryType.LoseAllStacks;
     public int maxStacks = 1;
     public float duration = 5f;
     public float period = 1f;
-    
-    [Tooltip("List of ordered runtime reactions to event triggers."), SerializeReference]
-    public List<EventReaction> reactions = new();
+
+    [NonSerialized] public int currentStacks = 1;
 }
