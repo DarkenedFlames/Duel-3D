@@ -1,3 +1,4 @@
+
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,9 +9,9 @@ public class EffectBarUI : MonoBehaviour
     [Header("References")]
     [SerializeField] private EffectSlotUI effectSlotPrefab;
     [SerializeField] private HorizontalLayoutGroup layoutGroup;
-    private EffectHandler effectHandler;
+    private CharacterEffects _effects;
 
-    private readonly Dictionary<Effect, EffectSlotUI> activeSlots = new();
+    private readonly Dictionary<CharacterEffect, EffectSlotUI> activeSlots = new();
 
     private void Awake()
     {
@@ -18,26 +19,28 @@ public class EffectBarUI : MonoBehaviour
             layoutGroup = GetComponent<HorizontalLayoutGroup>();
     }
 
-    public void SubscribeToHandler(EffectHandler handler)
+    public void SubscribeToHandler(CharacterEffects effects)
     {
-        if (handler == null) return;
-        effectHandler = handler;
+        _effects = effects;
 
-        effectHandler.OnEffectApplied += HandleEffectApplied;
-        effectHandler.OnEffectExpired += HandleEffectExpired;
-        effectHandler.OnEffectStackChange += HandleEffectStackChange;
-        effectHandler.OnEffectRefreshed += HandleEffectRefreshed;
+        _effects.OnEffectGained += HandleEffectApplied;
+        _effects.OnEffectLost += HandleEffectExpired;
+        _effects.OnEffectStackChanged += HandleEffectStackChange;
+        _effects.OnEffectRefreshed += HandleEffectRefreshed;
+
+        foreach (CharacterEffect effect in _effects.Effects)
+            HandleEffectApplied(effect);
     }
 
     void OnDestroy()
     {
-        effectHandler.OnEffectApplied -= HandleEffectApplied;
-        effectHandler.OnEffectExpired -= HandleEffectExpired;
-        effectHandler.OnEffectStackChange -= HandleEffectStackChange;
-        effectHandler.OnEffectRefreshed -= HandleEffectRefreshed;
+        _effects.OnEffectGained -= HandleEffectApplied;
+        _effects.OnEffectLost -= HandleEffectExpired;
+        _effects.OnEffectStackChanged -= HandleEffectStackChange;
+        _effects.OnEffectRefreshed -= HandleEffectRefreshed;
     }
 
-    private void HandleEffectApplied(Effect effect)
+    private void HandleEffectApplied(CharacterEffect effect)
     {
         if (activeSlots.ContainsKey(effect)) return;
 
@@ -46,7 +49,7 @@ public class EffectBarUI : MonoBehaviour
         activeSlots.Add(effect, newSlot);
     }
 
-    private void HandleEffectExpired(Effect effect)
+    private void HandleEffectExpired(CharacterEffect effect)
     {
         if (activeSlots.TryGetValue(effect, out var slot))
         {
@@ -55,15 +58,15 @@ public class EffectBarUI : MonoBehaviour
         }
     }
 
-    private void HandleEffectStackChange(Effect effect)
+    private void HandleEffectStackChange(CharacterEffect effect)
     {
         if (activeSlots.TryGetValue(effect, out var slot))
-            slot.UpdateStackCount(effect.CurrentStacks);
+            slot.UpdateStackCount(effect.currentStacks.Value);
     }
 
-    private void HandleEffectRefreshed(Effect effect)
+    private void HandleEffectRefreshed(CharacterEffect effect)
     {
         if (activeSlots.TryGetValue(effect, out var slot))
-            slot.RefreshDuration(effect.RemainingTime(), effect.Definition.duration);
+            slot.RefreshDuration(effect.seconds.Value, effect.Definition.duration);
     }
 }

@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class PlayerHUDManager : MonoBehaviour
 {
-    private ResourceBarUI[] resourceBars;
-    private AbilityBarUI abilityBar;
-    private EffectBarUI effectBar;
+    ResourcePanelUI resourcePanel;
+    AbilityBarUI abilityBar;
+    EffectBarUI effectBar;
 
-    private void Awake()
+    void Start()
     {
-        resourceBars = GetComponentsInChildren<ResourceBarUI>(true);
+        resourcePanel = GetComponentInChildren<ResourcePanelUI>(true);
         abilityBar = GetComponentInChildren<AbilityBarUI>(true);
         effectBar = GetComponentInChildren<EffectBarUI>(true);
 
@@ -19,14 +19,13 @@ public class PlayerHUDManager : MonoBehaviour
             return;
         }
 
-        if (localPlayer.TryGetComponent(out StatsHandler stats))
-            foreach (var bar in resourceBars)
-                bar.SubscribeToHandler(stats); // subscribes to OnStatChanged
+        if (localPlayer.TryGetComponent(out CharacterStats stats))
+            resourcePanel.SubscribeToHandler(stats);
 
-        if (localPlayer.TryGetComponent(out AbilityHandler abilities))
+        if (localPlayer.TryGetComponent(out CharacterAbilities abilities))
             abilityBar.SubscribeToHandler(abilities);
 
-        if (localPlayer.TryGetComponent(out EffectHandler effects))
+        if (localPlayer.TryGetComponent(out CharacterEffects effects))
             effectBar.SubscribeToHandler(effects);
     }
 

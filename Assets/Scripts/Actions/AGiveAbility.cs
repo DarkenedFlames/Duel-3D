@@ -7,11 +7,11 @@ public class AGiveAbility : IGameAction
     [Tooltip("Ability to give."), SerializeField]
     AbilityDefinition abilityDefinition;
 
-    public void Execute(GameObject target)
+    public void Execute(GameObject source, GameObject target)
     {
         if (target == null) return;
 
-        if (target.TryGetComponent(out AbilityHandler abilityHandler))
+        if (target.TryGetComponent(out CharacterAbilities abilityHandler))
             abilityHandler.LearnAbility(abilityDefinition);
     }
 }

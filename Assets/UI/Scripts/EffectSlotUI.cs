@@ -1,3 +1,4 @@
+
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,23 +10,23 @@ public class EffectSlotUI : MonoBehaviour
     [SerializeField] private Image cooldownOverlay;
     [SerializeField] private TextMeshProUGUI stackText;
 
-    private Effect effect;
+    private CharacterEffect effect;
 
-    public void Initialize(Effect effect)
+    public void Initialize(CharacterEffect effect)
     {
         this.effect = effect;
 
         if (iconImage != null)
             iconImage.sprite = effect.Definition.icon;
 
-        UpdateStackCount(effect.CurrentStacks);
-        RefreshDuration(effect.RemainingTime(), effect.Definition.duration);
+        UpdateStackCount(effect.currentStacks.Value);
+        RefreshDuration(effect.seconds.Value, effect.Definition.duration);
     }
 
     private void Update()
     {
         if (effect == null) return;
-        RefreshDuration(effect.RemainingTime(), effect.Definition.duration);
+        RefreshDuration(effect.seconds.Value, effect.Definition.duration);
     }
 
     public void UpdateStackCount(int stacks)

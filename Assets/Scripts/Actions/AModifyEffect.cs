@@ -5,7 +5,7 @@ public class AModifyEffect : IGameAction
 {
     [Header("Effect Configuration")]
     [Tooltip("Effect to modify."), SerializeField]
-    GameObject effectPrefab;
+    EffectDefinition effectDefinition;
     
     [Tooltip("Apply stacks if mode is checked, otherwise remove stacks."), SerializeField]
     bool mode;
@@ -13,14 +13,14 @@ public class AModifyEffect : IGameAction
     [Tooltip("The number of stacks to apply or remove."), SerializeField]
     int stacks;
     
-    public void Execute(GameObject target)
+    public void Execute(GameObject source, GameObject target)
     {
         if (target == null) return;
 
-        if (target.TryGetComponent(out EffectHandler effects))
+        if (target.TryGetComponent(out CharacterEffects effects))
             if (mode) 
-                effects.ApplyEffect(effectPrefab, stacks);
+                effects.AddEffect(effectDefinition, stacks);
             else
-                effects.RemoveStacks(effectPrefab.name, stacks);
+                effects.RemoveEffect(effectDefinition, stacks);
     }
 }

@@ -9,23 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce9ccbea72b4fb44a9d1e4b3bc015f50, type: 3}
+  m_Script: {fileID: 11500000, guid: 9edc98be2175dfa42b07e1d960fac3ce, type: 3}
   m_Name: Effect_Inferno
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Inferno
   icon: {fileID: 21300000, guid: f8747447b00cf1343aea604499f8c9ea, type: 3}
   stackingType: -1
-  expiryType: 1
-  maxStacks: 3
-  duration: 3
-  period: 0.25
-  reactions:
-  - rid: 1013435636988248204
-  references:
-    version: 2
-    RefIds:
-    - rid: 1013435636988248204
-      type: {class: LDamage, ns: , asm: Assembly-CSharp}
-      data:
-        Events: 03000000
-        amount: 1
+  expiryType: 0
+  maxStacks: 5
+  duration: 5
+  period: 1

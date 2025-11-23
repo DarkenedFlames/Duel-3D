@@ -7,11 +7,11 @@ public class AGiveWeapon : IGameAction
     [Tooltip("Weapon to give."), SerializeField]
     GameObject weaponPrefab;
 
-    public void Execute(GameObject target)
+    public void Execute(GameObject source, GameObject target)
     {
         if (target == null) return;
 
-        if (target.TryGetComponent(out ActorWeaponHandler weaponHandler))
+        if (target.TryGetComponent(out CharacterWeapons weaponHandler))
             weaponHandler.EquipWeapon(weaponPrefab);
     }
 }

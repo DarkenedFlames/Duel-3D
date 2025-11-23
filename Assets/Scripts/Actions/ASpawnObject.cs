@@ -13,20 +13,15 @@ public class ASpawnObject : IGameAction
     [Tooltip("Local rotation offset."), SerializeField]
     Vector3 localEulerRotation = Vector3.zero;
 
-    public void Execute(GameObject target) // This is nice... shows directly passing on the source.
+    public void Execute(GameObject source, GameObject target)
     {
-        /* We need a way to access the object
-        GameObject source = null;
-        if (TryGetComponent(out RequiresSource requiresSource))
-            source = requiresSource.Source;
+        Vector3 spawnPosition = source.transform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = source.transform.rotation * Quaternion.Euler(localEulerRotation);
 
-        Vector3 spawnPosition = transform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = transform.rotation * Quaternion.Euler(localEulerRotation);
-        var Instance = SpawnerController.Instance.SpawnArea(prefab, spawnPosition, spawnRotation);
+        GameObject Instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
 
-        if (Instance.TryGetComponent(out RequiresSource requiresSource))
-            Instance.SetSource(source);
-        */
+        if (Instance.TryGetComponent(out IRequiresSource newObject) && source.TryGetComponent(out IRequiresSource oldObject))
+            newObject.Source = oldObject.Source;
     }
 }
 

@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.hbm.scriptable": "https://github.com/HypnoBeaverMoose/scriptable-library-unity.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.ai.navigation": "2.0.9",
     "com.unity.collab-proxy": "2.10.0",

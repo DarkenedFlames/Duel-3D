@@ -1,5 +1,12 @@
 {
   "dependencies": {
+    "com.hbm.scriptable": {
+      "version": "https://github.com/HypnoBeaverMoose/scriptable-library-unity.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "1613667dde5a26855cdd146e5fc8fa3e1bb2e825"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

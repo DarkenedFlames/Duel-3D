@@ -10,16 +10,14 @@ public class AMoveActor : IGameAction
     [Tooltip("Force strength with which the actor is moved."), SerializeField]
     float forceStrength = 5f;
     
-    public void Execute(GameObject actor)
+    public void Execute(GameObject source, GameObject target)
     {
-        /* We need a way to access the object
-        if (actor == null) return;
+        if (target == null || source == null) return;
 
-        if (actor.TryGetComponent(out CharacterMovement movement))
+        if (target.TryGetComponent(out MovementProcessor movement))
         {
-            Vector3 pushDirection = transform.TransformDirection(Vector3.forward + direction).normalized;
+            Vector3 pushDirection = source.transform.TransformDirection(Vector3.forward + direction).normalized;
             movement.ApplyExternalVelocity(pushDirection * forceStrength);
         }
-        */
     }
 }

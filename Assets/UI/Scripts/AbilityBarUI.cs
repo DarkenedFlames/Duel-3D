@@ -5,7 +5,7 @@ public class AbilityBarUI : MonoBehaviour
 {
     private AbilitySlotUI[] slots;
     private Dictionary<AbilityType, AbilitySlotUI> slotLookup;
-    private AbilityHandler abilityHandler;
+    private CharacterAbilities abilityHandler;
 
     void Awake()
     {
@@ -13,14 +13,16 @@ public class AbilityBarUI : MonoBehaviour
         BuildLookup();
     }
 
-    /// <summary>
-    /// Subscribe to AbilityHandler events. Should be called before AbilityHandler.Awake finishes.
-    /// </summary>
-    public void SubscribeToHandler(AbilityHandler handler)
+    public void SubscribeToHandler(CharacterAbilities handler)
     {
         abilityHandler = handler;
         abilityHandler.OnAbilityLearned += HandleAbilityLearned;
         abilityHandler.OnAbilityActivated += HandleAbilityUsed;
+
+        foreach (Ability ability in abilityHandler.abilities.Values)
+        {
+            HandleAbilityLearned(ability);
+        }
     }
 
     private void BuildLookup()
