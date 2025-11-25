@@ -1,5 +1,6 @@
 using UnityEngine;
 using HBM.Scriptable;
+using System.Collections.Generic;
 
 [CreateAssetMenu(menuName = "Sets/Character")]
 public class CharacterSet : RuntimeSet<Character>
@@ -32,6 +33,26 @@ public class CharacterSet : RuntimeSet<Character>
         foreach (Character c in this)
         {
             if (c == exclude) continue;
+
+            float d = Vector3.Distance(position, c.transform.position);
+            if (d < distance)
+            {
+                distance = d;
+                closest = c;
+            }
+        }
+
+        return closest;
+    }
+
+    public Character GetClosestExcludingMany(Vector3 position, List<Character> exclusions, out float distance)
+    {
+        Character closest = null;
+        distance = float.MaxValue;
+
+        foreach (Character c in this)
+        {
+            if (exclusions.Contains(c)) continue;
 
             float d = Vector3.Distance(position, c.transform.position);
             if (d < distance)

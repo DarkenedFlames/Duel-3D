@@ -38,4 +38,4 @@ MonoBehaviour:
     - rid: 1013435820514738284
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
-        abilityDefinition: {fileID: 11400000, guid: 6f6f8fa09585b6942bf5e3bc3dbde05d, type: 2}
+        abilityDefinition: {fileID: 11400000, guid: 5fa403a22b4cd6e498f9a85b6e0f82eb, type: 2}

@@ -7,13 +7,18 @@ using System.Linq;
 
 [RequireComponent(typeof(Collider))]
 [RequireComponent(typeof(SpawnContext))]
+[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(RegionSetRegistrar))]
 public class Region : MonoBehaviour
 {
     public RegionDefinition Definition;
 
+    List<IRegionMover> movers;
+
     readonly HashSet<GameObject> _currentTargets = new();
     Collider col;
     SpawnContext spawnContext;
+    Rigidbody rb;
 
     FloatCounter seconds;
     FloatCounter pulse;
@@ -22,8 +27,16 @@ public class Region : MonoBehaviour
     void Awake()
     {
         spawnContext = GetComponent<SpawnContext>();
+
         col = GetComponent<Collider>();
         col.isTrigger = true;
+        
+        rb = GetComponent<Rigidbody>();
+        rb.isKinematic = true;
+
+        movers = new List<IRegionMover>(Definition.Movers.Count);
+        foreach (IRegionMover mover in Definition.Movers)
+            movers.Add(mover.Clone());
 
         seconds = new(Definition.Duration, 0, Definition.Duration, true, true);
         hits    = new(0,                   0, Definition.MaxHits,  true, false);
@@ -40,7 +53,7 @@ public class Region : MonoBehaviour
 
     void Update()
     {
-        Definition.Movers.ForEach(m => m.Tick(this));
+        movers.ForEach(m => m.Tick(this));
 
         seconds.Decrease(Time.deltaTime);
         pulse.Decrease(Time.deltaTime);
@@ -54,20 +67,18 @@ public class Region : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (!FilterTarget(other, out GameObject target)) return;
-        _currentTargets.Add(target);
+        if (!FilterTarget(other, out GameObject target) || !_currentTargets.Add(target)) return;
 
-        hits.Increment();
         Execute(Definition.OnEnterActions, target);
 
+        hits.Increment();
         if (Definition.RegionExpiryType.HasFlag(RegionExpiryType.HitLimit) && hits.Exceeded)
             DestroyRegion();
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (!FilterTarget(other, out GameObject target)) return;
-        _currentTargets.Remove(target);
+        if (!FilterTarget(other, out GameObject target) || !_currentTargets.Remove(target)) return;
 
         Execute(Definition.OnExitActions, target);
     }
@@ -80,7 +91,7 @@ public class Region : MonoBehaviour
         target = null;
         GameObject potentialTarget = other.gameObject;
 
-        if (!Definition.AffectsSource && spawnContext.Owner != null && potentialTarget == spawnContext.Owner)
+        if (spawnContext.Owner != null && !Definition.AffectsSource && potentialTarget == spawnContext.Owner)
             return false;
         if ((Definition.LayerMask.value & (1 << potentialTarget.layer)) == 0)
             return false;

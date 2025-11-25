@@ -19,6 +19,9 @@ MonoBehaviour:
   CooldownTime: 1
   UseTime: 1
   AnimationTrigger: AttackTrigger
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   OnHitActions:
   - rid: 1013435820514738273
   references:

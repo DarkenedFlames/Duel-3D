@@ -18,4 +18,15 @@ MonoBehaviour:
   expiryType: 0
   maxStacks: 5
   duration: 5
-  period: 1
+  period: 0.25
+  OnApplyActions: []
+  OnPulseActions:
+  - rid: 1013435839720980591
+  OnExpireActions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435839720980591
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        amount: 1

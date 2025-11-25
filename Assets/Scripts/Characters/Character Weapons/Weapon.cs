@@ -1,5 +1,6 @@
 
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
@@ -10,6 +11,8 @@ public class Weapon : MonoBehaviour
     public FloatCounter seconds;
     SpawnContext spawnContext;
     Collider col;
+
+    HashSet<GameObject> _hitThisSwing = new();
 
     void Awake()
     {
@@ -25,6 +28,7 @@ public class Weapon : MonoBehaviour
     {
         if (!FilterTarget(other, out GameObject target)) return;
 
+        _hitThisSwing.Add(target);
         Definition.OnHitActions.ForEach(a => a.Execute(gameObject, target));
     }
 
@@ -32,12 +36,16 @@ public class Weapon : MonoBehaviour
     {
         target = null;
         GameObject potentialTarget = other.gameObject;
-        if (spawnContext.Owner == potentialTarget)
-            return false;
-        if ((Definition.layerMask.value & (1 << potentialTarget.layer)) == 0)
-            return false;
 
-        return potentialTarget != null;
+        if (_hitThisSwing.Contains(potentialTarget)) // Already hit this swing => filter out
+            return false;
+        if (potentialTarget == spawnContext.Owner) // Is the wielder => filter out
+            return false;
+        if ((Definition.layerMask.value & (1 << potentialTarget.layer)) == 0) // Not on a valid layer => filter out
+            return false;
+        
+        target = potentialTarget;
+        return target != null;
     }
 
     public bool TryUse()
@@ -62,6 +70,7 @@ public class Weapon : MonoBehaviour
 
     IEnumerator UseCoroutine()
     {
+        _hitThisSwing.Clear();
         col.enabled = true;
         yield return new WaitForSeconds(Definition.UseTime);
         col.enabled = false;

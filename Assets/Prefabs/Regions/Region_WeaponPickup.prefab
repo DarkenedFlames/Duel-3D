@@ -12,8 +12,10 @@ GameObject:
   - component: {fileID: 3126636491132896766}
   - component: {fileID: 1815504746628024461}
   - component: {fileID: -1057976007786460374}
+  - component: {fileID: 5136861874099515299}
   - component: {fileID: 6198466816635294357}
   - component: {fileID: -4890810398130399807}
+  - component: {fileID: 7045113076828645436}
   m_Layer: 8
   m_Name: Region_WeaponPickup
   m_TagString: Region
@@ -114,6 +116,33 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!54 &5136861874099515299
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367643029821559675}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!114 &6198466816635294357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -140,3 +169,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RegionSetRegistrar
   _set: {fileID: 11400000, guid: e75d57075d8f4124bbae5fba66f1a9c1, type: 2}
+--- !u!114 &7045113076828645436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6367643029821559675}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ed66374b65c3174a9783e1a0dca4942, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SpawnContext
+  Owner: {fileID: 0}
+  Spawner: {fileID: 0}

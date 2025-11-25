@@ -32,6 +32,7 @@ public class CharacterEffects : MonoBehaviour
             if (effect.TryExpire())
             {
                 effects.RemoveAt(i);
+                Debug.Log($"{gameObject.name} lost {effect.Definition.effectName}");
                 OnEffectLost?.Invoke(effect);
             }
         }
@@ -65,7 +66,6 @@ public class CharacterEffects : MonoBehaviour
             CharacterEffect newEffect = new(gameObject, effectDefinition, stacks);
             effects.Add(newEffect);
             OnEffectGained?.Invoke(newEffect);
-            Debug.Log($"{gameObject.name} gained {newEffect.Definition.effectName}");
             return stacks;
         }
     }

@@ -10,23 +10,24 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
-  m_Name: Ability_ArcaneDash
+  m_Name: Ability_ArcaneStrike
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
-  abilityName: Arcane Dash
-  icon: {fileID: 21300000, guid: 677b9042cc42d50419d99157836902bd, type: 3}
-  abilityType: 2
+  abilityName: Arcane Strike
+  icon: {fileID: 21300000, guid: 30acd23143c58c94d8745533391cd31a, type: 3}
+  abilityType: 1
   castAnimationTrigger: 1
   manaCost: 5
   cooldown: 1
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   actions:
-  - rid: 1013435820514738285
+  - rid: 1013435839720980609
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738285
-      type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
+    - rid: 1013435839720980609
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
-        direction: {x: 0, y: 0, z: 1}
-        forceStrength: 10
+        prefab: {fileID: 1019408762163005056, guid: 8a36ffb0c6a45dd47968cf0b0a955fb1, type: 3}
+        spawnOffset: {x: -1, y: 0, z: 1}
+        localEulerRotation: {x: 0, y: 0, z: 0}

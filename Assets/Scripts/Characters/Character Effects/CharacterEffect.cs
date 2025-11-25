@@ -19,6 +19,7 @@ public class CharacterEffect
         pulse = new(def.period, 0, def.period);
 
         Execute(Definition.OnApplyActions);
+        Debug.Log($"{Definition.effectName} created with {currentStacks.Value} stacks and {seconds.Value} seconds.");
     }
 
     public void OnUpdate()
@@ -63,19 +64,21 @@ public class CharacterEffect
     public bool TryExpire()
     {
         bool shouldExpire = currentStacks.Expired
-            || Definition.expiryType == ExpiryType.LoseAllStacks && seconds.Expired
-            || Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && currentStacks.Value <= 1 && seconds.Expired;
+            || (Definition.expiryType == ExpiryType.LoseAllStacks && seconds.Expired)
+            || (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && currentStacks.Value <= 1 && seconds.Expired);
 
         if (shouldExpire)
         {
             Execute(Definition.OnExpireActions);
             return true;
         }
-        else if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh)
-        {
+
+        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && currentStacks.Value > 1 && seconds.Expired)
+        {            
             currentStacks.Decrement();
             seconds.Reset();
         }
+
         return false;
     }
 

@@ -21,7 +21,7 @@ public class CharacterWeapons : MonoBehaviour
         if (initialWeapon != null) EquipWeapon(initialWeapon);
     }
 
-    public void EquipWeapon(GameObject weaponPrefab, GameObject spawner = null)
+    public void EquipWeapon(GameObject weaponPrefab)
     {        
         currentWeapon = Instantiate(weaponPrefab, WeaponSlot.position, WeaponSlot.localRotation, WeaponSlot);
 
@@ -29,7 +29,7 @@ public class CharacterWeapons : MonoBehaviour
             Debug.Log("Weapon has no SpawnContext");
 
         spawnContext.Owner = gameObject;
-        spawnContext.Spawner = spawner;
+        spawnContext.Spawner = null;
         OnEquipWeapon?.Invoke(currentWeapon);
     }
 

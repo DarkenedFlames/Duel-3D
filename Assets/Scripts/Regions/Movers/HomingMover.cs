@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -18,26 +17,35 @@ public class HomingMover : IRegionMover
     [Tooltip("The distance (meters) at which the region may reacquire homing targets.")]
     public float HomingDistance;
 
+    // State
     Character currentTarget;
+
+    public IRegionMover Clone()
+    {
+        HomingMover copy = (HomingMover)MemberwiseClone();
+        copy.currentTarget = null;
+        return copy;
+    }
+
     public void Tick(Region region)
     {
         if (currentTarget == null)
         {
             Character best;
             float trueDistance;
+            GameObject ownerObject = region.GetComponent<SpawnContext>().Owner;
             
-            if (region.Definition.AffectsSource)
+            if (ownerObject != null && !region.Definition.AffectsSource && ownerObject.TryGetComponent(out Character character))
             {
-                best = allCharacters.GetClosest(region.transform.position, out float distance);
+                best = allCharacters.GetClosestExcluding(region.transform.position, character, out float distance);
                 trueDistance = distance;
             }
             else
             {
-                Character sourceCharacter = region.GetComponent<SpawnContext>().Owner.GetComponent<Character>();
-                best = allCharacters.GetClosestExcluding(region.transform.position, sourceCharacter, out float distance);
+                best = allCharacters.GetClosest(region.transform.position, out float distance);
                 trueDistance = distance;
             }
-
+            
             if (best != null && trueDistance <= HomingDistance) currentTarget = best;
             else currentTarget = null;
         }
@@ -47,7 +55,7 @@ public class HomingMover : IRegionMover
             region.transform.forward = Vector3.RotateTowards(
                 region.transform.forward,
                 direction,
-                TurnRate * Time.deltaTime,
+                TurnRate * Mathf.Deg2Rad * Time.deltaTime,
                 0f
             );
 

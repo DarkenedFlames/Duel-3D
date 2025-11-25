@@ -255,7 +255,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterWeapons
   initialWeapon: {fileID: 0}
-  WeaponSlot: {fileID: 0}
+  WeaponSlot: {fileID: 1948262982348785490}
 --- !u!114 &3498779990238371716
 MonoBehaviour:
   m_ObjectHideFlags: 0

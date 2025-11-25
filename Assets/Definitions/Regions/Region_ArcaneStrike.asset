@@ -10,36 +10,36 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47cf0abe4e0ea6e41b563c7b80fbe339, type: 3}
-  m_Name: Region_ArcaneMissile
+  m_Name: Region_ArcaneStrike
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
-  RegionName: Arcane Missile
+  RegionName: Arcane Strike
   AffectsSource: 0
-  RegionExpiryType: -1
-  Duration: 10
-  MaxHits: 1
+  RegionExpiryType: 0
+  Duration: 0.5
+  MaxHits: 0
   Period: 0
   LayerMask:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 64
   Movers:
-  - rid: 1013435820514738266
+  - rid: 1013435839720980607
   OnSpawnActions: []
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435820514738260
+  - rid: 1013435839720980608
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738260
+    - rid: 1013435839720980607
+      type: {class: RotateAroundSourceMover, ns: , asm: Assembly-CSharp}
+      data:
+        ArcDegreesPerSecond: 720
+        Radius: 1.25
+        VerticalOffset: 0.75
+        Clockwise: 1
+    - rid: 1013435839720980608
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
         amount: 5
-    - rid: 1013435820514738266
-      type: {class: HomingMover, ns: , asm: Assembly-CSharp}
-      data:
-        allCharacters: {fileID: 11400000, guid: da06d002a3bbcaa46ac1fc49d61f1924, type: 2}
-        TurnRate: 210
-        Speed: 30
-        HomingDistance: 30
