@@ -1,22 +1,37 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterEffect
 {
+    public GameObject GameObject;
     public EffectDefinition Definition;
     public IntegerCounter currentStacks;
     public FloatCounter seconds;
+    public FloatCounter pulse;
 
-    public CharacterEffect(EffectDefinition def, int initialStacks)
+    public CharacterEffect(GameObject gameObject, EffectDefinition def, int initialStacks)
     {
+        GameObject = gameObject;
         Definition = def;
-        
-        currentStacks = new(initialStacks, 0, def.maxStacks, inclusive: true, resetToMax: false);
-        seconds = new(def.duration, 0, def.duration, inclusive: true, resetToMax: true);
+
+        currentStacks = new(initialStacks, 0, def.maxStacks, resetToMax: false);
+        seconds = new(def.duration, 0, def.duration);
+        pulse = new(def.period, 0, def.period);
+
+        Execute(Definition.OnApplyActions);
     }
 
     public void OnUpdate()
     {
-        seconds.Decrease(Time.deltaTime);
+        float dt = Time.deltaTime;
+        seconds.Decrease(dt);
+        pulse.Decrease(dt);
+        
+        if (pulse.Expired)
+        {
+            Execute(Definition.OnPulseActions);
+            pulse.Reset();
+        }
     }
 
     public bool Refresh()
@@ -47,18 +62,22 @@ public class CharacterEffect
 
     public bool TryExpire()
     {
-        Debug.Log($"Effect {Definition.effectName}: seconds = {seconds.Value}, expired = {seconds.Expired}");
+        bool shouldExpire = currentStacks.Expired
+            || Definition.expiryType == ExpiryType.LoseAllStacks && seconds.Expired
+            || Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && currentStacks.Value <= 1 && seconds.Expired;
 
-        if (currentStacks.Expired) return true;
-        if (!seconds.Expired) return false;
-        if (Definition.expiryType == ExpiryType.LoseAllStacks) return true;
-        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh && currentStacks.Value <= 1) return true;
-
-        if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh)
+        if (shouldExpire)
+        {
+            Execute(Definition.OnExpireActions);
+            return true;
+        }
+        else if (Definition.expiryType == ExpiryType.LoseOneStackAndRefresh)
         {
             currentStacks.Decrement();
-            Refresh();
+            seconds.Reset();
         }
         return false;
     }
+
+    void Execute(List<IGameAction> actions) => actions.ForEach(a => a.Execute(GameObject, GameObject));
 }

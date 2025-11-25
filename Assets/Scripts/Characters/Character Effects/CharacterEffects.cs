@@ -62,7 +62,7 @@ public class CharacterEffects : MonoBehaviour
         }
         else
         {
-            CharacterEffect newEffect = new(effectDefinition, stacks);
+            CharacterEffect newEffect = new(gameObject, effectDefinition, stacks);
             effects.Add(newEffect);
             OnEffectGained?.Invoke(newEffect);
             Debug.Log($"{gameObject.name} gained {newEffect.Definition.effectName}");

@@ -12,6 +12,8 @@ public class ADealsDamage : IGameAction
         if (target == null) return;
 
         if (target.TryGetComponent(out CharacterStats stats))
+        {
             stats.TakeDamage(amount);
+        }
     }
 }

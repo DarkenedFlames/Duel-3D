@@ -1,17 +1,15 @@
-using System;
 using UnityEngine;
 
 public class Ability
 {
+    public GameObject GameObject { get; private set; }
     public AbilityDefinition Definition { get; private set; }
-    public CharacterAbilities Handler { get; private set; }
     readonly Counter seconds;
-    public event Action<Ability> OnAbilityActivated;
 
-    public Ability(AbilityDefinition definition, CharacterAbilities handler)
+    public Ability(GameObject gameObject, AbilityDefinition definition)
     {
+        GameObject = gameObject;
         Definition = definition;
-        Handler = handler;
         seconds = new(Definition.cooldown);
     }
 
@@ -26,8 +24,7 @@ public class Ability
         if (!seconds.Expired) return false;
 
         seconds.Reset();
-        Definition.actions.ForEach(a => a.Execute(Handler.gameObject, Handler.gameObject));
-        OnAbilityActivated?.Invoke(this);
+        Definition.actions.ForEach(a => a.Execute(GameObject, GameObject));
         Debug.Log("Ability Activated!");
         return true;
     }

@@ -4,10 +4,13 @@ using UnityEngine;
 [Serializable]
 public class StraightLineMover : IRegionMover
 {
-    float speed;
+    [Header("The speed (meters/second) at which the region moves.")]
+    public float Speed;
+    
     public void Tick(Region region)
     {
-        Vector3 direction = region.GetComponent<IRequiresSource>().Source.transform.position - region.transform.position;
-        region.transform.position += speed * Time.deltaTime * direction.normalized;
+        GameObject spawner = region.GetComponent<SpawnContext>().Spawner;
+        Vector3 direction = (spawner.transform.position - region.transform.position).normalized;
+        region.transform.position += Speed * Time.deltaTime * direction;
     }
 }

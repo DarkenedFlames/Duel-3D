@@ -11,11 +11,11 @@ public class CameraOrbit : MonoBehaviour
 
     float _pitch;
 
-    PlayerInputDriver input;
+    IInputDriver input;
 
     void Awake()
     {
-        input = target.GetComponent<PlayerInputDriver>();
+        input = target.GetComponent<IInputDriver>();
     }
 
     void Start()
@@ -30,14 +30,14 @@ public class CameraOrbit : MonoBehaviour
 
     void LateUpdate()
     {
-        _pitch -= input.lookInput.y * sensitivityY;
+        _pitch -= input.LookInput.y * sensitivityY;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
 
         Quaternion rotation = Quaternion.Euler(_pitch, target.eulerAngles.y, 0f);
         Vector3 desiredPosition = target.position - rotation * Vector3.forward * distance;
         Vector3 direction = (desiredPosition - target.position).normalized;
 
-        if (Physics.Raycast(target.position, direction, out RaycastHit hit, distance, ~LayerMask.GetMask("Actors")))
+        if (Physics.Raycast(target.position, direction, out RaycastHit hit, distance, ~LayerMask.GetMask("Characters")))
         {
             desiredPosition = target.position - rotation * Vector3.forward * hit.distance * 0.9f;
         }

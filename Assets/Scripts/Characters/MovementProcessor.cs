@@ -1,7 +1,6 @@
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInputDriver))]
 [RequireComponent(typeof(CharacterStats))]
 public class MovementProcessor : MonoBehaviour
 {
@@ -16,13 +15,13 @@ public class MovementProcessor : MonoBehaviour
     Vector3 externalVelocity;
 
     CharacterController controller;
-    PlayerInputDriver input;
+    IInputDriver input;
     CharacterStats stats;
 
     void Awake()
     {
         controller = GetComponent<CharacterController>();
-        input = GetComponent<PlayerInputDriver>();
+        input = GetComponent<IInputDriver>();
         stats = GetComponent<CharacterStats>();
 
         input.OnJumpInput += OnJumpInput;
@@ -36,7 +35,7 @@ public class MovementProcessor : MonoBehaviour
     void Update()
     {
         // Rotate player horizontally
-        float yawDelta = input.lookInput.x * rotationSpeed * Time.deltaTime;
+        float yawDelta = input.LookInput.x * rotationSpeed * Time.deltaTime;
         transform.Rotate(Vector3.up, yawDelta);
 
         // Convert stats into actual speeds
@@ -49,12 +48,12 @@ public class MovementProcessor : MonoBehaviour
         float sprintSpeed = speed.Value * sprintModifier;
 
         // Calculate movement direction
-        float currentSpeed = input.sprintingInput ? sprintSpeed : moveSpeed;
+        float currentSpeed = input.SprintingInput ? sprintSpeed : moveSpeed;
 
 
         Vector3 moveDir = 
-            (transform.forward * input.moveInput.y) + 
-            (transform.right * input.moveInput.x);
+            (transform.forward * input.MoveInput.y) + 
+            (transform.right * input.MoveInput.x);
 
         // Apply gravity
         if (controller.isGrounded)

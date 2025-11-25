@@ -3,34 +3,52 @@ using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-public class Weapon : MonoBehaviour, IRequiresSource
+[RequireComponent(typeof(SpawnContext))]
+public class Weapon : MonoBehaviour
 {
     public WeaponDefinition Definition;
-    public GameObject Source { get; set; }
-
     public FloatCounter seconds;
+    SpawnContext spawnContext;
     Collider col;
 
     void Awake()
     {
         col = GetComponent<Collider>();
+        spawnContext = GetComponent<SpawnContext>();
         col.enabled = false;
         seconds = new(Definition.CooldownTime, 0, Definition.CooldownTime, true, true);
     }
 
-    void Update()
+    void Update() => seconds.Decrease(Time.deltaTime);
+    
+    void OnTriggerEnter(Collider other)
     {
-        seconds.Decrease(Time.deltaTime);
+        if (!FilterTarget(other, out GameObject target)) return;
+
+        Definition.OnHitActions.ForEach(a => a.Execute(gameObject, target));
+    }
+
+    bool FilterTarget(Collider other, out GameObject target)
+    {
+        target = null;
+        GameObject potentialTarget = other.gameObject;
+        if (spawnContext.Owner == potentialTarget)
+            return false;
+        if ((Definition.layerMask.value & (1 << potentialTarget.layer)) == 0)
+            return false;
+
+        return potentialTarget != null;
     }
 
     public bool TryUse()
-    {        
-        CharacterStats sourceStats = Source.GetComponent<CharacterStats>();
+    {   
+        GameObject owner = spawnContext.Owner;
+        CharacterStats ownerStats = owner.GetComponent<CharacterStats>();
 
         string expendedStatName = Definition.ExpendedStat.statName;
         float amountToExpend = Definition.StatCost;
 
-        if (sourceStats.TryGetStat(expendedStatName, out ClampedStat stat) 
+        if (ownerStats.TryGetStat(expendedStatName, out ClampedStat stat) 
             && amountToExpend <= stat.Value
             && seconds.Expired)
         {

@@ -6,11 +6,10 @@ TagManager:
   tags:
   - Ground
   - Weapon
-  - Projectile
   - Pickup
   - Actor
   - AI
-  - Area
+  - Region
   layers:
   - Default
   - TransparentFX
@@ -18,13 +17,13 @@ TagManager:
   - 
   - Water
   - UI
-  - Actors
+  - Characters
   - Terrain
-  - Projectiles
-  - Areas
-  - Pickups
+  - Regions
   - Weapons
-  - NoCollide
+  - 
+  - 
+  - 
   - 
   - 
   - 

@@ -1,15 +1,13 @@
 using UnityEngine;
-using HBM.Scriptable;
 
 [RequireComponent(typeof(CharacterController))]
-[RequireComponent(typeof(PlayerInputDriver))]
 [RequireComponent(typeof(CharacterAbilities))]
 [RequireComponent(typeof(CharacterWeapons))]
 public class PlayerAnimationProcessor : MonoBehaviour
 {
     Animator animator;
     CharacterController controller;
-    PlayerInputDriver input;
+    IInputDriver input;
     CharacterAbilities abilities;
     CharacterWeapons weapons;
 
@@ -17,7 +15,7 @@ public class PlayerAnimationProcessor : MonoBehaviour
     {
         animator = GetComponentInChildren<Animator>();
         controller = GetComponent<CharacterController>();
-        input = GetComponent<PlayerInputDriver>();
+        input = GetComponent<IInputDriver>();
         abilities = GetComponent<CharacterAbilities>();
         weapons = GetComponent<CharacterWeapons>();
     }
@@ -38,8 +36,12 @@ public class PlayerAnimationProcessor : MonoBehaviour
 
     void Update()
     {
-        Vector2 animInput = input.moveInput;
-        if (input.sprintingInput) animInput.y *= 2f;
+        if (input == null) Debug.Log("Input null");
+        if (animator == null) Debug.Log("Animator null");
+        if (controller == null) Debug.Log("Controller null");
+
+        Vector2 animInput = input.MoveInput;
+        if (input.SprintingInput) animInput.y *= 2f;
         animator.SetFloat("MoveX", animInput.x, 0.1f, Time.deltaTime);
         animator.SetFloat("MoveY", animInput.y, 0.1f, Time.deltaTime);
         animator.SetBool("IsGrounded", controller.isGrounded);

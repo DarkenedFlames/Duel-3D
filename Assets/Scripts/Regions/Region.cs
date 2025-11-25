@@ -3,42 +3,44 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-[Flags] public enum RegionExecutionType { OnSpawn, Periodic, OnEnter, OnExit, OnDestroy }
 [Flags] public enum RegionExpiryType { Duration, HitLimit }
 
-public class Region : MonoBehaviour, IRequiresSource
+[RequireComponent(typeof(Collider))]
+[RequireComponent(typeof(SpawnContext))]
+public class Region : MonoBehaviour
 {
     public RegionDefinition Definition;
 
-    private readonly HashSet<GameObject> _currentTargets = new();
-    public GameObject Source {get; set;}
+    readonly HashSet<GameObject> _currentTargets = new();
+    Collider col;
+    SpawnContext spawnContext;
+
     FloatCounter seconds;
     FloatCounter pulse;
     IntegerCounter hits;
 
     void Awake()
     {
+        spawnContext = GetComponent<SpawnContext>();
+        col = GetComponent<Collider>();
+        col.isTrigger = true;
+
         seconds = new(Definition.Duration, 0, Definition.Duration, true, true);
         hits    = new(0,                   0, Definition.MaxHits,  true, false);
         pulse   = new(Definition.Period,   0, Definition.Period,   true, true);
     }
 
-    void Start()
-    {
-        if (Definition.RegionExecutionType.HasFlag(RegionExecutionType.OnSpawn))
-            ExecuteAll();
-    }
-
+    void Start() => ExecuteAll(Definition.OnSpawnActions);
+    
     void DestroyRegion()
     {
-        if (Definition.RegionExecutionType.HasFlag(RegionExecutionType.OnDestroy))
-            ExecuteAll();
+        ExecuteAll(Definition.OnDestroyActions);
         Destroy(gameObject);
     }
 
     void Update()
     {
-        Definition.Mover?.Tick(this);
+        Definition.Movers.ForEach(m => m.Tick(this));
 
         seconds.Decrease(Time.deltaTime);
         pulse.Decrease(Time.deltaTime);
@@ -46,8 +48,8 @@ public class Region : MonoBehaviour, IRequiresSource
         if (Definition.RegionExpiryType.HasFlag(RegionExpiryType.Duration) && seconds.Expired)
             DestroyRegion();
 
-        if (Definition.RegionExecutionType.HasFlag(RegionExecutionType.Periodic) && pulse.Expired)
-            ExecuteAll();
+        if (pulse.Expired)
+            ExecuteAll(Definition.OnPulseActions);
     }
 
     void OnTriggerEnter(Collider other)
@@ -56,9 +58,7 @@ public class Region : MonoBehaviour, IRequiresSource
         _currentTargets.Add(target);
 
         hits.Increment();
-
-        if (Definition.RegionExecutionType.HasFlag(RegionExecutionType.OnEnter))
-            Execute(target);
+        Execute(Definition.OnEnterActions, target);
 
         if (Definition.RegionExpiryType.HasFlag(RegionExpiryType.HitLimit) && hits.Exceeded)
             DestroyRegion();
@@ -69,20 +69,23 @@ public class Region : MonoBehaviour, IRequiresSource
         if (!FilterTarget(other, out GameObject target)) return;
         _currentTargets.Remove(target);
 
-        if (Definition.RegionExecutionType.HasFlag(RegionExecutionType.OnExit))
-            Execute(target);
+        Execute(Definition.OnExitActions, target);
     }
 
-    void Execute(GameObject target) => Definition.Actions.ForEach(a => a.Execute(gameObject, target));
-    void ExecuteAll() => _currentTargets.ToList().ForEach(t => Execute(t));
+    void Execute(List<IGameAction> actions, GameObject target) => actions.ForEach(a => a.Execute(gameObject, target));
+    void ExecuteAll(List<IGameAction> actions) => _currentTargets.ToList().ForEach(t => Execute(actions, t));
 
     bool FilterTarget(Collider other, out GameObject target)
     {
         target = null;
         GameObject potentialTarget = other.gameObject;
+
+        if (!Definition.AffectsSource && spawnContext.Owner != null && potentialTarget == spawnContext.Owner)
+            return false;
         if ((Definition.LayerMask.value & (1 << potentialTarget.layer)) == 0)
             return false;
 
-        return potentialTarget != null;
+        target = potentialTarget;
+        return target != null;
     }
 }

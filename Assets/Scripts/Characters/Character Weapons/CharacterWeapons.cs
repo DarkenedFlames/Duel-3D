@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-[RequireComponent(typeof(PlayerAnimationProcessor))]
 [RequireComponent(typeof(CharacterStats))]
 public class CharacterWeapons : MonoBehaviour
 {
@@ -9,57 +8,41 @@ public class CharacterWeapons : MonoBehaviour
     [SerializeField] GameObject initialWeapon;
     [SerializeField] Transform WeaponSlot;
 
-    CharacterStats stats;
-    PlayerInputDriver input;
+    IInputDriver input;
 
     [NonSerialized] public GameObject currentWeapon;
     public event Action<GameObject> OnEquipWeapon;
     public event Action<Weapon> OnWeaponUsed;
 
-    /// <summary>
-    /// If <see cref="currentWeapon"/> is defined at runtime as a prefab, <see cref="Object.Instantiate()"/> and re-store it.
-    /// </summary>
     void Awake()
     {
-        stats = GetComponent<CharacterStats>();
-        input = GetComponent<PlayerInputDriver>();
-
-        input.OnWeaponInput += HandleWeaponInput;
+        input = GetComponent<IInputDriver>();
 
         if (initialWeapon != null) EquipWeapon(initialWeapon);
     }
 
-    /// <summary>
-    /// Replaces <see cref="currentWeapon"/> with an instance of <param name="weaponPrefab">weaponPrefab</param>
-    /// </summary>
-    /// <param name="weaponPrefab">The weapon to be instantiated.</param>
-    public void EquipWeapon(GameObject weaponPrefab)
+    public void EquipWeapon(GameObject weaponPrefab, GameObject spawner = null)
     {        
         currentWeapon = Instantiate(weaponPrefab, WeaponSlot.position, WeaponSlot.localRotation, WeaponSlot);
 
-        if (!currentWeapon.TryGetComponent(out IRequiresSource hasSource))
-        {
-            Debug.LogError("Weapon Prefab has no RequiresSource Component");
-            return;
-        }
+        if (!currentWeapon.TryGetComponent<SpawnContext>(out var spawnContext))
+            Debug.Log("Weapon has no SpawnContext");
 
-        hasSource.Source = gameObject;
+        spawnContext.Owner = gameObject;
+        spawnContext.Spawner = spawner;
         OnEquipWeapon?.Invoke(currentWeapon);
     }
 
     void HandleWeaponInput()
     {
+        if (currentWeapon == null) return;
         Weapon weaponComponent = currentWeapon.GetComponent<Weapon>();
-        WeaponDefinition weaponDefinition = weaponComponent.Definition;
-        
+                
         if (weaponComponent.TryUse())
-        {
             OnWeaponUsed?.Invoke(weaponComponent);
-        }
     }
 
-    void OnDestroy()
-    {
-        input.OnWeaponInput -= HandleWeaponInput;
-    }
+    void OnEnable() => input.OnWeaponInput += HandleWeaponInput;
+    void OnDisable() => input.OnWeaponInput -= HandleWeaponInput;
+    
 }
