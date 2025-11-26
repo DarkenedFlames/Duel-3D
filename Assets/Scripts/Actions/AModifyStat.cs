@@ -13,14 +13,32 @@ public class AModifyStat : IGameAction
     [Tooltip("Amount by which to modify."), SerializeField]
     float amount;
 
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null) return;
-
-        if (target.TryGetComponent(out CharacterStats stats) && stats.TryGetStat(StatDefinition.statName, out ClampedStat stat))
+        if (context.Target == null)
         {
-            if (modifyMax) stat.MaxStat.BaseValue -= amount;
-            else stat.BaseValue += amount;
+            Debug.LogError($"Action {nameof(AModifyStat)} was passed a null parameter: {nameof(context.Target)}!");
+            return;
         }
+        if (StatDefinition == null)
+        {
+            Debug.LogError($"Action {nameof(AModifyStat)} was configured with a null parameter: {nameof(StatDefinition)}!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out CharacterStats stats))
+        {
+            Debug.LogError($"Action {nameof(AModifyStat)} was passed a parameter with a missing component: {nameof(CharacterStats)}!");
+            return;
+        }
+        if (!stats.TryGetStat(StatDefinition.statName, out ClampedStat stat))
+        {
+            Debug.LogError($"Action {nameof(AModifyStat)} could not find stat: {StatDefinition.statName}!");
+            return;
+        }
+        
+        if (modifyMax)
+            stat.MaxStat.BaseValue += amount;
+        else
+            stat.BaseValue += amount;
     }
 }

@@ -13,8 +13,6 @@ public class Region : MonoBehaviour
 {
     public RegionDefinition Definition;
 
-    List<IRegionMover> movers;
-
     readonly HashSet<GameObject> _currentTargets = new();
     Collider col;
     SpawnContext spawnContext;
@@ -34,10 +32,6 @@ public class Region : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
 
-        movers = new List<IRegionMover>(Definition.Movers.Count);
-        foreach (IRegionMover mover in Definition.Movers)
-            movers.Add(mover.Clone());
-
         seconds = new(Definition.Duration, 0, Definition.Duration, true, true);
         hits    = new(0,                   0, Definition.MaxHits,  true, false);
         pulse   = new(Definition.Period,   0, Definition.Period,   true, true);
@@ -53,8 +47,6 @@ public class Region : MonoBehaviour
 
     void Update()
     {
-        movers.ForEach(m => m.Tick(this));
-
         seconds.Decrease(Time.deltaTime);
         pulse.Decrease(Time.deltaTime);
 
@@ -83,7 +75,13 @@ public class Region : MonoBehaviour
         Execute(Definition.OnExitActions, target);
     }
 
-    void Execute(List<IGameAction> actions, GameObject target) => actions.ForEach(a => a.Execute(gameObject, target));
+    void Execute(List<IGameAction> actions, GameObject target)
+    {
+        if (!target.TryGetComponent(out Character character)) return;
+        
+        ActionContext context = new(){ Source = this, Target = character };
+        actions.ForEach(a => a.Execute(context));
+    }
     void ExecuteAll(List<IGameAction> actions) => _currentTargets.ToList().ForEach(t => Execute(actions, t));
 
     bool FilterTarget(Collider other, out GameObject target)

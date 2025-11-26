@@ -7,11 +7,24 @@ public class ADealsDamage : IGameAction
     [Tooltip("The amount of damage dealt."), SerializeField]
     int amount;
 
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null) return;
+        if (context.Target == null)
+        {
+            Debug.LogError($"Action {nameof(ADealsDamage)} was passed a null parameter: {nameof(context.Target)}!");
+            return;
+        }
+        if (amount <= 0)
+        {
+            Debug.LogError($"Action {nameof(ADealsDamage)} was configured with an invalid parameter: {nameof(amount)} must be positive!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out CharacterStats stats))
+        {
+            Debug.LogError($"Action {nameof(ADealsDamage)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterStats)}!");
+            return;
+        }
 
-        if (target.TryGetComponent(out CharacterStats stats))
-            stats.TakeDamage(amount);
+        stats.TakeDamage(amount);
     }
 }

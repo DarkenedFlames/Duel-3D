@@ -82,5 +82,9 @@ public class CharacterEffect
         return false;
     }
 
-    void Execute(List<IGameAction> actions) => actions.ForEach(a => a.Execute(GameObject, GameObject));
+    void Execute(List<IGameAction> actions)
+    {
+        ActionContext context = new() { Source = this, Target = GameObject.GetComponent<Character>() };
+        actions.ForEach(a => a.Execute(context));
+    }
 }

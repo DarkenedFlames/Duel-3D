@@ -13,14 +13,32 @@ public class AModifyEffect : IGameAction
     [Tooltip("The number of stacks to apply or remove."), SerializeField]
     int stacks;
     
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null) return;
+        if (context.Target == null)
+        {
+            Debug.LogError($"Action {nameof(AModifyEffect)} was passed a null parameter: {nameof(context.Target)}!");
+            return;
+        }
+        if (effectDefinition == null)
+        {
+            Debug.LogError($"Action {nameof(AModifyEffect)} was configured with a null parameter: {nameof(effectDefinition)}!");
+            return;
+        }
+        if (stacks <= 0)
+        {
+            Debug.LogError($"Action {nameof(AModifyEffect)} was configured with an invalid parameter: {nameof(stacks)} must be positive!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out CharacterEffects effects))
+        {
+            Debug.LogError($"Action {nameof(AModifyEffect)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterEffects)}!");
+            return;
+        }
 
-        if (target.TryGetComponent(out CharacterEffects effects))
-            if (mode) 
-                effects.AddEffect(effectDefinition, stacks);
-            else
-                effects.RemoveEffect(effectDefinition, stacks);
+        if (mode) 
+            effects.AddEffect(effectDefinition, stacks);
+        else
+            effects.RemoveEffect(effectDefinition, stacks);
     }
 }

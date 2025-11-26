@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4332784401175945187}
   - component: {fileID: 7583803209273445212}
   - component: {fileID: 4215822569354039806}
+  - component: {fileID: 6277094360568933557}
   m_Layer: 8
   m_Name: Region_LightningArc
   m_TagString: Region
@@ -127,6 +128,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RegionSetRegistrar
   _set: {fileID: 11400000, guid: e75d57075d8f4124bbae5fba66f1a9c1, type: 2}
+--- !u!114 &6277094360568933557
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1488354467560375872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9b1e478ca628c6429cf56dc3d09579a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MHomingSequential
+  allCharacters: {fileID: 11400000, guid: da06d002a3bbcaa46ac1fc49d61f1924, type: 2}
+  targetsSource: 0
+  TurnRate: 3600
+  Speed: 40
+  HomingDistance: 20
+  HitDistance: 0.5
 --- !u!1 &5432510764495124762
 GameObject:
   m_ObjectHideFlags: 0

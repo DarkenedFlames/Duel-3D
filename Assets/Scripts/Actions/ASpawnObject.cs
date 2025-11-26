@@ -13,10 +13,19 @@ public class ASpawnObject : IGameAction
     [Tooltip("Local rotation offset."), SerializeField]
     Vector3 localEulerRotation = Vector3.zero;
 
-    public void Execute(GameObject source, GameObject _)
+    public void Execute(ActionContext context)
     {
-        Vector3 spawnPosition = source.transform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = source.transform.rotation * Quaternion.Euler(localEulerRotation);
+        if (!context.TryGetSourceTransform(out Transform sourceTransform))
+        {
+            Debug.LogError("Could not find source transform in ASpawnObject");
+            return;
+        }
+
+        
+        // ADD NULL CHECKS
+
+        Vector3 spawnPosition = sourceTransform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = sourceTransform.rotation * Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
 
@@ -26,14 +35,6 @@ public class ASpawnObject : IGameAction
             return;
         }
 
-        instanceContext.Spawner = source; // Remains null if not spawned by something
-
-        if(!source.TryGetComponent(out SpawnContext sourceContext))
-        {
-            Debug.Log($"Spawner {source.name} had no spawn context. Defaulting Owner of {instance.name} to Spawner {source.name}.");
-            instanceContext.Owner = source;
-        }
-        else
-            instanceContext.Owner = sourceContext.Owner; // Only is null if the source was not spawned by something
+        instanceContext.Initialize(context.Source);
     }
 }

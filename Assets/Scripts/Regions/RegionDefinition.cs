@@ -27,10 +27,6 @@ public class RegionDefinition : ScriptableObject
     [Tooltip("The layers with which the Region may interact.")]
     public LayerMask LayerMask;
 
-    [Header("Movers")]
-    [Tooltip("The movement configuration for the Region."), SerializeReference]
-    public List<IRegionMover> Movers;
-
     [Header("Actions")]
     [Tooltip("The actions to execute on all valid targets in the region upon instantiation."), SerializeReference]
     public List<IGameAction> OnSpawnActions = new();

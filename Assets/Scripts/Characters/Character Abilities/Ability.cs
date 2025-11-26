@@ -17,15 +17,17 @@ public class Ability
 
     public bool TryActivate()
     {
-        Debug.Log("Trying To activate!");
         foreach (ActivationCondition condition in Definition.activationConditions)
             if (!condition.IsMet(this)) return false;
 
         if (!seconds.Expired) return false;
 
+        if(GameObject.TryGetComponent(out CharacterStats stats) && stats.TryGetStat("Mana", out ClampedStat stat))
+            stat.BaseValue -= Definition.manaCost;
+
         seconds.Reset();
-        Definition.actions.ForEach(a => a.Execute(GameObject, GameObject));
-        Debug.Log("Ability Activated!");
+        ActionContext context = new(){ Source = this, Target = GameObject.GetComponent<Character>() };
+        Definition.actions.ForEach(a => a.Execute(context));
         return true;
     }
 }

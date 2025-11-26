@@ -10,14 +10,31 @@ public class AMoveCharacter : IGameAction
     [Tooltip("Force strength with which the actor is moved."), SerializeField]
     float forceStrength = 5f;
     
-    public void Execute(GameObject source, GameObject target)
-    {
-        if (target == null || source == null) return;
-
-        if (target.TryGetComponent(out MovementProcessor movement))
+    public void Execute(ActionContext context)
+    {;
+        if (context.Target == null)
         {
-            Vector3 pushDirection = source.transform.TransformDirection(Vector3.forward + direction).normalized;
-            movement.ApplyExternalVelocity(pushDirection * forceStrength);
+            Debug.LogError("The Target passed to AMoveCharacter is null!");
+            return;
         }
+        if (context.Source == null)
+        {
+            Debug.LogError("The Source passed to AMoveCharacter is null!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out MovementProcessor movement))
+        {
+            Debug.LogError($"AMoveCharacter expected {context.Target.name} to have a MovementProcessor but it is missing!");
+            return;
+        }
+        if(!context.TryGetSourceTransform(out Transform sourceTransform))
+        {
+            Debug.LogError("Couldn't find source transform in AMoveCharacter.");
+            return;
+        }
+
+        Vector3 localDir = direction == Vector3.zero ? Vector3.forward : direction;
+        Vector3 pushDirection = sourceTransform.TransformDirection(localDir).normalized;
+        movement.ApplyExternalVelocity(pushDirection * forceStrength);
     }
 }

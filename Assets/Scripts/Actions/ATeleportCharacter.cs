@@ -7,9 +7,16 @@ public class ATeleportCharacter : IGameAction
     [Tooltip("Local offset to teleport the character."), SerializeField]
     Vector3 localOffset = Vector3.zero;
     
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null || source == null) return;
-        target.transform.position = source.transform.TransformPoint(localOffset);
+        if (context.Target == null || context.Source == null) return;
+
+        
+        // ADD NULL CHECKS
+
+        if(!context.TryGetSourceTransform(out Transform sourceTransform))
+            Debug.LogError("Couldn't find source transform in ATeleportCharacter.");
+
+        context.Target.transform.position = sourceTransform.TransformPoint(localOffset);
     }
 }

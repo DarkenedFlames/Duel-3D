@@ -103,6 +103,7 @@ GameObject:
   - component: {fileID: 5014112666861547163}
   - component: {fileID: 665752956731754965}
   - component: {fileID: 6612868152716003439}
+  - component: {fileID: 3276893218271487195}
   m_Layer: 8
   m_Name: Region_ArcaneMissile
   m_TagString: Region
@@ -216,3 +217,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SpawnContext
   Owner: {fileID: 0}
   Spawner: {fileID: 0}
+--- !u!114 &3276893218271487195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4286046279312439979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa4eaa0d7b3760648bd90a3464dd3341, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::MHoming
+  allCharacters: {fileID: 11400000, guid: da06d002a3bbcaa46ac1fc49d61f1924, type: 2}
+  targetsSource: 0
+  TurnRate: 360
+  Speed: 30
+  HomingDistance: 20

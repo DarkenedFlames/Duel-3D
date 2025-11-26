@@ -7,11 +7,24 @@ public class AGiveWeapon : IGameAction
     [Tooltip("Weapon to give."), SerializeField]
     GameObject weaponPrefab;
 
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null) return;
+        if (context.Target == null)
+        {
+            Debug.LogError($"Action {nameof(AGiveWeapon)} was passed a null parameter: {nameof(context.Target)}");
+            return;
+        }
+        if (weaponPrefab == null)
+        {
+            Debug.LogError($"Action {nameof(AGiveWeapon)} was configured with a null parameter: {nameof(weaponPrefab)}!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out CharacterWeapons weapons))
+        {
+            Debug.LogError($"Action {nameof(AGiveWeapon)} was passed a paramter with a missing component: {nameof(context.Target)} missing {nameof(CharacterWeapons)}!");
+            return;
+        }
 
-        if (target.TryGetComponent(out CharacterWeapons weaponHandler))
-            weaponHandler.EquipWeapon(weaponPrefab);
+        weapons.EquipWeapon(weaponPrefab);
     }
 }

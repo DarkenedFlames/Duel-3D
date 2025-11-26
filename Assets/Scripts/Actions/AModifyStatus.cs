@@ -10,14 +10,18 @@ public class AModifyStatus : IGameAction
     [Tooltip("Apply status if mode is checked, otherwise remove status."), SerializeField]
     bool mode;
     
-    public void Execute(GameObject source, GameObject target)
+    public void Execute(ActionContext context)
     {
-        if (target == null) return;
+        if (context.Target == null) return;
 
-        if (target.TryGetComponent(out CharacterStatuses statuses))
-            if (mode)
-                statuses.AddStatus(statusDefinition);
-            else
-                statuses.RemoveStatus(statusDefinition);
+        // ADD NULL CHECKS
+
+        // Target is guaranteed to have CharacterStatuses because it is a Character
+        CharacterStatuses statuses = context.Target.GetComponent<CharacterStatuses>();
+
+        if (mode)
+            statuses.AddStatus(statusDefinition);
+        else
+            statuses.RemoveStatus(statusDefinition);
     }
 }
