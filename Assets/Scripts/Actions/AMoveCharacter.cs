@@ -14,27 +14,36 @@ public class AMoveCharacter : IGameAction
     {;
         if (context.Target == null)
         {
-            Debug.LogError("The Target passed to AMoveCharacter is null!");
+            Debug.LogError($"Action {nameof(AMoveCharacter)} was passed a null parameter: {nameof(context.Target)}!");
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError("The Source passed to AMoveCharacter is null!");
+            Debug.LogError($"Action {nameof(AMoveCharacter)} was passed a null parameter: {nameof(context.Source)}!");
             return;
         }
         if (!context.Target.TryGetComponent(out MovementProcessor movement))
         {
-            Debug.LogError($"AMoveCharacter expected {context.Target.name} to have a MovementProcessor but it is missing!");
+            Debug.LogError($"Action {nameof(AMoveCharacter)} was passed a parameter with a missing component: {nameof(MovementProcessor)}!");
+            return;
+        }
+        if (Mathf.Approximately(direction.x, 0) && Mathf.Approximately(direction.y, 0) && Mathf.Approximately(direction.z, 0))
+        {
+            Debug.LogError($"Action {nameof(AMoveCharacter)} was configured with an invalid parameter: {nameof(direction)} must be a non-zero vector!");
+            return;
+        }
+        if (Mathf.Approximately(forceStrength, 0))
+        {
+            Debug.LogError($"Action {nameof(AMoveCharacter)} was configured with an invalid parameter: {nameof(forceStrength)} must be non-zero (might be too small)!");
             return;
         }
         if(!context.TryGetSourceTransform(out Transform sourceTransform))
         {
-            Debug.LogError("Couldn't find source transform in AMoveCharacter.");
+            Debug.LogError($"Action {nameof(AMoveCharacter)} could not find {nameof(sourceTransform)}!");
             return;
         }
 
-        Vector3 localDir = direction == Vector3.zero ? Vector3.forward : direction;
-        Vector3 pushDirection = sourceTransform.TransformDirection(localDir).normalized;
+        Vector3 pushDirection = sourceTransform.TransformDirection(direction).normalized;
         movement.ApplyExternalVelocity(pushDirection * forceStrength);
     }
 }

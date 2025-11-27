@@ -12,12 +12,16 @@ public class AModifyStatus : IGameAction
     
     public void Execute(ActionContext context)
     {
-        if (context.Target == null) return;
-
-        // ADD NULL CHECKS
-
-        // Target is guaranteed to have CharacterStatuses because it is a Character
-        CharacterStatuses statuses = context.Target.GetComponent<CharacterStatuses>();
+        if (context.Target == null)
+        {
+            Debug.LogError($"Action {nameof(AModifyStatus)} was passed a null parameter: {nameof(context.Target)}!");
+            return;
+        }
+        if (!context.Target.TryGetComponent(out CharacterStatuses statuses))
+        {
+            Debug.LogError($"Action {nameof(AModifyStatus)} was passed a parameter with a missing component: {nameof(CharacterStatuses)}!");
+            return;
+        }
 
         if (mode)
             statuses.AddStatus(statusDefinition);

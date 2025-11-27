@@ -21,21 +21,26 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  Movers:
-  - rid: 1013435820514738283
   OnSpawnActions: []
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
   - rid: 1013435820514738284
+  - rid: 1013435871330041932
+  - rid: 1013435871330041942
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738283
-      type: {class: StationaryMover, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 1013435820514738284
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
         abilityDefinition: {fileID: 11400000, guid: 5fa403a22b4cd6e498f9a85b6e0f82eb, type: 2}
+    - rid: 1013435871330041932
+      type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
+      data:
+        abilityDefinition: {fileID: 11400000, guid: 58c16abd01a5a6a4e9840166162628cb, type: 2}
+    - rid: 1013435871330041942
+      type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
+      data:
+        abilityDefinition: {fileID: 11400000, guid: e5dfca9f1ec0354488416cd9d55aaf9c, type: 2}

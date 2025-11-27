@@ -9,7 +9,11 @@ public class StatusBlacklistCondition : ActivationCondition
 
     public override bool IsMet(Ability ability)
     {
-        if (!ability.GameObject.TryGetComponent(out CharacterStatuses characterStatuses)) return false;
+        if (!ability.GameObject.TryGetComponent(out CharacterStatuses characterStatuses))
+        {
+            Debug.LogError($"Activation Condition {nameof(StatusBlacklistCondition)} expected missing component: {nameof(CharacterStatuses)}!");
+            return false;
+        }
 
         foreach (StatusDefinition definition in blacklist)
             if (characterStatuses.TryGetStatus(definition, out CharacterStatus _)) 

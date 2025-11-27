@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -15,23 +16,30 @@ public class ASpawnObject : IGameAction
 
     public void Execute(ActionContext context)
     {
-        if (!context.TryGetSourceTransform(out Transform sourceTransform))
+        if (prefab == null)
         {
-            Debug.LogError("Could not find source transform in ASpawnObject");
+            Debug.LogError($"Action {nameof(ASpawnObject)} was configured with a null parameter: {nameof(prefab)}!");
             return;
         }
-
-        
-        // ADD NULL CHECKS
+        if (context.Source == null)
+        {
+            Debug.LogError($"Action {nameof(ASpawnObject)} was passed a null parameter: {nameof(context.Source)}!");
+            return;
+        }
+        if(!context.TryGetSourceTransform(out Transform sourceTransform))
+        {
+            Debug.LogError($"Action {nameof(ASpawnObject)} could not find {nameof(sourceTransform)}!");
+            return;
+        }
 
         Vector3 spawnPosition = sourceTransform.TransformPoint(spawnOffset);
         Quaternion spawnRotation = sourceTransform.rotation * Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
-
         if (!instance.TryGetComponent(out SpawnContext instanceContext))
         {
-            Debug.LogError($"Trying to spawn {instance.name} but it has no SpawnContext");
+            Debug.LogError($"Action {nameof(ASpawnObject)} instantiated a GameObject with a missing component: {instance.name} missing {nameof(SpawnContext)}! Destroying {instance.name}...");
+            Object.Destroy(instance);
             return;
         }
 

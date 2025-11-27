@@ -9,13 +9,21 @@ public class ATeleportCharacter : IGameAction
     
     public void Execute(ActionContext context)
     {
-        if (context.Target == null || context.Source == null) return;
-
-        
-        // ADD NULL CHECKS
-
+        if (context.Target == null)
+        {
+            Debug.LogError($"Action {nameof(ATeleportCharacter)} was passed a null parameter: {nameof(context.Target)}!");
+            return;
+        }
+        if (context.Source == null)
+        {
+            Debug.LogError($"Action {nameof(ATeleportCharacter)} was passed a null parameter: {nameof(context.Source)}!");
+            return;
+        }
         if(!context.TryGetSourceTransform(out Transform sourceTransform))
-            Debug.LogError("Couldn't find source transform in ATeleportCharacter.");
+        {
+            Debug.LogError($"Action {nameof(ATeleportCharacter)} could not find {nameof(sourceTransform)}!");
+            return;
+        }
 
         context.Target.transform.position = sourceTransform.TransformPoint(localOffset);
     }

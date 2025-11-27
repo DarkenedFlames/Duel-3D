@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 
 [RequireComponent(typeof(CharacterStats))]
+[RequireComponent(typeof(Character))]
 public class CharacterWeapons : MonoBehaviour
 {
     [Header("Weapon Settings")]
@@ -16,33 +17,49 @@ public class CharacterWeapons : MonoBehaviour
 
     void Awake()
     {
-        input = GetComponent<IInputDriver>();
+
+        if (!TryGetComponent(out IInputDriver inputDriver))
+            Debug.LogError($"{name}'s {nameof(CharacterWeapons)} expected an implementer of {nameof(IInputDriver)} but none was found!");
+        else input = inputDriver;
 
         if (initialWeapon != null) EquipWeapon(initialWeapon);
     }
 
     public void EquipWeapon(GameObject weaponPrefab)
-    {        
+    {   
+        if (currentWeapon != null)
+        {
+            Debug.Log($"{name}'s {currentWeapon.name} being replaced by {weaponPrefab.name}! Destroying {currentWeapon.name}...");
+            Destroy(currentWeapon);
+        }
         currentWeapon = Instantiate(weaponPrefab, WeaponSlot.position, WeaponSlot.localRotation, WeaponSlot);
 
         if (!currentWeapon.TryGetComponent<SpawnContext>(out var spawnContext))
-            Debug.Log("Weapon has no SpawnContext");
+        {
+            Debug.LogError($"{name}'s weapon was instantiated missing a component: {currentWeapon.name} missing {nameof(SpawnContext)}! Destroying {currentWeapon.name}...");
+            Destroy(currentWeapon);
+            return;
+        }
 
-        spawnContext.Owner = gameObject;
+        spawnContext.Owner = GetComponent<Character>();
         spawnContext.Spawner = null;
         OnEquipWeapon?.Invoke(currentWeapon);
     }
 
     void HandleWeaponInput()
     {
-        if (currentWeapon == null) return;
-        Weapon weaponComponent = currentWeapon.GetComponent<Weapon>();
-                
+        if (currentWeapon == null) return; // Ignore weapon input with no weapon equipped.
+        
+        if (!currentWeapon.TryGetComponent(out Weapon weaponComponent))
+        {
+            Debug.LogError($"{name}'s weapon is missing a component: {currentWeapon.name} missing {nameof(Weapon)}!");
+            return;
+        }
+
         if (weaponComponent.TryUse())
             OnWeaponUsed?.Invoke(weaponComponent);
     }
 
     void OnEnable() => input.OnWeaponInput += HandleWeaponInput;
     void OnDisable() => input.OnWeaponInput -= HandleWeaponInput;
-    
 }

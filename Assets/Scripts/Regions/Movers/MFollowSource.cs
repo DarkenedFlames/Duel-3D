@@ -4,15 +4,17 @@ using UnityEngine;
 public class MFollowSource : MonoBehaviour
 {
     [Tooltip("The local offset at which we follow the source.")]
-    public Vector3 LocalOffset;
+    public Vector3 LocalOffset = Vector3.zero;
 
     void Update()
     {
-        SpawnContext spawnContext = GetComponent<SpawnContext>();
-        GameObject source = spawnContext.Owner != null ? spawnContext.Spawner : spawnContext.Owner;
+        Character owner = GetComponent<SpawnContext>().Owner;
+        if (owner == null)
+        {
+            Debug.LogError($"{name}'s Mover {nameof(MFollowSource)} found a null {nameof(SpawnContext.Owner)}");
+            return;
+        }
 
-        if (source == null) return;
-
-        transform.SetPositionAndRotation(source.transform.TransformPoint(LocalOffset), source.transform.rotation);
+        transform.SetPositionAndRotation(owner.transform.TransformPoint(LocalOffset), owner.transform.rotation);
     }
 }

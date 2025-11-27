@@ -45,7 +45,7 @@ public class AModifyStatModifier : IGameAction
         }
         if (!stats.TryGetStat(StatDefinition.statName, out ClampedStat stat))
         {
-            Debug.LogError($"Action {nameof(AModifyStat)} could not find stat: {StatDefinition.statName}!");
+            // Not an error. Just does nothing if the Character does not have the stat.
             return;
         }
 
@@ -56,7 +56,7 @@ public class AModifyStatModifier : IGameAction
         else
         {
             StatModifier toRemove = statToChange.Modifiers.ToList().Find(m => m.Value == amount && m.Type == type);
-            if (toRemove == null)
+            if (toRemove != null)
                 statToChange.RemoveModifier(toRemove);
         }
     }

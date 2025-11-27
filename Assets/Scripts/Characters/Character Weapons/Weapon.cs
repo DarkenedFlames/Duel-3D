@@ -29,7 +29,7 @@ public class Weapon : MonoBehaviour
         if (!FilterTarget(other, out GameObject target)) return;
 
         _hitThisSwing.Add(target);
-        Definition.OnHitActions.ForEach(a => a.Execute(gameObject, target));
+        Execute(Definition.OnHitActions, target);
     }
 
     bool FilterTarget(Collider other, out GameObject target)
@@ -39,7 +39,7 @@ public class Weapon : MonoBehaviour
 
         if (_hitThisSwing.Contains(potentialTarget)) // Already hit this swing => filter out
             return false;
-        if (potentialTarget == spawnContext.Owner) // Is the wielder => filter out
+        if (potentialTarget.TryGetComponent(out Character character) && character == spawnContext.Owner) // Is the wielder => filter out
             return false;
         if ((Definition.layerMask.value & (1 << potentialTarget.layer)) == 0) // Not on a valid layer => filter out
             return false;
@@ -50,7 +50,7 @@ public class Weapon : MonoBehaviour
 
     public bool TryUse()
     {   
-        GameObject owner = spawnContext.Owner;
+        Character owner = spawnContext.Owner;
         CharacterStats ownerStats = owner.GetComponent<CharacterStats>();
 
         string expendedStatName = Definition.ExpendedStat.statName;
@@ -74,5 +74,13 @@ public class Weapon : MonoBehaviour
         col.enabled = true;
         yield return new WaitForSeconds(Definition.UseTime);
         col.enabled = false;
+    }
+
+    void Execute(List<IGameAction> actions, GameObject target)
+    {
+        if (!target.TryGetComponent(out Character character)) return;
+        
+        ActionContext context = new(){ Source = this, Target = character };
+        actions.ForEach(a => a.Execute(context));
     }
 }

@@ -22,6 +22,10 @@ public class ACleanseStatModifiers : IGameAction
             return;
         }
 
-        stats.Stats.ForEach(s => s.RemoveAllModifiersFromSource(context.Source));
+        foreach (ClampedStat stat in stats.Stats)
+        {
+            stat.MaxStat.RemoveAllModifiersFromSource(context.Source);
+            stat.RemoveAllModifiersFromSource(context.Source);
+        }
     }
 }

@@ -16,7 +16,7 @@ public class ActionContext
 
         if (Source == null)
         {
-            Debug.LogError("ActionContext.TryGetTransform() failed because ActionContext.Source == null!");
+            Debug.LogError("ActionContext.TryGetTransform() failed because ActionContext.Source is null!");
             return false;
         }
 
@@ -25,6 +25,7 @@ public class ActionContext
             Region => ((Region)Source).transform,                               // if Region  => region transform
             Ability => ((Ability)Source).GameObject.transform,                  // if Ability => owner transform
             CharacterEffect => ((CharacterEffect)Source).GameObject.transform,  // if Effect  => owner transform
+            Weapon => ((Weapon)Source).transform,
             _ => null
         };
 

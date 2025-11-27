@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using UnityEngine;
 
 [Serializable]
 public class Stat
@@ -65,6 +66,7 @@ public class Stat
     {
         SetDirty();
         modifiers.Add(modifier);
+        Debug.Log($"Modifier added {modifier.Type} of value {modifier.Value} for stat {Definition.statName}");
     }
 
     public virtual bool RemoveModifier(StatModifier modifier)
@@ -72,6 +74,7 @@ public class Stat
         if (modifiers.Remove(modifier))
         {
             SetDirty();
+            Debug.Log($"Modifier removed {modifier.Type} of value {modifier.Value} for stat {Definition.statName}");
             return true;
         }
         return false;
@@ -105,9 +108,8 @@ public class Stat
         {
             if (modifiers[i].Source == source)
             {
-                isDirty = true;
                 didRemove = true;
-                modifiers.RemoveAt(i);
+                RemoveModifier(modifiers[i]);
             }
         }
 

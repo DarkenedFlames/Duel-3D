@@ -89,7 +89,11 @@ public class Region : MonoBehaviour
         target = null;
         GameObject potentialTarget = other.gameObject;
 
-        if (spawnContext.Owner != null && !Definition.AffectsSource && potentialTarget == spawnContext.Owner)
+        if (spawnContext.Owner != null 
+            && !Definition.AffectsSource
+            && potentialTarget.TryGetComponent(out Character character)
+            && character == spawnContext.Owner
+            )
             return false;
         if ((Definition.LayerMask.value & (1 << potentialTarget.layer)) == 0)
             return false;

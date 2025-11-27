@@ -20,6 +20,7 @@ MonoBehaviour:
   cooldown: 1
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
+  - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
   actions:
   - rid: 1013435820514738250
   references:

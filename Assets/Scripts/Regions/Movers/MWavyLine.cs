@@ -17,13 +17,28 @@ public class MWavyLine : MonoBehaviour
     [Tooltip("The axis along which the object oscillates.")]
     public Vector3 WaveAxis = Vector3.right;
 
+    Vector3 initialPos;
     float time;
+    void Start()
+    {
+        initialPos = transform.position;
+
+        if (ForwardSpeed <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MWavyLine)} was configured with an invalid parameter: {nameof(ForwardSpeed)} must be positive!");
+        if (Mathf.Approximately(Amplitude, 0))
+            Debug.LogError($"{name}'s Mover {nameof(MWavyLine)} was configured with an invalid parameter: {nameof(Amplitude)} must be non-zero (might be too small)!");
+        if (Frequency <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MWavyLine)} was configured with an invalid parameter: {nameof(Frequency)} must be positive!");
+    }
+
     void Update()
     {
         time += Time.deltaTime;
-        transform.position += ForwardSpeed * Time.deltaTime * transform.forward;
+        Vector3 forwardMovement = ForwardSpeed * time * transform.forward;
 
         float wave = Amplitude * Mathf.Cos((time * Frequency) + Phase);
-        transform.position += transform.TransformDirection(WaveAxis.normalized) * wave;
+        Vector3 waveOffset = transform.TransformDirection(WaveAxis.normalized) * wave;
+
+        transform.position = initialPos + forwardMovement + waveOffset;
     }
 }

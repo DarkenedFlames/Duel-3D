@@ -17,7 +17,7 @@ public class CharacterStatuses : MonoBehaviour
 
     public bool TryGetStatus(StatusDefinition definition, out CharacterStatus status)
     {
-        status = statuses.Find(s => s.Definition.StatusName == definition.StatusName);
+        status = statuses.Find(s => s.Definition == definition);
         return status != null;
     }
 

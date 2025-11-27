@@ -21,26 +21,23 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 192
-  Movers:
-  - rid: 1013435839720980630
   OnSpawnActions: []
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
   - rid: 1013435839720980631
+  - rid: 1013435871330041929
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435839720980630
-      type: {class: HomingSequentialMover, ns: , asm: Assembly-CSharp}
-      data:
-        allCharacters: {fileID: 11400000, guid: da06d002a3bbcaa46ac1fc49d61f1924, type: 2}
-        TurnRate: 1440
-        Speed: 40
-        HomingDistance: 20
-        HitDistance: 0.5
     - rid: 1013435839720980631
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
         amount: 5
+    - rid: 1013435871330041929
+      type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        effectDefinition: {fileID: 11400000, guid: 5d9a224ee42355e4ba3d187e1ffe8617, type: 2}
+        mode: 1
+        stacks: 1

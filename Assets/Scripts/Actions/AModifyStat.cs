@@ -32,7 +32,7 @@ public class AModifyStat : IGameAction
         }
         if (!stats.TryGetStat(StatDefinition.statName, out ClampedStat stat))
         {
-            Debug.LogError($"Action {nameof(AModifyStat)} could not find stat: {StatDefinition.statName}!");
+            // Not an error, just does nothing if the Character does not have the stat.
             return;
         }
         

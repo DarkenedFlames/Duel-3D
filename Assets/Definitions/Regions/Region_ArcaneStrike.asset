@@ -15,14 +15,12 @@ MonoBehaviour:
   RegionName: Arcane Strike
   AffectsSource: 0
   RegionExpiryType: 0
-  Duration: 0.5
+  Duration: 0.25
   MaxHits: 0
   Period: 0
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  Movers:
-  - rid: 1013435839720980607
   OnSpawnActions: []
   OnDestroyActions: []
   OnPulseActions: []
@@ -32,13 +30,6 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1013435839720980607
-      type: {class: RotateAroundSourceMover, ns: , asm: Assembly-CSharp}
-      data:
-        ArcDegreesPerSecond: 720
-        Radius: 1.25
-        VerticalOffset: 0.75
-        Clockwise: 1
     - rid: 1013435839720980608
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:

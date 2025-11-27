@@ -21,8 +21,6 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  Movers:
-  - rid: 1013435820514738289
   OnSpawnActions: []
   OnDestroyActions: []
   OnPulseActions: []
@@ -32,11 +30,8 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738289
-      type: {class: StationaryMover, ns: , asm: Assembly-CSharp}
-      data: 
     - rid: 1013435820514738290
       type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
-        direction: {x: 0, y: 0, z: 0}
+        direction: {x: 1, y: 0, z: 0}
         forceStrength: 10

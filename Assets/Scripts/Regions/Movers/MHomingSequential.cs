@@ -27,6 +27,18 @@ public class MHomingSequential : MonoBehaviour
     Character currentTarget;
     readonly HashSet<Character> previousTargets = new();
 
+    void Start()
+    {
+        if (TurnRate <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(TurnRate)} must be positive!");
+        if (Speed <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(Speed)} must be positive!");
+        if (HomingDistance <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(HomingDistance)} must be positive!");
+        if (HitDistance <= 0)
+            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(HitDistance)} must be positive!");
+    }
+
     void Update()
     {
         if (currentTarget == null) TryAcquire();
@@ -48,10 +60,10 @@ public class MHomingSequential : MonoBehaviour
     void TryAcquire()
     {
         List<Character> excluded = previousTargets.ToList();
-        SpawnContext spawnContext = GetComponent<SpawnContext>();
+        Character owner = GetComponent<SpawnContext>().Owner;
 
-        if (spawnContext.Owner != null && spawnContext.Owner.TryGetComponent(out Character ownerCharacter))
-            excluded.Add(ownerCharacter);
+        if (owner != null && !targetsSource)
+            excluded.Add(owner);
 
         Character best = allCharacters.GetClosestExcludingMany(
             transform.position,
