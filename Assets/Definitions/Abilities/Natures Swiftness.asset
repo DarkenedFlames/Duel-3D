@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Natures Swiftness
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Nature's Swiftness
+  icon: {fileID: 21300000, guid: a6d6c99af792d274f8fa9a3052f1f7c5, type: 3}
+  abilityType: 2
+  castAnimationTrigger: 1
+  expendedStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
+  statCost: 1
+  cooldown: 1
+  activationConditions:
+  - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
+  - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
+  actions:
+  - rid: 1013435871330042039
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435871330042039
+      type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        effectDefinition: {fileID: 11400000, guid: 70993c110f2254042a6e1d0741dc9030, type: 2}
+        mode: 1
+        stacks: 1

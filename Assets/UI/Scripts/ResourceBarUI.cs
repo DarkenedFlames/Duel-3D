@@ -4,7 +4,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Slider))]
 public class ResourceBarUI : MonoBehaviour
 {
-    public string StatName;
+    public ResourceDefinition LinkedResource;
     public Slider Slider;
 
     void Awake() => Slider = GetComponent<Slider>();

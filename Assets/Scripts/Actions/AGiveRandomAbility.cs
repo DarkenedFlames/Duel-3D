@@ -1,4 +1,3 @@
-using UnityEditor.Rendering;
 using UnityEngine;
 
 [System.Serializable]
@@ -12,26 +11,16 @@ public class AGiveRandomAbility : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"{nameof(AGiveAbility)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AGiveRandomAbility), context.Source.GameObject);
             return;
         }
-        if (set == null)
+        if (set == null || set.definitions.Count == 0)
         {
-            Debug.LogError($"{nameof(AGiveAbility)} was configured with a null parameter: {nameof(set)}!");
-            return;
-        }
-        if (set.definitions.Count == 0)
-        {
-            Debug.LogError($"{nameof(AGiveAbility)} was configured with an invalid parameter: {nameof(set)} cannot be empty!");
-            return;
-        }
-        if (!context.Target.TryGetComponent(out CharacterAbilities abilities))
-        {
-            Debug.LogError($"{nameof(AGiveAbility)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterAbilities)}!");
+            LogFormatter.LogNullCollectionField(nameof(set), nameof(Execute), nameof(AGiveRandomAbility), context.Source.GameObject);
             return;
         }
 
         AbilityDefinition abilityToGive = set.GetAbilityWeightedByType();
-        abilities.LearnAbility(abilityToGive);
+        context.Target.CharacterAbilities.LearnAbility(abilityToGive);
     }
 }

@@ -9,13 +9,7 @@ public class AModifyStatModifier : IGameAction
     [Tooltip("Stat to modify."), SerializeField]
     StatDefinition StatDefinition;
 
-    [Tooltip("If true, the 'maximum' stat will be modified, otherwise the 'current' stat will be modified."), SerializeField]
-    bool modifyMax = false;
-
-    [Tooltip("Whether to add or remove a modifier."), SerializeField]
-    bool mode = false;
-
-    [Tooltip("The type of modifier to modify."), SerializeField]
+    [Tooltip("The type of modifier to apply."), SerializeField]
     StatModifierType type = StatModifierType.Flat;
 
     [Tooltip("The modifier value."), SerializeField]
@@ -25,39 +19,26 @@ public class AModifyStatModifier : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(AModifyStatModifier)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullField(nameof(context.Target), nameof(AModifyStatModifier), context.Source.GameObject);
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError($"Action {nameof(AModifyStatModifier)} was passed a null parameter: {nameof(context.Source)}!");
+            LogFormatter.LogNullField(nameof(context.Source), nameof(AModifyStatModifier), context.Source.GameObject);
             return;
         }
         if (StatDefinition == null)
         {
-            Debug.LogError($"Action {nameof(AModifyStatModifier)} was configured with a null parameter: {nameof(StatDefinition)}!");
+            LogFormatter.LogNullField(nameof(AModifyStatModifier), nameof(StatDefinition), context.Source.GameObject);
             return;
         }
-        if (!context.Target.TryGetComponent(out CharacterStats stats))
+        if (!context.Target.CharacterStats.TryGetStat(StatDefinition, out Stat stat))
         {
-            Debug.LogError($"Action {nameof(AModifyStatModifier)} was passed a parameter with a missing component: {nameof(CharacterStats)}!");
-            return;
-        }
-        if (!stats.TryGetStat(StatDefinition.statName, out ClampedStat stat))
-        {
-            // Not an error. Just does nothing if the Character does not have the stat.
+            Debug.LogWarning($"Action {nameof(AModifyStatModifier)} could not find stat from definition {StatDefinition.name}!", context.Source.GameObject);
             return;
         }
 
-        Stat statToChange = modifyMax ? stat.MaxStat : stat;
-
-        if (mode)
-            statToChange.AddModifier(new StatModifier(type, amount, context.Source));
-        else
-        {
-            StatModifier toRemove = statToChange.Modifiers.ToList().Find(m => m.Value == amount && m.Type == type);
-            if (toRemove != null)
-                statToChange.RemoveModifier(toRemove);
-        }
+        // Want to add magnitude, but not sure if it works properly with effects and gaining new stacks.
+        stat.AddModifier(new StatModifier(type, amount, context.Source));
     }
 }

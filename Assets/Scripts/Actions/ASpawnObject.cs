@@ -6,7 +6,7 @@ public class ASpawnObject : IGameAction
 {
     [Header("SpawnArea Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 
-    GameObject prefab; // Must have a SpawnContext Component
+    GameObject prefab; // Must implement IActionSource?
 
     [Tooltip("Local spawn offset."), SerializeField]
     Vector3 spawnOffset = Vector3.zero;
@@ -18,31 +18,30 @@ public class ASpawnObject : IGameAction
     {
         if (prefab == null)
         {
-            Debug.LogError($"Action {nameof(ASpawnObject)} was configured with a null parameter: {nameof(prefab)}!");
+            LogFormatter.LogNullField(nameof(prefab), nameof(ASpawnObject), context.Source.GameObject);
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError($"Action {nameof(ASpawnObject)} was passed a null parameter: {nameof(context.Source)}!");
-            return;
-        }
-        if(!context.TryGetSourceTransform(out Transform sourceTransform))
-        {
-            Debug.LogError($"Action {nameof(ASpawnObject)} could not find {nameof(sourceTransform)}!");
+            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ASpawnObject), context.Source.GameObject);
             return;
         }
 
-        Vector3 spawnPosition = sourceTransform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = sourceTransform.rotation * Quaternion.Euler(localEulerRotation);
+        Vector3 spawnPosition = context.Source.Transform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = context.Source.Transform.rotation * Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
-        if (!instance.TryGetComponent(out SpawnContext instanceContext))
+
+        // If what we spawn is an action source, set its owner to the Spawner's owner.
+        if (instance.TryGetComponent(out IActionSource newSource))
         {
-            Debug.LogError($"Action {nameof(ASpawnObject)} instantiated a GameObject with a missing component: {instance.name} missing {nameof(SpawnContext)}! Destroying {instance.name}...");
-            Object.Destroy(instance);
-            return;
+            newSource.Owner = context.Source.Owner;
         }
 
-        instanceContext.Initialize(context.Source);
+        // Spawned object must be ISpawnable, then set the spawned object's Spawner.
+        if (!instance.TryGetComponent(out ISpawnable spawned))
+            Debug.LogError($"{instance.name} tried to spawn with no ISpawnable.");
+        else
+            spawned.Spawner = context.Source;
     }
 }

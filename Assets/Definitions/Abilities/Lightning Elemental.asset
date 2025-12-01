@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Lightning Elemental
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: 'Summon: Lightning Elemental'
+  icon: {fileID: 21300000, guid: 2650bfb23e5ee22468f11266ed1c5bd4, type: 3}
+  abilityType: 1
+  castAnimationTrigger: 1
+  expendedStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
+  statCost: 1
+  cooldown: 1
+  activationConditions:
+  - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
+  - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
+  actions:
+  - rid: 1013435871330041931
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435871330041931
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 2979696938617200448, guid: f252d2bf1bdd4ab428b11b2b022d2797, type: 3}
+        spawnOffset: {x: 0, y: 1, z: 1}
+        localEulerRotation: {x: 0, y: 0, z: 0}

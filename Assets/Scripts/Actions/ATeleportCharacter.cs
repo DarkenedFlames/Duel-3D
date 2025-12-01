@@ -11,20 +11,15 @@ public class ATeleportCharacter : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(ATeleportCharacter)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullField(nameof(context.Target), nameof(ATeleportCharacter), context.Source.GameObject);
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError($"Action {nameof(ATeleportCharacter)} was passed a null parameter: {nameof(context.Source)}!");
-            return;
-        }
-        if(!context.TryGetSourceTransform(out Transform sourceTransform))
-        {
-            Debug.LogError($"Action {nameof(ATeleportCharacter)} could not find {nameof(sourceTransform)}!");
+            LogFormatter.LogNullField(nameof(context.Source), nameof(ATeleportCharacter), context.Source.GameObject);
             return;
         }
 
-        context.Target.transform.position = sourceTransform.TransformPoint(localOffset);
+        context.Target.transform.position = context.Source.Transform.TransformPoint(localOffset);
     }
 }

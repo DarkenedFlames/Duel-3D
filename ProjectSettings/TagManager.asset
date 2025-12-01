@@ -10,6 +10,7 @@ TagManager:
   - Actor
   - AI
   - Region
+  - NPC
   layers:
   - Default
   - TransparentFX

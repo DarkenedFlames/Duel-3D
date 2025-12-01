@@ -11,20 +11,15 @@ public class AGiveAbility : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"{nameof(AGiveAbility)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AGiveAbility), context.Source.GameObject);
             return;
         }
         if (abilityDefinition == null)
         {
-            Debug.LogError($"{nameof(AGiveAbility)} was configured with a null parameter: {nameof(abilityDefinition)}!");
-            return;
-        }
-        if (!context.Target.TryGetComponent(out CharacterAbilities abilities))
-        {
-            Debug.LogError($"{nameof(AGiveAbility)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterAbilities)}!");
+            LogFormatter.LogNullField(nameof(AGiveAbility), nameof(abilityDefinition), context.Source.GameObject);
             return;
         }
 
-        abilities.LearnAbility(abilityDefinition);
+        context.Target.CharacterAbilities.LearnAbility(abilityDefinition);
     }
 }

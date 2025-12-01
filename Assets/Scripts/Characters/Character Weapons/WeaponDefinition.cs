@@ -12,11 +12,11 @@ public class WeaponDefinition : ScriptableObject
     public Sprite Icon;
 
     [Header("Weapon Settings")]
-    [Tooltip("The stat that is expended when the weapon is used.")]
-    public StatDefinition ExpendedStat;
+    [Tooltip("The resource that is expended when the weapon is used.")]
+    public ResourceDefinition ExpendedResource;
 
-    [Tooltip("The amount of the expended stat that is expended when the weapon is used.")]
-    public float StatCost;
+    [Tooltip("The amount of the expended resouce that is expended when the weapon is used.")]
+    public float ResourceCost;
 
     [Tooltip("The cooldown between uses in seconds.")]
     public float CooldownTime;

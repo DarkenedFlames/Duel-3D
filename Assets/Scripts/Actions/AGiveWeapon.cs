@@ -11,20 +11,15 @@ public class AGiveWeapon : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(AGiveWeapon)} was passed a null parameter: {nameof(context.Target)}");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AGiveWeapon), context.Source.GameObject);
             return;
         }
         if (weaponPrefab == null)
         {
-            Debug.LogError($"Action {nameof(AGiveWeapon)} was configured with a null parameter: {nameof(weaponPrefab)}!");
-            return;
-        }
-        if (!context.Target.TryGetComponent(out CharacterWeapons weapons))
-        {
-            Debug.LogError($"Action {nameof(AGiveWeapon)} was passed a paramter with a missing component: {nameof(context.Target)} missing {nameof(CharacterWeapons)}!");
+            LogFormatter.LogNullField(nameof(weaponPrefab), nameof(AGiveWeapon), context.Source.GameObject);
             return;
         }
 
-        weapons.EquipWeapon(weaponPrefab);
+        context.Target.CharacterWeapons.EquipWeapon(weaponPrefab);
     }
 }

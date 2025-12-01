@@ -2,41 +2,35 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-[RequireComponent(typeof(SpawnContext))]
+[RequireComponent(typeof(IActionSource))]
 public class MHomingSequential : MonoBehaviour
 {
     [Header("Homing Settings")]
-    [Tooltip("The global character runtime set for targeting.")]
-    public CharacterSet allCharacters;
+    [Tooltip("The global character runtime set for targeting."), SerializeField]
+    CharacterSet allCharacters;
 
-    [Tooltip("Whether or not the source Character is targeted for homing.")]
-    public bool targetsSource = false;
+    [Tooltip("Whether or not the source Character is targeted for homing."), SerializeField]
+    bool targetsSource = false;
 
-    [Tooltip("The rate (degrees/second) at which the region turns towards its target.")]
-    public float TurnRate = 360f;
+    [Tooltip("The rate (degrees/second) at which the region turns towards its target."), SerializeField, Min(0)]
+    float TurnRate = 360f;
 
-    [Tooltip("The speed (meters/second) at which the region moves.")]
-    public float Speed = 10f;
+    [Tooltip("The speed (meters/second) at which the region moves."), SerializeField, Min(0)]
+    float Speed = 10f;
 
-    [Tooltip("The distance (meters) at which the region may reacquire homing targets.")]
-    public float HomingDistance = 20f;
+    [Tooltip("The distance (meters) at which the region may reacquire homing targets."), SerializeField, Min(0)]
+    float HomingDistance = 20f;
 
-    [Tooltip("The distance (meters) at which the region is considered to have 'hit' its target.")]
-    public float HitDistance = 0.5f;
+    [Tooltip("The distance (meters) at which the region is considered to have 'hit' its target."), SerializeField, Min(0)]
+    float HitDistance = 0.5f;
 
     Character currentTarget;
     readonly HashSet<Character> previousTargets = new();
 
     void Start()
     {
-        if (TurnRate <= 0)
-            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(TurnRate)} must be positive!");
-        if (Speed <= 0)
-            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(Speed)} must be positive!");
-        if (HomingDistance <= 0)
-            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(HomingDistance)} must be positive!");
-        if (HitDistance <= 0)
-            Debug.LogError($"{name}'s Mover {nameof(MHomingSequential)} was configured with an invalid parameter: {nameof(HitDistance)} must be positive!");
+        if (allCharacters == null || allCharacters.Count() == 0)
+            LogFormatter.LogNullField(nameof(allCharacters), nameof(MHoming), GetComponent<IActionSource>().GameObject);
     }
 
     void Update()
@@ -60,9 +54,15 @@ public class MHomingSequential : MonoBehaviour
     void TryAcquire()
     {
         List<Character> excluded = previousTargets.ToList();
-        Character owner = GetComponent<SpawnContext>().Owner;
 
-        if (owner != null && !targetsSource)
+        Character owner = GetComponent<IActionSource>().Owner;
+        if (owner == null)
+        {
+            Debug.LogError($"Mover {nameof(MHomingSequential)} found a null {nameof(IActionSource.Owner)}", GetComponent<IActionSource>().GameObject);
+            return;
+        }
+
+        if (!targetsSource)
             excluded.Add(owner);
 
         Character best = allCharacters.GetClosestExcludingMany(

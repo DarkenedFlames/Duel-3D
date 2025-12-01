@@ -15,7 +15,9 @@ public class CameraOrbit : MonoBehaviour
 
     void Awake()
     {
-        input = target.GetComponent<IInputDriver>();
+        if (!target.TryGetComponent(out IInputDriver inputDriver))
+            Debug.LogError($"{target.name}'s {nameof(CameraOrbit)} expected a component but it was missing: {nameof(IInputDriver)} missing!");
+        else input = inputDriver;
     }
 
     void Start()
@@ -30,6 +32,8 @@ public class CameraOrbit : MonoBehaviour
 
     void LateUpdate()
     {
+        if (input == null || target == null) return;
+
         _pitch -= input.LookInput.y * sensitivityY;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
 
@@ -38,10 +42,8 @@ public class CameraOrbit : MonoBehaviour
         Vector3 direction = (desiredPosition - target.position).normalized;
 
         if (Physics.Raycast(target.position, direction, out RaycastHit hit, distance, ~LayerMask.GetMask("Characters")))
-        {
             desiredPosition = target.position - rotation * Vector3.forward * hit.distance * 0.9f;
-        }
-
+        
         transform.position = desiredPosition;
         transform.LookAt(target.position + Vector3.up);
     }

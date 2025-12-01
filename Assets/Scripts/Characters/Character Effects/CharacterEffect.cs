@@ -1,9 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterEffect
+public class CharacterEffect : IActionSource
 {
-    public GameObject GameObject;
+    public Character Owner { get; set; }
+    public Transform Transform => Owner.transform;
+    public GameObject GameObject { get; }
+    
+
     public EffectDefinition Definition;
     public IntegerCounter currentStacks;
     public FloatCounter seconds;
@@ -12,14 +16,20 @@ public class CharacterEffect
     public CharacterEffect(GameObject gameObject, EffectDefinition def, int initialStacks)
     {
         GameObject = gameObject;
+        if (!gameObject.TryGetComponent(out Character character))
+            Debug.LogError($"{gameObject.name}'s {Definition.effectName} expected a {nameof(Character)} but it was missing!");
+        else
+            Owner = character;
+        
         Definition = def;
 
         currentStacks = new(initialStacks, 0, def.maxStacks, resetToMax: false);
+        // Make these two null if their duration/period is not >0, but all references must null check
         seconds = new(def.duration, 0, def.duration);
         pulse = new(def.period, 0, def.period);
 
         Execute(Definition.OnApplyActions);
-        Debug.Log($"{Definition.effectName} created with {currentStacks.Value} stacks and {seconds.Value} seconds.");
+        Debug.Log($"{GameObject.name} gained {currentStacks.Value}x {Definition.effectName} ({seconds.Value}s)!");
     }
 
     public void OnUpdate()
@@ -28,7 +38,7 @@ public class CharacterEffect
         seconds.Decrease(dt);
         pulse.Decrease(dt);
         
-        if (pulse.Expired)
+        if (pulse.Expired && Definition.period > 0)
         {
             Execute(Definition.OnPulseActions);
             pulse.Reset();
@@ -47,7 +57,9 @@ public class CharacterEffect
         if (stacks <= 0) return 0;
         if (!Definition.stackingType.HasFlag(StackingType.AddStack)) return 0;
         
-        int stacksToAdd = Mathf.Min(currentStacks.Value + stacks, Definition.maxStacks);
+        int stacksToAdd = Mathf.Min(stacks, Definition.maxStacks - currentStacks.Value);
+        if (stacksToAdd <= 0) return 0;
+
         currentStacks.Increase(stacksToAdd);
         return stacksToAdd;
     }
@@ -70,6 +82,7 @@ public class CharacterEffect
         if (shouldExpire)
         {
             Execute(Definition.OnExpireActions);
+            Debug.Log($"{GameObject.name} lost {Definition.effectName}!");
             return true;
         }
 
@@ -84,7 +97,11 @@ public class CharacterEffect
 
     void Execute(List<IGameAction> actions)
     {
-        ActionContext context = new() { Source = this, Target = GameObject.GetComponent<Character>() };
+        float magnitude = 1f;
+        if (Definition.ScalesWithStacks)
+            magnitude = currentStacks.Value;
+
+        ActionContext context = new() { Source = this, Target = GameObject.GetComponent<Character>(), Magnitude = magnitude };
         actions.ForEach(a => a.Execute(context));
     }
 }

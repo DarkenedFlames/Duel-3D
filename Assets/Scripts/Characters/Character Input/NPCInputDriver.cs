@@ -13,8 +13,21 @@ public class NPCInputDriver : MonoBehaviour, IInputDriver
 
     void Update()
     {
+        // All placeholder
         MoveInput = Vector2.zero;
         LookInput = Vector2.zero;
         SprintingInput = false;
+
+        bool jumping = false;
+        if (jumping)
+            OnJumpInput?.Invoke();
+        
+        bool ability = false;
+        if (ability)
+            OnAbilityInput?.Invoke(AbilityType.Primary);
+
+        bool weapon = false;
+        if (weapon)
+            OnWeaponInput?.Invoke();
     }
 }

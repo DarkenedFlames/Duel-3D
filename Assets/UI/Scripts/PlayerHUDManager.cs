@@ -19,8 +19,8 @@ public class PlayerHUDManager : MonoBehaviour
             return;
         }
 
-        if (localPlayer.TryGetComponent(out CharacterStats stats))
-            resourcePanel.SubscribeToHandler(stats);
+        if (localPlayer.TryGetComponent(out CharacterResources resources))
+            resourcePanel.SubscribeToHandler(resources);
 
         if (localPlayer.TryGetComponent(out CharacterAbilities abilities))
             abilityBar.SubscribeToHandler(abilities);

@@ -8,37 +8,27 @@ public class AModifyEffect : IGameAction
     EffectDefinition effectDefinition;
     
     [Tooltip("Apply stacks if mode is checked, otherwise remove stacks."), SerializeField]
-    bool mode;
+    bool mode = true;
 
-    [Tooltip("The number of stacks to apply or remove."), SerializeField]
-    int stacks;
+    [Tooltip("The number of stacks to apply or remove."), SerializeField, Min(1)]
+    int stacks = 1;
     
     public void Execute(ActionContext context)
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(AModifyEffect)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyEffect), context.Source.GameObject);
             return;
         }
         if (effectDefinition == null)
         {
-            Debug.LogError($"Action {nameof(AModifyEffect)} was configured with a null parameter: {nameof(effectDefinition)}!");
-            return;
-        }
-        if (stacks <= 0)
-        {
-            Debug.LogError($"Action {nameof(AModifyEffect)} was configured with an invalid parameter: {nameof(stacks)} must be positive!");
-            return;
-        }
-        if (!context.Target.TryGetComponent(out CharacterEffects effects))
-        {
-            Debug.LogError($"Action {nameof(AModifyEffect)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterEffects)}!");
+            LogFormatter.LogNullField(nameof(AModifyEffect), nameof(effectDefinition), context.Source.GameObject);
             return;
         }
 
         if (mode) 
-            effects.AddEffect(effectDefinition, stacks);
+            context.Target.CharacterEffects.AddEffect(effectDefinition, stacks);
         else
-            effects.RemoveEffect(effectDefinition, stacks);
+            context.Target.CharacterEffects.RemoveEffect(effectDefinition, stacks);
     }
 }

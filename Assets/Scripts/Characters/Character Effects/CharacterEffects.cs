@@ -32,25 +32,25 @@ public class CharacterEffects : MonoBehaviour
             if (effect.TryExpire())
             {
                 effects.RemoveAt(i);
-                Debug.Log($"{gameObject.name} lost {effect.Definition.effectName}");
                 OnEffectLost?.Invoke(effect);
             }
         }
     }
 
-    public bool TryGetEffect(string effectName, out CharacterEffect effect)
+    public bool TryGetEffect(EffectDefinition definition, out CharacterEffect effect)
     {
-        effect = effects.Find(e => e.Definition.effectName == effectName);
+        effect = effects.Find(e => e.Definition == definition);
         return effect != null;
     }
 
 
     // Returns the number of stacks added.
-    public int AddEffect(EffectDefinition effectDefinition, int stacks)
+    public int AddEffect(EffectDefinition definition, int stacks)
     {
-        if (TryGetEffect(effectDefinition.effectName, out CharacterEffect existing))
+        if (TryGetEffect(definition, out CharacterEffect existing))
         {
-            if (existing.Refresh()) OnEffectRefreshed?.Invoke(existing);
+            if (existing.Refresh())
+                OnEffectRefreshed?.Invoke(existing);
 
             int stacksGained = existing.AddStacks(stacks);
             if (stacksGained > 0)
@@ -63,7 +63,7 @@ public class CharacterEffects : MonoBehaviour
         }
         else
         {
-            CharacterEffect newEffect = new(gameObject, effectDefinition, stacks);
+            CharacterEffect newEffect = new(gameObject, definition, stacks);
             effects.Add(newEffect);
             OnEffectGained?.Invoke(newEffect);
             return stacks;
@@ -71,12 +71,21 @@ public class CharacterEffects : MonoBehaviour
     }
 
     // Returns the number of stacks removed.
-    public int RemoveEffect(EffectDefinition effectDefinition, int stacksToRemove)
+    public int RemoveEffect(EffectDefinition definition, int stacksToRemove)
     {
-        if (!TryGetEffect(effectDefinition.effectName, out CharacterEffect existing))
+        if (!TryGetEffect(definition, out CharacterEffect existing))
             return 0;
         
         OnEffectStackChanged?.Invoke(existing);
         return existing.RemoveStacks(stacksToRemove);
+    }
+
+    public bool RemoveEffect(EffectDefinition definition)
+    {
+        if (!TryGetEffect(definition, out CharacterEffect existing) || !effects.Remove(existing))
+            return false;
+
+        OnEffectLost?.Invoke(existing);
+        return true;
     }
 }

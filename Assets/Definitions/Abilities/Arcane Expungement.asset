@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Arcane Expungement
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Arcane Expungement
+  icon: {fileID: 21300000, guid: 522b5a720a646664aaa1b3c02a89a143, type: 3}
+  abilityType: 3
+  castAnimationTrigger: 1
+  expendedStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
+  statCost: 1
+  cooldown: 1
+  activationConditions:
+  - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
+  - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
+  actions:
+  - rid: 1013435820514738291
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435820514738291
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 1226243809847121358, guid: 5ba1acfed318a264bb9de5e7ab83f13b, type: 3}
+        spawnOffset: {x: 0, y: 1, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

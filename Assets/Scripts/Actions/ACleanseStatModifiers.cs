@@ -1,5 +1,3 @@
-using UnityEngine;
-
 [System.Serializable]
 public class ACleanseStatModifiers : IGameAction
 {
@@ -8,24 +6,14 @@ public class ACleanseStatModifiers : IGameAction
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(ACleanseStatModifiers)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(ACleanseStatModifiers), context.Source.GameObject);
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError($"Action {nameof(ACleanseStatModifiers)} was passed a null parameter: {nameof(context.Source)}!");
+            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ACleanseStatModifiers), context.Source.GameObject);
             return;
         }
-        if (!context.Target.TryGetComponent(out CharacterStats stats))
-        {
-            Debug.LogError($"Action {nameof(ACleanseStatModifiers)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterStats)}!");
-            return;
-        }
-
-        foreach (ClampedStat stat in stats.Stats)
-        {
-            stat.MaxStat.RemoveAllModifiersFromSource(context.Source);
-            stat.RemoveAllModifiersFromSource(context.Source);
-        }
+        context.Target.CharacterStats.Stats.ForEach(s => s.RemoveAllModifiersFromSource(context.Source));
     }
 }

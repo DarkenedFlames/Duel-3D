@@ -4,27 +4,17 @@ using UnityEngine;
 public class ADealsDamage : IGameAction
 {
     [Header("Damage Configuration")]
-    [Tooltip("The amount of damage dealt."), SerializeField]
-    int amount;
+    [Tooltip("The amount of damage dealt."), SerializeField, Min(0)]
+    int amount = 1;
 
     public void Execute(ActionContext context)
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(ADealsDamage)} was passed a null parameter: {nameof(context.Target)}!");
-            return;
-        }
-        if (amount <= 0)
-        {
-            Debug.LogError($"Action {nameof(ADealsDamage)} was configured with an invalid parameter: {nameof(amount)} must be positive!");
-            return;
-        }
-        if (!context.Target.TryGetComponent(out CharacterStats stats))
-        {
-            Debug.LogError($"Action {nameof(ADealsDamage)} was passed a parameter with a missing component: {nameof(context.Target)} missing {nameof(CharacterStats)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(ADealsDamage), context.Source.GameObject);
             return;
         }
 
-        stats.TakeDamage(amount);
+        context.Target.CharacterResources.TakeDamage(amount * context.Magnitude);
     }
 }

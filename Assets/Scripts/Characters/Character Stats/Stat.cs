@@ -3,116 +3,91 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
 
-[Serializable]
 public class Stat
 {
     public readonly StatDefinition Definition;
-    public float BaseValue 
-    {
-        get => _baseValue;
-        set
-        {
-            if (_baseValue != value)
-            {
-                _baseValue = value;
-                SetDirty();
-            }
-        }
-    }
-    private float _baseValue;
 
-    public virtual float Value 
-    { 
-        get
-        {
-            if (isDirty || BaseValue != _lastBaseValue)
-            {
-                _lastBaseValue = BaseValue;
-                _value = FinalValue();
-                isDirty = false;
-            }
-            return _value;
-        }
-    }
+    protected float _baseValue;
+    public virtual float BaseValue => _baseValue;
 
-    protected bool isDirty = true;
     protected float _value;
-    protected float _lastBaseValue  = float.MinValue;
+    public virtual float Value => _value;
 
     protected readonly List<StatModifier> modifiers;
     public readonly ReadOnlyCollection<StatModifier> Modifiers;
 
     public event Action<Stat> OnValueChanged;
 
-    public Stat(StatDefinition definition) : this()
+    public Stat(StatDefinition definition)
     {
         Definition = definition;
-        BaseValue = Definition.defaultValue;
-    }
-
-    public Stat()
-    {
+        _baseValue = definition.defaultValue;
         modifiers = new();
         Modifiers = modifiers.AsReadOnly();
+        RecalculateValue();
     }
 
-    protected void SetDirty()
+    protected virtual void RecalculateValue()
     {
-        isDirty = true;
+        _value = FinalValue();
+        Debug.Log($"[{Definition.statName}] changed to {_value}!");
         OnValueChanged?.Invoke(this);
-    }
-
-    public virtual void AddModifier(StatModifier modifier)
-    {
-        SetDirty();
-        modifiers.Add(modifier);
-        Debug.Log($"Modifier added {modifier.Type} of value {modifier.Value} for stat {Definition.statName}");
-    }
-
-    public virtual bool RemoveModifier(StatModifier modifier)
-    {
-        if (modifiers.Remove(modifier))
-        {
-            SetDirty();
-            Debug.Log($"Modifier removed {modifier.Type} of value {modifier.Value} for stat {Definition.statName}");
-            return true;
-        }
-        return false;
     }
 
     protected virtual float FinalValue()
     {
-        float totalFlat = 0f;
-        float totalPercentAdd = 0f;
-        float totalPercentMult = 1f;
+        GetModifierTotals(out float flat, out float percentAdd, out float percentMult);
+        return (BaseValue + flat) * (1 + percentAdd) * percentMult;
+    }
 
-        foreach (StatModifier mod in modifiers)
+    protected virtual void GetModifierTotals(out float flat, out float percentAdd, out float percentMult)
+    {
+        flat = 0f;
+        percentAdd = 0f;
+        percentMult = 1f;
+
+        foreach (var mod in modifiers)
         {
             switch (mod.Type)
             {
-                case StatModifierType.Flat:        totalFlat += mod.Value; break;
-                case StatModifierType.PercentAdd:  totalPercentAdd += mod.Value; break;
-                case StatModifierType.PercentMult: totalPercentMult *= mod.Value; break;
+                case StatModifierType.Flat: flat += mod.Value; break;
+                case StatModifierType.PercentAdd: percentAdd += mod.Value; break;
+                case StatModifierType.PercentMult: percentMult *= mod.Value; break;
             }
         }
-
-        float finalValue = (BaseValue + totalFlat) * (1 + totalPercentAdd) * totalPercentMult;
-        return (float)Math.Round(finalValue, 4);
     }
 
-    public virtual bool RemoveAllModifiersFromSource(object source)
+    public virtual void AddModifier(StatModifier mod)
     {
-        bool didRemove = false;
+        modifiers.Add(mod);
+        RecalculateValue();
+        Debug.Log($"[{Definition.statName}] Modifier Added: {mod.Value} {mod.Type}");
+    }
 
-        for (int i = modifiers.Count - 1; i >= 0; i--)
+    public virtual bool RemoveModifier(StatModifier mod)
+    {
+        bool removed = modifiers.Remove(mod);
+        if (removed)
         {
-            if (modifiers[i].Source == source)
-            {
-                didRemove = true;
-                RemoveModifier(modifiers[i]);
-            }
+            RecalculateValue();
+            Debug.Log($"[{Definition.statName}] Modifier Added: {mod.Value} {mod.Type}");
         }
+        return removed;
+    }
 
-        return didRemove;
+    public void ApplyFlat(float amount, object source = null) =>
+        AddModifier(new StatModifier(StatModifierType.Flat, amount, source));
+
+    public void ApplyPercent(float percent, object source = null) =>
+        AddModifier(new StatModifier(StatModifierType.PercentAdd, percent, source));
+    
+    public void ApplyMultiplier(float multiplier, object source = null) =>
+        AddModifier(new StatModifier(StatModifierType.PercentMult, multiplier, source));
+
+    public virtual void RemoveAllModifiersFromSource(object source)
+    {
+        for (int i = modifiers.Count - 1; i >= 0; i--)
+            if (modifiers[i].Source == source)
+                RemoveModifier(modifiers[i]);
     }
 }

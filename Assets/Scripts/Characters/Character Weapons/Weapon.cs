@@ -4,20 +4,26 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider))]
-[RequireComponent(typeof(SpawnContext))]
-public class Weapon : MonoBehaviour
+public class Weapon : MonoBehaviour, IActionSource
 {
+    public Character Owner { get; set; }
+    public Transform Transform => transform;
+    public GameObject GameObject => gameObject;
+
     public WeaponDefinition Definition;
     public FloatCounter seconds;
-    SpawnContext spawnContext;
+
     Collider col;
 
     HashSet<GameObject> _hitThisSwing = new();
 
     void Awake()
     {
+        Owner = GetComponentInParent<Character>();
+        if (Owner == null)
+            Debug.LogError($"{Owner.gameObject.name}'s {Definition.WeaponName} expected a {nameof(Character)} component but it was missing!");
+
         col = GetComponent<Collider>();
-        spawnContext = GetComponent<SpawnContext>();
         col.enabled = false;
         seconds = new(Definition.CooldownTime, 0, Definition.CooldownTime, true, true);
     }
@@ -39,7 +45,7 @@ public class Weapon : MonoBehaviour
 
         if (_hitThisSwing.Contains(potentialTarget)) // Already hit this swing => filter out
             return false;
-        if (potentialTarget.TryGetComponent(out Character character) && character == spawnContext.Owner) // Is the wielder => filter out
+        if (potentialTarget.TryGetComponent(out Character character) && character == Owner) // Is the wielder => filter out
             return false;
         if ((Definition.layerMask.value & (1 << potentialTarget.layer)) == 0) // Not on a valid layer => filter out
             return false;
@@ -50,17 +56,15 @@ public class Weapon : MonoBehaviour
 
     public bool TryUse()
     {   
-        Character owner = spawnContext.Owner;
-        CharacterStats ownerStats = owner.GetComponent<CharacterStats>();
+        CharacterResources resources = Owner.CharacterResources;
 
-        string expendedStatName = Definition.ExpendedStat.statName;
-        float amountToExpend = Definition.StatCost;
-
-        if (ownerStats.TryGetStat(expendedStatName, out ClampedStat stat) 
-            && amountToExpend <= stat.Value
+        if (resources.TryGetResource(Definition.ExpendedResource, out CharacterResource resource) 
+            && Definition.ResourceCost <= resource.Value
             && seconds.Expired)
         {
-            stat.BaseValue -= amountToExpend;
+            resource.ChangeValue(-1f * Definition.ResourceCost, out float _);
+            resource.RegenerationCounter.Reset();
+            
             seconds.Reset();
             StartCoroutine(UseCoroutine());
             return true;

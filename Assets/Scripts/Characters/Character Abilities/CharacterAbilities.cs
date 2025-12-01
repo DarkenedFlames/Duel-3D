@@ -13,7 +13,13 @@ public class CharacterAbilities : MonoBehaviour
     public event Action<Ability> OnAbilityActivated;
     public event Action<Ability> OnAbilityLearned;
 
-    void Awake() => input = GetComponent<IInputDriver>();
+    void Awake()
+    {
+        if (!TryGetComponent(out IInputDriver inputDriver))
+            Debug.LogError($"{name}'s {nameof(CharacterAbilities)} expected a component but it was missing: {nameof(IInputDriver)} missing!");
+        else input = inputDriver;
+    }
+
     void Start() { foreach (AbilityDefinition definition in initialAbilities) LearnAbility(definition); }
     void Update() => abilities.Values.ToList().ForEach(a => a.TickCooldown(Time.deltaTime));
     void OnEnable() => input.OnAbilityInput += TryActivateByType;
@@ -21,7 +27,7 @@ public class CharacterAbilities : MonoBehaviour
 
     public void LearnAbility(AbilityDefinition def)
     {
-        Ability newAbility = new(gameObject, def);
+        Ability newAbility = new(GetComponent<Character>(), def);
         abilities[def.abilityType] = newAbility;
         OnAbilityLearned?.Invoke(newAbility);
     }

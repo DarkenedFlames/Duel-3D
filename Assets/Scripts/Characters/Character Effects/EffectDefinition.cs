@@ -24,13 +24,16 @@ public class EffectDefinition : ScriptableObject
     [Tooltip("Determines the process used for this effect's expiration.")]
     public ExpiryType expiryType = ExpiryType.LoseAllStacks;
 
-    [Tooltip("The maximum number of stacks this effect can have.")]
+    [Tooltip("If true, the actions performed by this effect will scale with the number of stacks it has.")]
+    public bool ScalesWithStacks = true;
+
+    [Tooltip("The maximum number of stacks this effect can have."), Min(1)]
     public int maxStacks = 1;
 
-    [Tooltip("The amount of time it takes for the effect to attempt expiration.")]
+    [Tooltip("The lifetime of the effect in seconds (active if greater than 0)."), Min(0)]
     public float duration = 5f;
 
-    [Tooltip("The amount of time between OnTick action executions.")]
+    [Tooltip("The amount of time between pulses (active if greater than 0)."), Min(0)]
     public float period = 1f;
 
     [Header("Actions")]

@@ -7,28 +7,14 @@ public interface IGameAction
 
 public class ActionContext
 {
-    public object Source;
+    public IActionSource Source;
     public Character Target;
+    public float Magnitude = 1f;
+}
 
-    public bool TryGetSourceTransform(out Transform sourceTransform)
-    {
-        sourceTransform = null;
-
-        if (Source == null)
-        {
-            Debug.LogError("ActionContext.TryGetTransform() failed because ActionContext.Source is null!");
-            return false;
-        }
-
-        sourceTransform = Source switch
-        {
-            Region => ((Region)Source).transform,                               // if Region  => region transform
-            Ability => ((Ability)Source).GameObject.transform,                  // if Ability => owner transform
-            CharacterEffect => ((CharacterEffect)Source).GameObject.transform,  // if Effect  => owner transform
-            Weapon => ((Weapon)Source).transform,
-            _ => null
-        };
-
-        return sourceTransform != null;
-    }
+public interface IActionSource
+{
+    Character Owner { get; set; }    // Who owns this gameplay object?
+    Transform Transform { get; }     // Its world-space transform
+    GameObject GameObject { get; }   // Underlying GameObject (when applicable)
 }

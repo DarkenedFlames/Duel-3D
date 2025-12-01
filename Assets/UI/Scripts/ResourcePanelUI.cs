@@ -4,56 +4,54 @@ using UnityEngine;
 public class ResourcePanelUI : MonoBehaviour
 {
     ResourceBarUI[] bars;
-    private CharacterStats trackedStats;
+    private CharacterResources trackedResources;
 
-    void Awake()
+    void Awake() => bars = GetComponentsInChildren<ResourceBarUI>();
+    public void SubscribeToHandler(CharacterResources resources)
     {
-        bars = GetComponentsInChildren<ResourceBarUI>();
-    }
-
-    public void SubscribeToHandler(CharacterStats stats)
-    {
-        trackedStats = stats;
-        if (trackedStats == null) return;
+        trackedResources = resources;
+        if (trackedResources == null) return;
 
         foreach (ResourceBarUI bar in bars)
         {
-            if (trackedStats.TryGetStat(bar.StatName, out ClampedStat trackedStat))
+            if (trackedResources.TryGetResource(bar.LinkedResource, out CharacterResource trackedResource))
             {
-                trackedStat.MaxStat.OnValueChanged += HandleStatChanged;
-                trackedStat.OnValueChanged += HandleStatChanged;
+                trackedResource.MaxStat.OnValueChanged += HandleStatChanged;
+                trackedResource.OnValueChanged += HandleResourceChanged;
 
-                HandleStatChanged(trackedStat.MaxStat);
-                HandleStatChanged(trackedStat);
+                HandleStatChanged(trackedResource.MaxStat);
+                HandleResourceChanged(trackedResource);
             }
             else
-                Debug.LogError($"{name} couldn't find stat {bar.StatName} provided by {bar.name} for UI subscription");
+                Debug.LogError($"{name} couldn't find stat {bar.LinkedResource.ResourceName} provided by {bar.name} for UI subscription");
         }
     }
 
     void OnDestroy()
     {
-        if (trackedStats == null) return;
+        if (trackedResources == null) return;
 
         foreach (ResourceBarUI bar in bars)
         {
-            if (trackedStats.TryGetStat(bar.StatName, out ClampedStat trackedStat))
+            if (trackedResources.TryGetResource(bar.LinkedResource, out CharacterResource trackedResource))
             {
-                trackedStat.OnValueChanged -= HandleStatChanged;
-                trackedStat.MaxStat.OnValueChanged -= HandleStatChanged;
+                trackedResource.OnValueChanged -= HandleResourceChanged;
+                trackedResource.MaxStat.OnValueChanged -= HandleStatChanged;
             }
             else
-                Debug.LogError($"{name} couldn't find stat {bar.StatName} provided by {bar.name} for UI unsubscription");
+                Debug.LogError($"{name} couldn't find stat {bar.LinkedResource.ResourceName} provided by {bar.name} for UI unsubscription");
         }
     }
 
     void HandleStatChanged(Stat stat)
     {
-        ResourceBarUI bar = bars.FirstOrDefault(b => b.StatName == stat.Definition.statName);
+        ResourceBarUI bar = bars.FirstOrDefault(b => b.LinkedResource.MaxStat == stat.Definition);
+        bar.SetSliderMaxValue(stat.Value);
+    }
 
-        if(stat is ClampedStat)
-            bar.SetSliderValue(stat.Value);
-        else
-            bar.SetSliderMaxValue(stat.Value);
+    void HandleResourceChanged(CharacterResource resource)
+    {
+        ResourceBarUI bar = bars.FirstOrDefault(b => b.LinkedResource == resource.Definition);
+        bar.SetSliderValue(resource.Value);
     }
 }

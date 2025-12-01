@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edc98be2175dfa42b07e1d960fac3ce, type: 3}
+  m_Name: Inferno
+  m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
+  effectName: Inferno
+  icon: {fileID: 21300000, guid: f8747447b00cf1343aea604499f8c9ea, type: 3}
+  stackingType: -1
+  expiryType: 0
+  maxStacks: 5
+  duration: 5
+  period: 0.25
+  OnApplyActions: []
+  OnPulseActions:
+  - rid: 1013435839720980591
+  OnExpireActions: []
+  references:
+    version: 2
+    RefIds:
+    - rid: 1013435839720980591
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        amount: 1

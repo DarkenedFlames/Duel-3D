@@ -20,8 +20,11 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("The character animation trigger to use for this ability.")]
     public AbilityAnimationTrigger castAnimationTrigger = AbilityAnimationTrigger.Cast;
 
-    [Tooltip("The amount of mana spent per cast.")]
-    public float manaCost = 0f;
+    [Tooltip("The resource that this ability expends.")]
+    public ResourceDefinition expendedResource;
+
+    [Tooltip("The amount of the expended resource spent per cast.")]
+    public float resourceCost = 0f;
 
     [Tooltip("The cooldown per cast in seconds.")]
     public float cooldown = 0f;
@@ -31,5 +34,5 @@ public class AbilityDefinition : ScriptableObject
 
     [Tooltip("The actions this ability executes upon activation."), SerializeReference]
     public List<IGameAction> actions = new();
-
+    
 }

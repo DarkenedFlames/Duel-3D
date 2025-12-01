@@ -1,60 +1,47 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class CharacterStats : MonoBehaviour
 {
-    [SerializeField] public List<StatDefinition> InitialStats;
-    public List<ClampedStat> Stats { get; private set; } = new();
+    public List<StatDefinition> InitialStats;
+
+    public Dictionary<Stat, FloatCounter> RegenerationCounters = new();
+
+    public List<Stat> Stats { get; private set; } = new();
+
     public event Action<Stat> OnStatLearned;
-    public event Action<GameObject> OnDeath;
-    public event Action<GameObject> OnTakeDamage;
 
     void Awake()
     {
         foreach (StatDefinition definition in InitialStats)
-            LearnStat(definition);
+        {
+            if (!TryLearnStat(definition, out Stat _))
+                continue;
+        }
     }
 
-    public bool TryGetStat(string statName, out ClampedStat stat)
+    public bool TryGetStat(StatDefinition definition, out Stat stat)
     {
-        stat = Stats.FirstOrDefault(s => s.Definition.statName == statName);
+        stat = Stats.Find(s => s.Definition == definition);
         return stat != null;
     }
 
-    void LearnStat(StatDefinition definition)
+    bool TryLearnStat(StatDefinition definition, out Stat newStat)
     {
-        if (!TryGetStat(definition.statName, out ClampedStat _))
+        if (TryGetStat(definition, out Stat _))
         {
-            ClampedStat newStat = new(definition, new Stat(definition));
+            newStat = null;
+            Debug.LogWarning($"{gameObject.name}'s {nameof(CharacterStats)} tried to learn a duplicate stat from definition {definition.name}!");
+        }
+
+        else
+        {
+            newStat = new(definition);
             Stats.Add(newStat);
             OnStatLearned?.Invoke(newStat);
         }
-    }
-    
-    void Update()
-    {
-        TryDie();
-    }
 
-    public void TakeDamage(float amount)
-    {
-        if (TryGetStat("Health", out ClampedStat health))
-        {
-            health.BaseValue -= amount;
-            Debug.Log($"{gameObject.name} took {amount} damage!");
-            OnTakeDamage?.Invoke(gameObject);  
-        }
-    }
-
-    void TryDie()
-    {
-        if (TryGetStat("Health", out ClampedStat health) && health.Value <= 0)
-        {
-            Debug.Log($"{gameObject.name} died!");
-            OnDeath?.Invoke(gameObject);
-            Destroy(gameObject);
-        }
+        return newStat != null;
     }
 }

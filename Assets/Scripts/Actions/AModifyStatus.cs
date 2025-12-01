@@ -8,24 +8,24 @@ public class AModifyStatus : IGameAction
     StatusDefinition statusDefinition;
     
     [Tooltip("Apply status if mode is checked, otherwise remove status."), SerializeField]
-    bool mode;
+    bool mode = true;
     
     public void Execute(ActionContext context)
     {
         if (context.Target == null)
         {
-            Debug.LogError($"Action {nameof(AModifyStatus)} was passed a null parameter: {nameof(context.Target)}!");
+            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyStatus), context.Source.GameObject);
             return;
         }
-        if (!context.Target.TryGetComponent(out CharacterStatuses statuses))
+        if (statusDefinition == null)
         {
-            Debug.LogError($"Action {nameof(AModifyStatus)} was passed a parameter with a missing component: {nameof(CharacterStatuses)}!");
+            LogFormatter.LogNullField(nameof(statusDefinition), nameof(AModifyStatus), context.Source.GameObject);
             return;
         }
 
         if (mode)
-            statuses.AddStatus(statusDefinition);
+            context.Target.CharacterStatuses.AddStatus(statusDefinition);
         else
-            statuses.RemoveStatus(statusDefinition);
+            context.Target.CharacterStatuses.RemoveStatus(statusDefinition);
     }
 }

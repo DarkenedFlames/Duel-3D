@@ -14,22 +14,17 @@ public class ASpawnParticles : IGameAction
     {
         if (prefab == null)
         {
-            Debug.LogError($"Action {nameof(ASpawnParticles)} was configured with a null parameter: {nameof(prefab)}!");
+            LogFormatter.LogNullField(nameof(prefab), nameof(ASpawnParticles), context.Source.GameObject);
             return;
         }
         if (context.Source == null)
         {
-            Debug.LogError($"Action {nameof(ASpawnObject)} was passed a null parameter: {nameof(context.Source)}!");
-            return;
-        }
-        if(!context.TryGetSourceTransform(out Transform sourceTransform))
-        {
-            Debug.LogError($"Action {nameof(ASpawnObject)} could not find {nameof(sourceTransform)}!");
+            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ASpawnParticles), context.Source.GameObject);
             return;
         }
 
-        Vector3 spawnPosition = sourceTransform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = sourceTransform.rotation * Quaternion.Euler(localEulerRotation);
+        Vector3 spawnPosition = context.Source.Transform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = context.Source.Transform.rotation * Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
     }

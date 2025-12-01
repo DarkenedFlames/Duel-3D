@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::StatDefinition
   statName: Speed
   defaultValue: 100
+  IsRegenerative: 0
+  RegenerationCooldown: 7
+  RegenerationPercentage: 0.14
