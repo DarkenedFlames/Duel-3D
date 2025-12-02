@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e8d418a0105844cb674c9656363072, type: 3}
   m_Name: Mana
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDefinition
-  ResourceName: Untitled Resource
-  MaxStat: {fileID: 0}
+  ResourceName: Mana
+  MaxStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
   RegenerationCooldown: 7
   RegenerationPercentage: 0.14

@@ -1002,6 +1002,10 @@ PrefabInstance:
       propertyPath: LinkedStat
       value: 
       objectReference: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
+    - target: {fileID: 433866184919815730, guid: bf3e59377f1ccc3448601d78d30bea50, type: 3}
+      propertyPath: LinkedResource
+      value: 
+      objectReference: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
     - target: {fileID: 1438650890767748222, guid: bf3e59377f1ccc3448601d78d30bea50, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1026,6 +1030,10 @@ PrefabInstance:
       propertyPath: LinkedStat
       value: 
       objectReference: {fileID: 11400000, guid: 562c35fa967cbc543b43a87d26f15abe, type: 2}
+    - target: {fileID: 7757714844400344616, guid: bf3e59377f1ccc3448601d78d30bea50, type: 3}
+      propertyPath: LinkedResource
+      value: 
+      objectReference: {fileID: 11400000, guid: c6b83e8d8ee4d1849971f674a6c5922b, type: 2}
     - target: {fileID: 8438774620264934199, guid: bf3e59377f1ccc3448601d78d30bea50, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1114,6 +1122,10 @@ PrefabInstance:
       propertyPath: LinkedStat
       value: 
       objectReference: {fileID: 11400000, guid: 16290002e89a2a943ac0f450e8a7fa82, type: 2}
+    - target: {fileID: 8763947237637812309, guid: bf3e59377f1ccc3448601d78d30bea50, type: 3}
+      propertyPath: LinkedResource
+      value: 
+      objectReference: {fileID: 11400000, guid: 501e610550fe7ea47a7df5f9b8ec09d2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

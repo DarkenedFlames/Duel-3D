@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Blizzard
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Blizzard
-  AffectsSource: 1
+  AffectsSource: 0
   Duration: 5
   MaxHits: 0
   Period: 0.25
@@ -34,8 +34,6 @@ MonoBehaviour:
       type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
       data:
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-        modifyMax: 0
-        mode: 1
         type: 2
         amount: 0.95
     - rid: 1013435952863379457

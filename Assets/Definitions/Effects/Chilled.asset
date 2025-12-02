@@ -16,6 +16,7 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 2e2d92e55cc43b74eba6b28465777c2b, type: 3}
   stackingType: -1
   expiryType: 1
+  ScalesWithStacks: 1
   maxStacks: 1
   duration: 3
   period: 1
@@ -31,7 +32,6 @@ MonoBehaviour:
       type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
       data:
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-        modifyMax: 0
         type: 2
         amount: 0.5
     - rid: 1013435935641567309

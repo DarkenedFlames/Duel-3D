@@ -16,8 +16,8 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 1a9548f0ec45973478c62621ace90e25, type: 3}
   abilityType: 3
   castAnimationTrigger: 1
-  expendedStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
-  statCost: 5
+  expendedResource: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
+  resourceCost: 1
   cooldown: 1
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}

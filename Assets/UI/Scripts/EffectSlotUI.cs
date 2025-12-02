@@ -1,4 +1,3 @@
-
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -15,29 +14,37 @@ public class EffectSlotUI : MonoBehaviour
     public void Initialize(CharacterEffect effect)
     {
         this.effect = effect;
+        iconImage.sprite = effect.Definition.icon;
 
-        if (iconImage != null)
-            iconImage.sprite = effect.Definition.icon;
-
-        UpdateStackCount(effect.currentStacks.Value);
-        RefreshDuration(effect.seconds.Value, effect.Definition.duration);
+        UpdateStackCount();
+        UpdateDuration();
     }
 
-    private void Update()
+    void Update() => UpdateDuration();
+    
+    public void UpdateStackCount()
     {
         if (effect == null) return;
-        RefreshDuration(effect.seconds.Value, effect.Definition.duration);
+
+        stackText.text = effect.currentStacks.Value > 1 
+            ? effect.currentStacks.Value.ToString()
+            : string.Empty;
     }
 
-    public void UpdateStackCount(int stacks)
+    public void UpdateDuration()
     {
-        if (stackText != null)
-            stackText.text = stacks > 1 ? stacks.ToString() : string.Empty;
+        if (effect == null) return;
+
+        cooldownOverlay.fillAmount = effect.seconds == null
+            ? 0f
+            : Mathf.Clamp01(effect.seconds.Value / effect.CurrentDuration);
     }
 
-    public void RefreshDuration(float remaining, float total)
+    public void PlayMaxStackEffect()
     {
-        if (cooldownOverlay == null) return;
-        cooldownOverlay.fillAmount = Mathf.Clamp01(remaining / total);
+    }
+
+    public void PlayPulseEffect()
+    {
     }
 }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e8d418a0105844cb674c9656363072, type: 3}
   m_Name: Health
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDefinition
-  ResourceName: Untitled Resource
-  MaxStat: {fileID: 0}
+  ResourceName: Health
+  MaxStat: {fileID: 11400000, guid: 16290002e89a2a943ac0f450e8a7fa82, type: 2}
   RegenerationCooldown: 7
   RegenerationPercentage: 0.14

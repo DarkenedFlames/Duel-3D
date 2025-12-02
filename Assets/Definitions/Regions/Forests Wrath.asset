@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Forest's Wrath
   AffectsSource: 0
-  RegionExpiryType: 0
   Duration: 0.55
   MaxHits: 0
   Period: 0
@@ -26,26 +25,15 @@ MonoBehaviour:
   - rid: 1013435888429695043
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435888429695040
   - rid: 1013435888429695041
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435888429695040
-      type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
-      data:
-        StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-        modifyMax: 1
-        mode: 1
-        type: 2
-        amount: 0
     - rid: 1013435888429695041
       type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
       data:
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-        modifyMax: 0
-        mode: 1
         type: 2
         amount: 0
     - rid: 1013435888429695043

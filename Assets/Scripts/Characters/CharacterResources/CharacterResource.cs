@@ -62,7 +62,7 @@ public class CharacterResource
         RegenerationCounter.Decrease(Time.deltaTime);
         if (!RegenerationCounter.Expired) return;
 
-        float regenAmount = MaxStat.Value * Definition.RegenerationPercentage;
+        float regenAmount = MaxStat.Value * Definition.RegenerationPercentage * Time.deltaTime;
         
         ChangeValue(regenAmount, out float _);
     }

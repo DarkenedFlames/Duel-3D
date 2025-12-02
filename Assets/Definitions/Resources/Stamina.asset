@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e8d418a0105844cb674c9656363072, type: 3}
   m_Name: Stamina
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDefinition
-  ResourceName: Untitled Resource
-  MaxStat: {fileID: 0}
+  ResourceName: Stamina
+  MaxStat: {fileID: 11400000, guid: 562c35fa967cbc543b43a87d26f15abe, type: 2}
   RegenerationCooldown: 7
   RegenerationPercentage: 0.14

@@ -8,6 +8,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 23359790890733420, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+    - target: {fileID: 145290487927980552, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 145290487927980552, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 145290487927980552, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
     - target: {fileID: 2025148895447053989, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
       propertyPath: m_Name
       value: StranglingRoots
@@ -16,6 +32,18 @@ PrefabInstance:
       propertyPath: Definition
       value: 
       objectReference: {fileID: 11400000, guid: f07d450ae18963c42af452cc8e776f57, type: 2}
+    - target: {fileID: 4233816165385749850, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233816165385749850, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4233816165385749850, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 4233816165385749850, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -56,6 +84,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4379653435674526346, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 22497b81aa008ec45b8772f87000d991, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -108,7 +140,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed94d0a199367074ab229c988f8a6a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MLinearScale
-  TargetScale: {x: 1, y: 1, z: 20}
+  TargetScale: {x: 1, y: 0.1, z: 20}
   ScaleRate: 40
 --- !u!114 &8349174420161768442
 MonoBehaviour:

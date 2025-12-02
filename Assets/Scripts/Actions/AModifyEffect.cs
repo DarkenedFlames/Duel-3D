@@ -1,17 +1,25 @@
 using UnityEngine;
 
+public enum EffectModifyMode { Apply, Remove }
+public enum EffectRemoveMode { RemoveStacks, RemoveAll }
+public enum EffectRemoveTarget { SpecificEffect, SpecificEffectFromSource, AllEffects, AllFromSource }
+
+
 [System.Serializable]
 public class AModifyEffect : IGameAction
 {
-    [Header("Effect Configuration")]
-    [Tooltip("Effect to modify."), SerializeField]
-    EffectDefinition effectDefinition;
-    
-    [Tooltip("Apply stacks if mode is checked, otherwise remove stacks."), SerializeField]
-    bool mode = true;
+    [SerializeField] private EffectModifyMode mode;
 
-    [Tooltip("The number of stacks to apply or remove."), SerializeField, Min(1)]
-    int stacks = 1;
+    [Header("Apply Settings")]
+    [SerializeField] private EffectDefinition effectToApply;
+    [SerializeField, Min(1)] private int stacksToApply = 1;
+
+    [Header("Remove Settings")]
+    [SerializeField] private EffectRemoveMode removeMode;
+    [SerializeField] private EffectRemoveTarget removeTarget;
+
+    [SerializeField] private EffectDefinition effectToRemove;
+    [SerializeField, Min(1)] private int stacksToRemove = 1;
     
     public void Execute(ActionContext context)
     {
@@ -20,15 +28,47 @@ public class AModifyEffect : IGameAction
             LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyEffect), context.Source.GameObject);
             return;
         }
-        if (effectDefinition == null)
+
+        var effects = context.Target.CharacterEffects;
+
+        if (mode == EffectModifyMode.Apply)
         {
-            LogFormatter.LogNullField(nameof(AModifyEffect), nameof(effectDefinition), context.Source.GameObject);
+            if (effectToApply == null)
+            {
+                LogFormatter.LogNullField(nameof(effectToApply), nameof(AModifyEffect), context.Source.GameObject);
+                return;
+            }
+
+            effects.AddEffect(effectToApply, stacksToApply, context.Source);
             return;
         }
 
-        if (mode) 
-            context.Target.CharacterEffects.AddEffect(effectDefinition, stacks);
-        else
-            context.Target.CharacterEffects.RemoveEffect(effectDefinition, stacks);
+        // REMOVE LOGIC
+        switch (removeTarget)
+        {
+            case EffectRemoveTarget.SpecificEffect:
+                if (effectToRemove == null) return;
+                if (removeMode == EffectRemoveMode.RemoveStacks)
+                    effects.RemoveEffect(effectToRemove, stacksToRemove);
+                else
+                    effects.RemoveEffect(effectToRemove);
+                break;
+
+            case EffectRemoveTarget.SpecificEffectFromSource:
+                if (effectToRemove == null) return;
+                if (removeMode == EffectRemoveMode.RemoveStacks)
+                    effects.RemoveSpecificEffectFromSource(effectToRemove, stacksToRemove, context.Source);
+                else
+                    effects.RemoveSpecificEffectFromSource(effectToRemove, context.Source);
+                break;
+
+            case EffectRemoveTarget.AllEffects:
+                effects.RemoveAllEffects();
+                break;
+
+            case EffectRemoveTarget.AllFromSource:
+                effects.RemoveAllEffectsFromSource(context.Source);
+                break;
+        }
     }
 }

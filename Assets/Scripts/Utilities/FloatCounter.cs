@@ -6,7 +6,7 @@ public class FloatCounter
     public float Value => _value;
 
     readonly float _min;
-    readonly float _max;
+    float _max;
 
     readonly bool _inclusive;
     readonly bool _resetToMax;
@@ -33,4 +33,5 @@ public class FloatCounter
         else _value = _min;
         
     }
+    public void SetMax(float newMax) => _max = newMax;
 }
