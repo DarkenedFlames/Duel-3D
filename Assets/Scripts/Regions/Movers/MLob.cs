@@ -3,7 +3,7 @@ public class MLob : MonoBehaviour
 {
     [Header("Lob Settings")]
     [Tooltip("The speed (meters/second) at which the region moves."), SerializeField, Min(0)]
-    public float Speed = 10f;
+    float Speed = 10f;
 
     void Update()
     {

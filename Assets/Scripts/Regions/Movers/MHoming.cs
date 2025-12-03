@@ -22,11 +22,25 @@ public class MHoming : MonoBehaviour
     float HomingDistance = 20f;
 
     Character currentTarget;
+    Character owner;
 
     void Start()
     {
         if (allCharacters == null || allCharacters.Count() == 0)
-            LogFormatter.LogNullField(nameof(allCharacters), nameof(MHoming), GetComponent<IActionSource>().GameObject);
+            LogFormatter.LogNullCollectionField(nameof(allCharacters), nameof(Start), nameof(MHoming), GetComponent<IActionSource>().GameObject);
+
+        if (!TryGetComponent(out IActionSource source))
+        {
+            LogFormatter.LogMissingComponent(nameof(IActionSource), nameof(MHoming), gameObject);
+            return;
+        }
+        if (source.Owner == null)
+        {
+            Debug.LogError($"{nameof(MHoming)} was given to an object with no owner!");
+            return;
+        }
+
+        owner = source.Owner;
     }
 
     void Update()
@@ -40,13 +54,6 @@ public class MHoming : MonoBehaviour
     }
     void TryAcquire()
     {
-        Character owner = GetComponent<IActionSource>().Owner;
-        if (owner == null)
-        {
-            Debug.LogError($"{nameof(MHoming)} found a null {nameof(IActionSource.Owner)}", GetComponent<IActionSource>().GameObject);
-            return;
-        }
-
         List<Character> excluded = new();
 
         if (owner != null && !targetsOwner)

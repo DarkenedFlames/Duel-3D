@@ -10,4 +10,7 @@ public static class LogFormatter
 
     public static void LogNullCollectionField(string argumentName, string methodName, string className, Object source) =>
         Debug.LogError($"{className}.{methodName} was passed a null or empty collection argument: {argumentName}", source);
+
+    public static void LogMissingComponent(string componentName, string className, Object source) =>
+        Debug.LogError($"{className} expected a component but it was missing: {componentName}", source);
 }

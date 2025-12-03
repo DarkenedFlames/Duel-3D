@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Entangling Lash
   AffectsSource: 0
-  RegionExpiryType: -1
   Duration: 2
   MaxHits: 1
   Period: 0
@@ -25,13 +24,16 @@ MonoBehaviour:
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435871330042033
+  - rid: 8378409532984131655
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330042033
-      type: {class: AMoveCharacterAway, ns: , asm: Assembly-CSharp}
+    - rid: 8378409532984131655
+      type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
-        forceStrength: 15
-        moveAway: 0
+        target: 1
+        referenceType: 0
+        reference: 0
+        mode: 0
+        direction: {x: 0, y: 0, z: 10}

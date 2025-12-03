@@ -3,19 +3,19 @@ public class MWavyLine : MonoBehaviour
 {
     [Header("Wavy Line Settings")]
     [Tooltip("The speed (meters/second) at which the object moves foward."), SerializeField, Min(0)]
-    public float ForwardSpeed = 8f;
+    float ForwardSpeed = 8f;
 
     [Tooltip("The range (meters) at which the object strafes."), SerializeField, Min(0)]
-    public float Amplitude = 1f;
+    float Amplitude = 1f;
 
     [Tooltip("The frequency (Hz) at which the wavy path repeats."), SerializeField, Min(0)]
-    public float Frequency = 2f;
+    float Frequency = 2f;
 
     [Tooltip("The offset (radians) within the path at which the object starts."), SerializeField, Range(0,360)]
-    public float Phase = 0f;
+    float Phase = 0f;
 
     [Tooltip("The axis along which the object oscillates."), SerializeField]
-    public Vector3 WaveAxis = Vector3.right;
+    Vector3 WaveAxis = Vector3.right;
 
     Vector3 initialPos;
     float time;

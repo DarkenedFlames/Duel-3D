@@ -1,14 +1,28 @@
 using UnityEngine;
 
+public enum MoveCharacterTarget { Owner, Target }
+public enum MoveTargetReference { Owner, Target, Source }
+public enum MoveReferenceType { TowardsReference, LocalDirection }
+public enum MoveCharacterMode { Force, Reposition }
+
 [System.Serializable]
 public class AMoveCharacter : IGameAction
 {
     [Header("Movement Configuration")]
-    [Tooltip("Local direction to move the actor."), SerializeField]
-    Vector3 direction = new(0, 0, 1);
+    [Tooltip("The character to be moved."), SerializeField]
+    MoveCharacterTarget target = MoveCharacterTarget.Target;
 
-    [Tooltip("Force strength with which the actor is moved."), SerializeField, Min(0)]
-    float forceStrength = 5f;
+    [Tooltip("Is the character moved relative to themselves or a reference?"), SerializeField]
+    MoveReferenceType referenceType = MoveReferenceType.LocalDirection;
+
+    [Tooltip("The reference transform that the character moves relative to."), SerializeField]
+    MoveTargetReference reference = MoveTargetReference.Source;
+
+    [Tooltip("The process used to move the character."), SerializeField]
+    MoveCharacterMode mode = MoveCharacterMode.Force;
+
+    [Tooltip("Local direction to move the actor."), SerializeField]
+    Vector3 direction = Vector3.forward;
     
     public void Execute(ActionContext context)
     {
@@ -23,7 +37,34 @@ public class AMoveCharacter : IGameAction
             return;
         }
 
-        Vector3 pushDirection = context.Source.Transform.TransformDirection(direction).normalized;
-        context.Target.CharacterMovement.ApplyExternalVelocity(pushDirection * forceStrength);
+        Character characterToMove = target switch
+        {
+            MoveCharacterTarget.Owner  => context.Source.Owner,
+            MoveCharacterTarget.Target => context.Target,
+            _ => null
+        };
+
+        Vector3 movementDirection;
+        if (referenceType == MoveReferenceType.TowardsReference)
+        {
+            Transform referenceTransform = reference switch
+            {
+                MoveTargetReference.Owner  => context.Source.Owner.transform,
+                MoveTargetReference.Target => context.Target.transform,
+                MoveTargetReference.Source => context.Source.Transform,
+                _ => null
+            };
+
+            Vector3 worldDirectionOfReference = (referenceTransform.position - characterToMove.transform.position).normalized;
+            Quaternion localRotation = Quaternion.LookRotation(worldDirectionOfReference, Vector3.up);
+            movementDirection = localRotation * direction;
+        }
+        else
+            movementDirection = characterToMove.transform.TransformDirection(direction);
+        
+        if (mode == MoveCharacterMode.Force)
+            characterToMove.CharacterMovement.ApplyExternalVelocity(movementDirection);
+        else
+            characterToMove.transform.position += movementDirection; // Could multiply by context.Magnitude if desired
     }
 }

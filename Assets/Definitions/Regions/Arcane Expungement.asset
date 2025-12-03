@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Arcane Expungement
   AffectsSource: 0
-  RegionExpiryType: 0
   Duration: 0.75
   MaxHits: 0
   Period: 0
@@ -25,13 +24,16 @@ MonoBehaviour:
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435871330042026
+  - rid: 8378409532984131654
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330042026
-      type: {class: AMoveCharacterAway, ns: , asm: Assembly-CSharp}
+    - rid: 8378409532984131654
+      type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
-        forceStrength: 10
-        moveAway: 1
+        target: 1
+        referenceType: 0
+        reference: 2
+        mode: 0
+        direction: {x: 0, y: 0, z: 10}

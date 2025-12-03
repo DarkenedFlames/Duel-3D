@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Arcane Expungement
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Arcane Expungement
-  icon: {fileID: 21300000, guid: 522b5a720a646664aaa1b3c02a89a143, type: 3}
+  icon: {fileID: 21300000, guid: 8d4475a15fc09ff44b129434597f305d, type: 3}
   abilityType: 3
   castAnimationTrigger: 1
   expendedResource: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}

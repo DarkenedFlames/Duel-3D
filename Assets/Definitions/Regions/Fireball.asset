@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Fireball
   AffectsSource: 0
-  RegionExpiryType: -1
   Duration: 3
   MaxHits: 1
   Period: 0
@@ -26,6 +25,7 @@ MonoBehaviour:
   OnPulseActions: []
   OnEnterActions:
   - rid: 1013435894806085722
+  - rid: 8378409506690564174
   OnExitActions: []
   references:
     version: 2
@@ -36,3 +36,13 @@ MonoBehaviour:
         prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409506690564174
+      type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        mode: 0
+        effectToApply: {fileID: 11400000, guid: 66c53f2cb255b43408a35a59782e09d4, type: 2}
+        stacksToApply: 3
+        removeMode: 0
+        removeTarget: 0
+        effectToRemove: {fileID: 0}
+        stacksToRemove: 1

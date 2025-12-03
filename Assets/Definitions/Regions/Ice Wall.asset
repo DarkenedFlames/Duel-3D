@@ -32,6 +32,10 @@ MonoBehaviour:
     - rid: 1013435935641567320
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
-        effectDefinition: {fileID: 11400000, guid: 77fc561c34b88a5498b2990a42837892, type: 2}
-        mode: 1
-        stacks: 1
+        mode: 0
+        effectToApply: {fileID: 11400000, guid: 77fc561c34b88a5498b2990a42837892, type: 2}
+        stacksToApply: 1
+        removeMode: 0
+        removeTarget: 0
+        effectToRemove: {fileID: 0}
+        stacksToRemove: 1

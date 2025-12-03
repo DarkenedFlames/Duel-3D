@@ -27,10 +27,25 @@ public class MHomingSequential : MonoBehaviour
     Character currentTarget;
     readonly HashSet<Character> previousTargets = new();
 
+    Character owner;
+
     void Start()
     {
         if (allCharacters == null || allCharacters.Count() == 0)
-            LogFormatter.LogNullField(nameof(allCharacters), nameof(MHoming), GetComponent<IActionSource>().GameObject);
+            LogFormatter.LogNullCollectionField(nameof(allCharacters), nameof(Start), nameof(MHomingSequential), GetComponent<IActionSource>().GameObject);
+
+        if (!TryGetComponent(out IActionSource source))
+        {
+            LogFormatter.LogMissingComponent(nameof(IActionSource), nameof(MHoming), gameObject);
+            return;
+        }
+        if (source.Owner == null)
+        {
+            Debug.LogError($"{nameof(MHoming)} was given to an object with no owner!");
+            return;
+        }
+
+        owner = source.Owner;
     }
 
     void Update()
@@ -55,14 +70,7 @@ public class MHomingSequential : MonoBehaviour
     {
         List<Character> excluded = previousTargets.ToList();
 
-        Character owner = GetComponent<IActionSource>().Owner;
-        if (owner == null)
-        {
-            Debug.LogError($"Mover {nameof(MHomingSequential)} found a null {nameof(IActionSource.Owner)}", GetComponent<IActionSource>().GameObject);
-            return;
-        }
-
-        if (!targetsSource)
+        if (owner != null && !targetsSource)
             excluded.Add(owner);
 
         Character best = allCharacters.GetClosestExcludingMany(

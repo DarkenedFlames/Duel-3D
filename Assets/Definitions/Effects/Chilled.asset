@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Chilled
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Chilled
-  icon: {fileID: 21300000, guid: 2e2d92e55cc43b74eba6b28465777c2b, type: 3}
-  stackingType: -1
+  icon: {fileID: 21300000, guid: 3c71151d7480e9243a9504bafa593ffd, type: 3}
+  EffectStackingType: 2
   expiryType: 1
   ScalesWithStacks: 1
   maxStacks: 1
@@ -25,6 +25,11 @@ MonoBehaviour:
   OnPulseActions: []
   OnExpireActions:
   - rid: 1013435935641567309
+  OnMaxStackReachedActions: []
+  OnRefreshedActions: []
+  OnStackGainedActions: []
+  OnStackLostActions: []
+  OnExtendedActions: []
   references:
     version: 2
     RefIds:

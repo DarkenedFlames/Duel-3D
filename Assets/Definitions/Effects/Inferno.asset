@@ -13,16 +13,22 @@ MonoBehaviour:
   m_Name: Inferno
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Inferno
-  icon: {fileID: 21300000, guid: f8747447b00cf1343aea604499f8c9ea, type: 3}
-  stackingType: -1
+  icon: {fileID: 21300000, guid: 30785b805c0b56f46aa56e239f573281, type: 3}
+  EffectStackingType: 2
   expiryType: 0
-  maxStacks: 5
-  duration: 5
-  period: 0.25
+  ScalesWithStacks: 1
+  maxStacks: 3
+  duration: 3
+  period: 0.5
   OnApplyActions: []
   OnPulseActions:
   - rid: 1013435839720980591
   OnExpireActions: []
+  OnMaxStackReachedActions: []
+  OnRefreshedActions: []
+  OnStackGainedActions: []
+  OnStackLostActions: []
+  OnExtendedActions: []
   references:
     version: 2
     RefIds:

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Frost Shards
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Frost Shards
-  icon: {fileID: 21300000, guid: b4bc952e16e35c54d80cbee66c627656, type: 3}
+  icon: {fileID: 21300000, guid: 707a064039c5818438a7ce614c7e9492, type: 3}
   abilityType: 0
   castAnimationTrigger: 1
   expendedResource: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
