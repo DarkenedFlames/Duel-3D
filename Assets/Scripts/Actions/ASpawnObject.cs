@@ -1,4 +1,3 @@
-using UnityEditor;
 using UnityEngine;
 
 [System.Serializable]
@@ -6,7 +5,7 @@ public class ASpawnObject : IGameAction
 {
     [Header("SpawnArea Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 
-    GameObject prefab; // Must implement IActionSource?
+    GameObject prefab; // Must implement ISpawnable, might be an IActionSource
 
     [Tooltip("Local spawn offset."), SerializeField]
     Vector3 spawnOffset = Vector3.zero;

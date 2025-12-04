@@ -94,4 +94,41 @@ public class CharacterResources : MonoBehaviour
         OnDeath?.Invoke(gameObject);
         Destroy(gameObject);
     }
+
+    public void ChangeResourceValue(ResourceDefinition definition, float delta, out float changed)
+    {
+        changed = 0;
+        if (!TryGetResource(definition, out CharacterResource resource))
+            return;
+
+        resource.ChangeValue(delta, out changed);
+    }
+
+    public void AddModifierToResource(ResourceDefinition definition, ResourceModifierType type, float value, object source = null)
+    {
+        if (!TryGetResource(definition, out CharacterResource resource))
+            return;
+
+        resource.AddModifier(new(type, value, source));
+    }
+
+    public void RemoveSpecificModifierFromResource(ResourceDefinition definition, ResourceModifierType type, float value, object source = null)
+    {
+        if (!TryGetResource(definition, out CharacterResource resource))
+            return;
+
+        resource.RemoveSpecificModifier(type, value, source);
+    }
+
+    public void RemoveAllModifiersFromResource(ResourceDefinition definition, object source = null)
+    {
+        if (!TryGetResource(definition, out CharacterResource resource))
+            return;
+
+        resource.RemoveAllModifiers(source);
+    }
+
+
+    public void RemoveSpecificModifierFromAllResources(ResourceModifierType type, float value, object source = null) => Resources.ForEach(r => r.RemoveSpecificModifier(type, value, source));
+    public void RemoveAllModifiersFromAllResources(object source = null) => Resources.ForEach(r => r.RemoveAllModifiers(source));
 }

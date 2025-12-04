@@ -83,10 +83,22 @@ public class CharacterResource
         }
     }
 
-    public virtual void RemoveAllModifiersFromSource(object source)
+    public virtual void RemoveAllModifiers(object source = null)
+    {
+        if (source == null)
+            modifiers.Clear();
+        else
+        {
+            for (int i = modifiers.Count - 1; i >= 0; i--)
+                if (modifiers[i].Source == source)
+                    RemoveModifier(modifiers[i]);
+        }
+    }
+
+    public virtual void RemoveSpecificModifier(ResourceModifierType type, float value, object source = null)
     {
         for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (modifiers[i].Source == source)
+            if (modifiers[i].Type == type && Mathf.Approximately(modifiers[i].Value, value) && (source == null || modifiers[i].Source == source))
                 RemoveModifier(modifiers[i]);
     }
 }

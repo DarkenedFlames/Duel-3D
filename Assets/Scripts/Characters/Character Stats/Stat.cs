@@ -61,17 +61,13 @@ public class Stat
     {
         modifiers.Add(mod);
         RecalculateValue();
-        Debug.Log($"[{Definition.statName}] Modifier Added: {mod.Value} {mod.Type}");
     }
 
     public virtual bool RemoveModifier(StatModifier mod)
     {
         bool removed = modifiers.Remove(mod);
         if (removed)
-        {
             RecalculateValue();
-            Debug.Log($"[{Definition.statName}] Modifier Added: {mod.Value} {mod.Type}");
-        }
         return removed;
     }
 
@@ -84,10 +80,23 @@ public class Stat
     public void ApplyMultiplier(float multiplier, object source = null) =>
         AddModifier(new StatModifier(StatModifierType.PercentMult, multiplier, source));
 
-    public virtual void RemoveAllModifiersFromSource(object source)
+    public virtual void RemoveAllModifiers(object source = null)
+    {
+        if (source == null)
+            modifiers.Clear();
+        else
+        {
+            for (int i = modifiers.Count - 1; i >= 0; i--)
+                if (modifiers[i].Source == source)
+                    RemoveModifier(modifiers[i]);
+        }
+        RecalculateValue();
+    }
+
+    public virtual void RemoveSpecificModifier(StatModifierType type, float value, object source = null)
     {
         for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (modifiers[i].Source == source)
+            if (modifiers[i].Type == type && Mathf.Approximately(modifiers[i].Value, value) && (source == null || modifiers[i].Source == source))
                 RemoveModifier(modifiers[i]);
     }
 }

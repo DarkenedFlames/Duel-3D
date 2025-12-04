@@ -5,11 +5,7 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
     public List<StatDefinition> InitialStats;
-
-    public Dictionary<Stat, FloatCounter> RegenerationCounters = new();
-
     public List<Stat> Stats { get; private set; } = new();
-
     public event Action<Stat> OnStatLearned;
 
     void Awake()
@@ -34,7 +30,6 @@ public class CharacterStats : MonoBehaviour
             newStat = null;
             Debug.LogWarning($"{gameObject.name}'s {nameof(CharacterStats)} tried to learn a duplicate stat from definition {definition.name}!");
         }
-
         else
         {
             newStat = new(definition);
@@ -44,4 +39,31 @@ public class CharacterStats : MonoBehaviour
 
         return newStat != null;
     }
+    public void AddModifierToStat(StatDefinition definition, StatModifierType type, float value, object source = null)
+    {
+        if (!TryGetStat(definition, out Stat stat))
+            return;
+
+        stat.AddModifier(new(type, value, source));
+    }
+
+    public void RemoveSpecificModifierFromStat(StatDefinition definition, StatModifierType type, float value, object source = null)
+    {
+        if (!TryGetStat(definition, out Stat stat))
+            return;
+
+        stat.RemoveSpecificModifier(type, value, source);
+    }
+
+    public void RemoveAllModifiersFromStat(StatDefinition definition, object source = null)
+    {
+        if (!TryGetStat(definition, out Stat stat))
+            return;
+
+        stat.RemoveAllModifiers(source);
+    }
+
+    public void RemoveSpecificModifierFromAllStats(StatModifierType type, float value, object source = null) => Stats.ForEach(s => s.RemoveSpecificModifier(type, value, source));
+
+    public void RemoveAllModifiersFromAllStats(object source = null) => Stats.ForEach(s => s.RemoveAllModifiers(source));
 }

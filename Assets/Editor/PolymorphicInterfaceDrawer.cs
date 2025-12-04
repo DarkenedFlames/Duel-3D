@@ -59,11 +59,20 @@ public abstract class PolymorphicInterfaceDrawer : PropertyDrawer
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
         Init();
+
         if (property.managedReferenceValue == null)
             return EditorGUIUtility.singleLineHeight;
 
-        // Approximate height
+        var concreteType = property.managedReferenceValue.GetType();
+
+        // Custom drawer height?
+        if (_customDrawers.TryGetValue(concreteType, out var drawer))
+            return EditorGUIUtility.singleLineHeight + 2 + drawer.GetHeight(property, label);
+
+
+        // Fallback => default height
         float height = EditorGUIUtility.singleLineHeight + 4;
+
         var iterator = property.Copy();
         var end = iterator.GetEndProperty();
         iterator.NextVisible(true);
@@ -76,6 +85,7 @@ public abstract class PolymorphicInterfaceDrawer : PropertyDrawer
 
         return height;
     }
+
 
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
