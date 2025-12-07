@@ -14,26 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Nature's Swiftness
   icon: {fileID: 21300000, guid: a6d6c99af792d274f8fa9a3052f1f7c5, type: 3}
-  stackingType: 2
+  EffectStackingType: 2
   expiryType: 1
   ScalesWithStacks: 1
   maxStacks: 1
   duration: 5
   period: 1
   OnApplyActions:
-  - rid: 1013435871330042037
+  - rid: 8378409551465545804
   OnPulseActions: []
   OnExpireActions:
-  - rid: 1013435871330042038
+  - rid: 8378409551465545805
+  OnMaxStackReachedActions: []
+  OnRefreshedActions: []
+  OnStackGainedActions: []
+  OnStackLostActions: []
+  OnExtendedActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330042037
-      type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
+    - rid: 8378409551465545804
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        mode: 0
+        target: 0
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
+        modifierTarget: 0
         type: 2
         amount: 1.5
-    - rid: 1013435871330042038
-      type: {class: ACleanseStatModifiers, ns: , asm: Assembly-CSharp}
-      data: 
+    - rid: 8378409551465545805
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        mode: 1
+        target: 1
+        StatDefinition: {fileID: 0}
+        modifierTarget: 3
+        type: 0
+        amount: 0

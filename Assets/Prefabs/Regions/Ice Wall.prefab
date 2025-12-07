@@ -121,5 +121,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed94d0a199367074ab229c988f8a6a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MLinearScale
-  TargetScale: {x: 5, y: 3, z: 1}
-  ScaleRate: 15
+  ScaleSequence:
+  - Float: 0.2
+    Vector: {x: 5, y: 3, z: 1}

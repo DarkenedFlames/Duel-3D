@@ -2,15 +2,11 @@ using UnityEngine;
 
 public class PlayerHUDManager : MonoBehaviour
 {
-    ResourcePanelUI resourcePanel;
     AbilityBarUI abilityBar;
-    EffectBarUI effectBar;
 
     void Start()
     {
-        resourcePanel = GetComponentInChildren<ResourcePanelUI>(true);
         abilityBar = GetComponentInChildren<AbilityBarUI>(true);
-        effectBar = GetComponentInChildren<EffectBarUI>(true);
 
         var localPlayer = FindLocalPlayer();
         if (localPlayer == null)
@@ -19,14 +15,8 @@ public class PlayerHUDManager : MonoBehaviour
             return;
         }
 
-        if (localPlayer.TryGetComponent(out CharacterResources resources))
-            resourcePanel.SubscribeToHandler(resources);
-
         if (localPlayer.TryGetComponent(out CharacterAbilities abilities))
             abilityBar.SubscribeToHandler(abilities);
-
-        if (localPlayer.TryGetComponent(out CharacterEffects effects))
-            effectBar.SubscribeToHandler(effects);
     }
 
     private GameObject FindLocalPlayer()

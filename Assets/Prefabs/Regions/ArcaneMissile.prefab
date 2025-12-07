@@ -175,7 +175,7 @@ PrefabInstance:
       addedObject: {fileID: 5360091493496659921}
     - targetCorrespondingSourceObject: {fileID: 2025148895447053989, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
       insertIndex: -1
-      addedObject: {fileID: -8509548548861952111}
+      addedObject: {fileID: 6204989396809527104}
   m_SourcePrefab: {fileID: 100100000, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
 --- !u!4 &4695080814416185614 stripped
 Transform:
@@ -210,7 +210,7 @@ CapsuleCollider:
   m_Height: 1
   m_Direction: 2
   m_Center: {x: 0, y: -0.01277864, z: 0}
---- !u!114 &-8509548548861952111
+--- !u!114 &6204989396809527104
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,11 +219,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7490339737211632369}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aa4eaa0d7b3760648bd90a3464dd3341, type: 3}
+  m_Script: {fileID: 11500000, guid: d9b1e478ca628c6429cf56dc3d09579a, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::MHoming
+  m_EditorClassIdentifier: Assembly-CSharp::MHomingSequential
   allCharacters: {fileID: 11400000, guid: da06d002a3bbcaa46ac1fc49d61f1924, type: 2}
-  targetsOwner: 0
+  targetsSource: 0
   TurnRate: 360
   Speed: 30
   HomingDistance: 20
+  HitDistance: 0.3

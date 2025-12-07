@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
+[RequireComponent(typeof(Character))]
 public class CharacterResources : MonoBehaviour
 {
     public List<ResourceDefinition> InitialResources;
@@ -11,10 +10,14 @@ public class CharacterResources : MonoBehaviour
 
     public List<CharacterResource> Resources { get; private set; } = new();
 
-    public event Action<CharacterResource> OnResourceLearned;
-    public event Action<GameObject> OnDeath;
-    public event Action<GameObject> OnTakeDamage;
+    bool _isInitialized = false;
+    public bool IsInitialized => _isInitialized;
 
+    public event Action<CharacterResource> OnResourceLearned;
+    public event Action<CharacterResource> OnResourceValueChanged;
+    public event Action<GameObject> OnDeath;
+
+    Character Owner => GetComponent<Character>();
 
     void Awake()
     {
@@ -22,16 +25,15 @@ public class CharacterResources : MonoBehaviour
             Debug.LogError($"{gameObject.name}'s {nameof(CharacterResources)} was configured with an invalid parameter: {nameof(InitialResources)} must reference {nameof(healthDefinition)} but it was missing or null!");
     }
 
-    // Must run in start because it depends on CharacterStats.Awake()
-    // UI.Start() is set to +1 execution order so that this will run first.
-    void Start()
+    void Start() => EnsureInitialized();
+    public void EnsureInitialized()
     {
+        if (_isInitialized) return;
+
         foreach (ResourceDefinition definition in InitialResources)
-        {
-            // This accesses CharacterStats.Stats before CharacterStats.Awake populates that list.
-            if (!TryLearnResource(definition, out CharacterResource newResource))
-                continue;
-        }
+            AddResource(definition);
+        
+        _isInitialized = true;
     }
 
     public bool TryGetResource(ResourceDefinition definition, out CharacterResource resource)
@@ -40,49 +42,32 @@ public class CharacterResources : MonoBehaviour
         return resource != null;
     }
 
-    bool TryLearnResource(ResourceDefinition definition, out CharacterResource newResource)
+    void AddResource(ResourceDefinition definition)
     {
-        newResource = null;
         if (TryGetResource(definition, out CharacterResource _))
-            Debug.LogWarning($"{gameObject.name}'s {nameof(CharacterResources)} tried to learn a duplicate resource from definition {definition.name}!");
+            return;
         else
         {
-            CharacterStats stats = GetComponent<Character>().CharacterStats;
-            if (!stats.TryGetStat(definition.MaxStat, out Stat maxStat))
+            if (!Owner.CharacterStats.TryGetStat(definition.MaxStat, out Stat maxStat))
             {
                 Debug.LogError($"{gameObject.name}'s {nameof(CharacterResources)} could not find MaxStat for resource definition {definition.name}!");
-                return false;
+                return;
             }
 
-            newResource = new(definition, maxStat);
+            CharacterResource newResource = new(definition, maxStat);
             Resources.Add(newResource);
             OnResourceLearned?.Invoke(newResource);
         }
-
-        return newResource != null;
     }
     
     void Update()
     {
-        Resources.ForEach(r => r.TickRegeneration());
+        foreach (CharacterResource resource in Resources)
+        {
+            if (resource.TickRegeneration(out float _))
+                OnResourceValueChanged?.Invoke(resource);
+        }
         TryDie();
-    }
-
-    public void TakeDamage(float amount)
-    {
-        if (amount <= 0) return;
-        if (!TryGetResource(healthDefinition, out CharacterResource health))
-        {
-            Debug.LogWarning($"{gameObject.name} could not find stat from Definition {healthDefinition.name} for damage!");
-            return;
-        }
-
-        if (health.ChangeValue(-1f * amount, out float changed))
-        {
-            health.RegenerationCounter.Reset();
-            Debug.Log($"{gameObject.name} took {amount} damage!");
-            OnTakeDamage?.Invoke(gameObject);
-        }
     }
 
     void TryDie()
@@ -95,13 +80,20 @@ public class CharacterResources : MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void ChangeResourceValue(ResourceDefinition definition, float delta, out float changed)
+    public bool ChangeResourceValue(ResourceDefinition definition, float delta, out float changed, bool resetRegenerationIfChanged = false)
     {
         changed = 0;
         if (!TryGetResource(definition, out CharacterResource resource))
-            return;
+            return false;
 
-        resource.ChangeValue(delta, out changed);
+        bool didChange = resource.ChangeValue(delta, out changed);
+        if (didChange)
+        {
+            OnResourceValueChanged?.Invoke(resource);
+            if (resetRegenerationIfChanged)
+                resource.RegenerationCounter.Reset();
+        }
+        return didChange;
     }
 
     public void AddModifierToResource(ResourceDefinition definition, ResourceModifierType type, float value, object source = null)
@@ -111,7 +103,6 @@ public class CharacterResources : MonoBehaviour
 
         resource.AddModifier(new(type, value, source));
     }
-
     public void RemoveSpecificModifierFromResource(ResourceDefinition definition, ResourceModifierType type, float value, object source = null)
     {
         if (!TryGetResource(definition, out CharacterResource resource))
@@ -119,7 +110,6 @@ public class CharacterResources : MonoBehaviour
 
         resource.RemoveSpecificModifier(type, value, source);
     }
-
     public void RemoveAllModifiersFromResource(ResourceDefinition definition, object source = null)
     {
         if (!TryGetResource(definition, out CharacterResource resource))
@@ -127,8 +117,6 @@ public class CharacterResources : MonoBehaviour
 
         resource.RemoveAllModifiers(source);
     }
-
-
     public void RemoveSpecificModifierFromAllResources(ResourceModifierType type, float value, object source = null) => Resources.ForEach(r => r.RemoveSpecificModifier(type, value, source));
     public void RemoveAllModifiersFromAllResources(object source = null) => Resources.ForEach(r => r.RemoveAllModifiers(source));
 }

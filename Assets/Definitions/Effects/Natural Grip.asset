@@ -14,26 +14,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Natural Grip
   icon: {fileID: 21300000, guid: 9e8973fec378a9d488a2c99b64d66a03, type: 3}
-  stackingType: 2
+  EffectStackingType: 2
   expiryType: 1
+  ScalesWithStacks: 1
   maxStacks: 1
   duration: 2
   period: 1
   OnApplyActions:
-  - rid: 1013435871330041990
+  - rid: 8378409551465545802
   OnPulseActions: []
   OnExpireActions:
-  - rid: 1013435871330041989
+  - rid: 8378409551465545803
+  OnMaxStackReachedActions: []
+  OnRefreshedActions: []
+  OnStackGainedActions: []
+  OnStackLostActions: []
+  OnExtendedActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330041989
-      type: {class: ACleanseStatModifiers, ns: , asm: Assembly-CSharp}
-      data: 
-    - rid: 1013435871330041990
-      type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
+    - rid: 8378409551465545802
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        mode: 0
+        target: 0
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-        modifyMax: 0
+        modifierTarget: 0
         type: 2
+        amount: 0
+    - rid: 8378409551465545803
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        mode: 1
+        target: 1
+        StatDefinition: {fileID: 0}
+        modifierTarget: 3
+        type: 0
         amount: 0

@@ -1,14 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 
 [CreateAssetMenu]
 public class AbilityDefinitionSet : ScriptableObject
 {
     public List<AbilityDefinition> definitions = new();
 
-    public AbilityDefinition GetAbilityWeightedByType()
+    public AbilityDefinition GetAbilityWeightedByType(List<AbilityDefinition> exclusions = null)
     {
         Dictionary<AbilityType, List<AbilityDefinition>> abilityMap = new()
         {
@@ -19,13 +18,22 @@ public class AbilityDefinitionSet : ScriptableObject
         };
 
         foreach (AbilityDefinition definition in definitions)
+        {
+            if (exclusions != null && exclusions.Contains(definition))
+                continue;
+                
             abilityMap[definition.abilityType].Add(definition);
+        }
 
-        // Assumes at least one of each ability type exists
-        int r1 = (int)Mathf.Round(UnityEngine.Random.value * (abilityMap.Values.Count() - 1));
-        AbilityType type = abilityMap.Keys.ToList()[r1];
+        var availableTypes = abilityMap.Where(kvp => kvp.Value.Count > 0).ToList();
+        
+        if (availableTypes.Count == 0)
+            return null;
 
-        int r2 = (int)Mathf.Round(UnityEngine.Random.value * (abilityMap[type].Count() - 1));
+        int r1 = Random.Range(0, availableTypes.Count + 1);
+        AbilityType type = availableTypes[r1].Key;
+
+        int r2 = Random.Range(0, abilityMap[type].Count + 1);
         return abilityMap[type][r2];
     }
 }

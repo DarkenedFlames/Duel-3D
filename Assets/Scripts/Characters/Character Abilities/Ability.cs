@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Ability : IActionSource
@@ -28,16 +27,18 @@ public class Ability : IActionSource
 
         if (!seconds.Expired) return false;
 
-        CharacterResources resources = Owner.CharacterResources;
-
-        if(!resources.TryGetResource(Definition.expendedResource, out CharacterResource resource))
+        if(!Owner.CharacterResources.TryGetResource(Definition.expendedResource, out CharacterResource resource))
         {
             Debug.LogError($"{GameObject.name}'s Ability {Definition.abilityName} expected {GameObject.name} to have {Definition.expendedResource.ResourceName} but it was missing!");
             return false;
         }
 
-        resource.ChangeValue(-1f * Definition.resourceCost, out float delta);
-        resource.RegenerationCounter.Reset();
+        Owner.CharacterResources.ChangeResourceValue(
+            Definition.expendedResource,
+            -1f * Definition.resourceCost,
+            out float _,
+            true
+        );
         
         seconds.Reset();
         ActionContext context = new(){ Source = this, Target = Owner };

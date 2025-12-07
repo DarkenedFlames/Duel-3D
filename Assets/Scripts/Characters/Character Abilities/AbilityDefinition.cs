@@ -23,10 +23,10 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("The resource that this ability expends.")]
     public ResourceDefinition expendedResource;
 
-    [Tooltip("The amount of the expended resource spent per cast.")]
+    [Tooltip("The amount of the expended resource spent per cast."), Min(0)]
     public float resourceCost = 0f;
 
-    [Tooltip("The cooldown per cast in seconds.")]
+    [Tooltip("The cooldown per cast in seconds."), Min(0)]
     public float cooldown = 0f;
 
     [Tooltip("The conditions required for this ability to activate."), SerializeReference]
@@ -34,5 +34,4 @@ public class AbilityDefinition : ScriptableObject
 
     [Tooltip("The actions this ability executes upon activation."), SerializeReference]
     public List<IGameAction> actions = new();
-    
 }

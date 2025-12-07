@@ -7,9 +7,7 @@ public class MLob : MonoBehaviour
 
     void Update()
     {
-        Vector3 velocity = transform.forward * Speed;
-        velocity += Physics.gravity * Time.deltaTime;
-
+        Vector3 velocity = transform.forward * Speed + Physics.gravity * Time.deltaTime;
         transform.position += velocity * Time.deltaTime;
         transform.forward = velocity.normalized;
     }

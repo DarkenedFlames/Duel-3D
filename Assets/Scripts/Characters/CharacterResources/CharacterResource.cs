@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class CharacterResource
@@ -29,9 +30,7 @@ public class CharacterResource
         Modifiers = modifiers.AsReadOnly();
     }
 
-    public virtual void AddModifier(ResourceModifier mod) => modifiers.Add(mod);
-    public virtual void RemoveModifier(ResourceModifier mod) => modifiers.Remove(mod);
-
+    // This is being called every frame probably because regen even at max. Fix.
     public bool ChangeValue(float delta, out float changed)
     {
         changed = 0;
@@ -44,28 +43,27 @@ public class CharacterResource
         else
             delta *= decrease;
         
-        delta = Mathf.Clamp(delta, -1f * _value, MaxStat.Value - _value);
-
         if (Mathf.Approximately(0, delta)) return false;
     
+        _value = Mathf.Clamp(_value + delta, 0, MaxStat.Value);
         changed = delta;
-        _value += delta;
-        Debug.Log($"[{Definition.ResourceName}] changed to {_value}!");
         OnValueChanged?.Invoke(this);
         return true;
     }
 
-    public void TickRegeneration()
+    public bool TickRegeneration(out float changed)
     {
-        if (RegenerationCounter == null) return;
-
+        changed = 0;
         RegenerationCounter.Decrease(Time.deltaTime);
-        if (!RegenerationCounter.Expired) return;
+        if (!RegenerationCounter.Expired) return false;
 
         float regenAmount = MaxStat.Value * Definition.RegenerationPercentage * Time.deltaTime;
         
-        ChangeValue(regenAmount, out float _);
+        return ChangeValue(regenAmount, out changed);
     }
+
+    public virtual void AddModifier(ResourceModifier mod) => modifiers.Add(mod);
+    public virtual void RemoveModifier(ResourceModifier mod) => modifiers.Remove(mod);
 
     public void GetModifierTotals(out float increase, out float decrease)
     {

@@ -7,6 +7,9 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterStatuses))]
 [RequireComponent(typeof(CharacterMovement))]
 [RequireComponent(typeof(CharacterResources))]
+[RequireComponent(typeof(CharacterAnimation))]
+[RequireComponent(typeof(IInputDriver))]
+
 public class Character : MonoBehaviour
 {
     public CharacterStats CharacterStats => GetComponent<CharacterStats>();
@@ -16,4 +19,6 @@ public class Character : MonoBehaviour
     public CharacterStatuses CharacterStatuses => GetComponent<CharacterStatuses>();
     public CharacterMovement CharacterMovement => GetComponent<CharacterMovement>();
     public CharacterResources CharacterResources => GetComponent<CharacterResources>();
+    public CharacterAnimation CharacterAnimation => GetComponent<CharacterAnimation>();
+    public IInputDriver CharacterInput => GetComponent<IInputDriver>();
 }

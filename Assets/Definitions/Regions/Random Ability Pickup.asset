@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Random Ability Pickup
   AffectsSource: 0
-  RegionExpiryType: 0
   Duration: 100
-  MaxHits: 0
+  MaxHits: 1
   Period: 0
   LayerMask:
     serializedVersion: 2
@@ -25,12 +24,14 @@ MonoBehaviour:
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435871330041964
+  - rid: 8378409551465545823
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330041964
-      type: {class: AGiveRandomAbility, ns: , asm: Assembly-CSharp}
+    - rid: 8378409551465545823
+      type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
+        mode: 1
+        abilityDefinition: {fileID: 0}
         set: {fileID: 11400000, guid: 11a04771294654041bb1ea7081e1eb9c, type: 2}

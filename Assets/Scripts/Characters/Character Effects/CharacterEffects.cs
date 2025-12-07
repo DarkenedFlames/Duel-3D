@@ -10,6 +10,7 @@ public class CharacterEffects : MonoBehaviour
     public ReadOnlyCollection<CharacterEffect> Effects => effects.AsReadOnly();
     private readonly List<CharacterEffect> effects = new();
 
+    public event Action OnInitialized;
     public event Action<CharacterEffect> OnEffectGained;
     public event Action<CharacterEffect> OnEffectLost;
     public event Action<CharacterEffect> OnEffectStackChanged;
@@ -22,6 +23,7 @@ public class CharacterEffects : MonoBehaviour
     {
         foreach (EffectDefinition definition in initialEffects)
             AddEffect(definition, 1, null);
+        OnInitialized?.Invoke();
     }
 
     void Update()
@@ -54,9 +56,15 @@ public class CharacterEffects : MonoBehaviour
         {
             existing.ApplyStacking(stacks, out bool refreshed, out bool extended, out bool stacksGained, out bool maxStacksReached);
             
+            Debug.Log($"AddEffect on existing {definition.effectName}: refreshed={refreshed}, extended={extended}, stacksGained={stacksGained}, maxStacksReached={maxStacksReached}");
+            
             if (refreshed) OnEffectRefreshed?.Invoke(existing);
             if (extended) OnEffectExtended?.Invoke(existing);
-            if (stacksGained) OnEffectStackChanged?.Invoke(existing);
+            if (stacksGained)
+            {
+                Debug.Log($"Firing OnEffectStackChanged for {definition.effectName}");
+                OnEffectStackChanged?.Invoke(existing);
+            }
             if (maxStacksReached) OnEffectMaxStacksReached?.Invoke(existing);
         }
         else

@@ -15,7 +15,7 @@ public class Weapon : MonoBehaviour, IActionSource
 
     Collider col;
 
-    HashSet<GameObject> _hitThisSwing = new();
+    readonly HashSet<GameObject> _hitThisSwing = new();
 
     void Awake()
     {
@@ -59,11 +59,14 @@ public class Weapon : MonoBehaviour, IActionSource
         CharacterResources resources = Owner.CharacterResources;
 
         if (resources.TryGetResource(Definition.ExpendedResource, out CharacterResource resource) 
-            && Definition.ResourceCost <= resource.Value
-            && seconds.Expired)
+            && Definition.ResourceCost <= resource.Value && seconds.Expired)
         {
-            resource.ChangeValue(-1f * Definition.ResourceCost, out float _);
-            resource.RegenerationCounter.Reset();
+            resources.ChangeResourceValue(
+                Definition.ExpendedResource,
+                -1f * Definition.ResourceCost,
+                out float _,
+                true
+            );
             
             seconds.Reset();
             StartCoroutine(UseCoroutine());

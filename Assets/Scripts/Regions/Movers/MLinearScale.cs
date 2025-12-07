@@ -1,18 +1,46 @@
+using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 public class MLinearScale : MonoBehaviour
 {
-    [Header("Linear Scale Settings")]
-    [Tooltip("The desired scale after the elapsed time."), SerializeField]
-    Vector3 TargetScale = Vector3.one * 2f;
+    [Header("Linear Scale Sequence")]
+    [Tooltip("Series of duration + target scale for sequential resizing."), SerializeField]
+    List<FloatVector3Pair> ScaleSequence = new();
 
-    [Tooltip("The rate (meters/second) at which the scale increases."), SerializeField, Min(0)]
-    float ScaleRate = 1f;
+    Vector3 currentStartingScale;
+
+    IntegerCounter steps;
+    FloatCounter seconds;
+
+    FloatVector3Pair CurrentPair => ScaleSequence[steps.Value];
+    float CurrentFraction => Mathf.Clamp01(seconds.Value / CurrentPair.Float);
 
     void Start()
     {
-        if (TargetScale.x <= 0 && TargetScale.y <= 0 && TargetScale.z <= 0)
-            Debug.LogError($"{name}'s Mover {nameof(MLinearScale)} was configured with an invalid parameter: {nameof(TargetScale)} must be non-zero (might be too small)!");
+        currentStartingScale = transform.localScale;
+
+        if (ScaleSequence.Count == 0)
+        {
+            LogFormatter.LogNullCollectionField(nameof(ScaleSequence), nameof(Start), nameof(MLinearScale), gameObject);
+            return;
+        }
+
+        steps = new(0, 0, ScaleSequence.Count - 1, resetToMax: false);
+        seconds = new(0, 0, CurrentPair.Float, resetToMax: false);
     }
 
-    void Update() => transform.localScale = Vector3.MoveTowards(transform.localScale, TargetScale, ScaleRate * Time.deltaTime);
+    void Update()
+    {
+        seconds.Increase(Time.deltaTime);
+        transform.localScale = Vector3.Lerp(currentStartingScale, CurrentPair.Vector, CurrentFraction);
+
+        if (CurrentFraction < 1f) return;
+
+        steps.Increment();
+        if (steps.Exceeded) steps.Reset();
+
+        currentStartingScale = transform.localScale;
+        seconds.SetMax(CurrentPair.Float);
+        seconds.Reset();
+    }
 }

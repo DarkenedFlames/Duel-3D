@@ -33,7 +33,6 @@ public class EffectBarUI : MonoBehaviour
         _effects.OnEffectMaxStacksReached += HandleMaxStacksReached;
         _effects.OnEffectPulsed += HandleEffectPulsed;
 
-        // Initialize existing
         foreach (var effect in _effects.Effects)
             HandleEffectGained(effect);
     }

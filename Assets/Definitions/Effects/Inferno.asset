@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
   effectName: Inferno
   icon: {fileID: 21300000, guid: 30785b805c0b56f46aa56e239f573281, type: 3}
-  EffectStackingType: 2
+  EffectStackingType: 1
   expiryType: 0
   ScalesWithStacks: 1
   maxStacks: 3
@@ -35,4 +35,5 @@ MonoBehaviour:
     - rid: 1013435839720980591
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
+        resetRegenerationIfChanged: 1
         amount: 1

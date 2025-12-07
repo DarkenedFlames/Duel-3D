@@ -23,6 +23,9 @@ public class AModifyResource : IGameAction
     [Tooltip("The type of modifier to modify."), SerializeField]
     ResourceModifierType type = ResourceModifierType.Increase;
 
+    [Tooltip("If the value changes, reset the resource's regeneration?"), SerializeField]
+    bool resetRegeneration = false;
+
     [Tooltip("The change or modifier value."), SerializeField]
     float amount = 0f;
 
@@ -42,7 +45,7 @@ public class AModifyResource : IGameAction
         CharacterResources resources = context.Target.CharacterResources;
         switch (mode)
         {
-            case ModifyResourceMode.ChangeValue: resources.ChangeResourceValue(resourceDefinition, amount, out _); break;
+            case ModifyResourceMode.ChangeValue: resources.ChangeResourceValue(resourceDefinition, amount, out float _, resetRegeneration); break;
             case ModifyResourceMode.AddModifier: resources.AddModifierToResource(resourceDefinition, type, amount, context.Source); break;
             case ModifyResourceMode.RemoveModifier:
                 switch (target)

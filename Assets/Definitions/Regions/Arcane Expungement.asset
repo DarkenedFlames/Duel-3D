@@ -36,4 +36,4 @@ MonoBehaviour:
         referenceType: 0
         reference: 2
         mode: 0
-        direction: {x: 0, y: 0, z: 10}
+        direction: {x: 0, y: 0, z: -10}

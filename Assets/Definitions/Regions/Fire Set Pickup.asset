@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 47cf0abe4e0ea6e41b563c7b80fbe339, type: 3}
-  m_Name: Multiple Ability Pickup
+  m_Name: Fire Set Pickup
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Multiple Ability Pickup
   AffectsSource: 0
-  RegionExpiryType: -1
   Duration: 100
   MaxHits: 1
   Period: 0
@@ -25,22 +24,28 @@ MonoBehaviour:
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435820514738284
-  - rid: 1013435871330041932
-  - rid: 1013435871330041942
+  - rid: 8378409617588748516
+  - rid: 8378409617588748517
+  - rid: 8378409617588748518
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738284
+    - rid: 8378409617588748516
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
-        abilityDefinition: {fileID: 11400000, guid: 5fa403a22b4cd6e498f9a85b6e0f82eb, type: 2}
-    - rid: 1013435871330041932
+        mode: 0
+        abilityDefinition: {fileID: 11400000, guid: c56eda6116c594f45ae6abf5daa2ca53, type: 2}
+        set: {fileID: 0}
+    - rid: 8378409617588748517
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
-        abilityDefinition: {fileID: 11400000, guid: 58c16abd01a5a6a4e9840166162628cb, type: 2}
-    - rid: 1013435871330041942
+        mode: 0
+        abilityDefinition: {fileID: 11400000, guid: 4e033ba0b8e53144e9dfc44dd7d33dec, type: 2}
+        set: {fileID: 0}
+    - rid: 8378409617588748518
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
-        abilityDefinition: {fileID: 11400000, guid: e5dfca9f1ec0354488416cd9d55aaf9c, type: 2}
+        mode: 0
+        abilityDefinition: {fileID: 11400000, guid: b93cdbe405c62d44f863b3a8d3495ec5, type: 2}
+        set: {fileID: 0}

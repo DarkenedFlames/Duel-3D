@@ -15,6 +15,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         SerializedProperty resourceDefinitionProp = property.FindPropertyRelative("resourceDefinition");
         SerializedProperty modifierTargetProp = property.FindPropertyRelative("modifierTarget");
         SerializedProperty typeProp = property.FindPropertyRelative("type");
+        SerializedProperty resetRegenProp = property.FindPropertyRelative("resetRegeneration");
         SerializedProperty amountProp = property.FindPropertyRelative("amount");
 
         ModifyResourceMode enabledMode = (ModifyResourceMode)modeProp.enumValueIndex;
@@ -27,6 +28,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         {
             case ModifyResourceMode.ChangeValue:
                 height += EditorGUI.GetPropertyHeight(resourceDefinitionProp) + VSpace;
+                height += EditorGUI.GetPropertyHeight(resetRegenProp) + VSpace;
                 height += EditorGUI.GetPropertyHeight(amountProp) + VSpace;
                 break;
             case ModifyResourceMode.AddModifier:
@@ -61,6 +63,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         SerializedProperty resourceDefinitionProp = property.FindPropertyRelative("resourceDefinition");
         SerializedProperty modifierTargetProp = property.FindPropertyRelative("modifierTarget");
         SerializedProperty typeProp = property.FindPropertyRelative("type");
+        SerializedProperty resetRegenProp = property.FindPropertyRelative("resetRegeneration");
         SerializedProperty amountProp = property.FindPropertyRelative("amount");
 
         ModifyResourceMode enabledMode = (ModifyResourceMode)modeProp.enumValueIndex;
@@ -78,6 +81,10 @@ public class AModifyResourceDrawer : IActionTypeDrawer
             case ModifyResourceMode.ChangeValue:
                 h = EditorGUI.GetPropertyHeight(resourceDefinitionProp);
                 EditorGUI.PropertyField(new Rect(position.x, y, position.width, h), resourceDefinitionProp);
+                y += h + 2;
+
+                h = EditorGUI.GetPropertyHeight(resetRegenProp);
+                EditorGUI.PropertyField(new Rect(position.x, y, position.width, h), resetRegenProp);
                 y += h + 2;
 
                 h = EditorGUI.GetPropertyHeight(amountProp);

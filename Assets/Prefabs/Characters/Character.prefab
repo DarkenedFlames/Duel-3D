@@ -454,6 +454,8 @@ GameObject:
   - component: {fileID: 2573011409523793657}
   - component: {fileID: 6609455820952798390}
   - component: {fileID: 8419923175194643824}
+  - component: {fileID: -8231788482048056667}
+  - component: {fileID: -830900240938980272}
   m_Layer: 6
   m_Name: Character
   m_TagString: Player
@@ -671,6 +673,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStatuses
   initialStatuses: []
+--- !u!114 &-8231788482048056667
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053115554608234454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8db1ae8d7f69c0e48b065c27ccb6ba85, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CharacterInterface
+  worldUIPrefab: {fileID: 5897501695909145094, guid: fc9a6f87768093340bd97d24e2354fff, type: 3}
+  uiOffset: {x: 0, y: 2, z: 0}
+--- !u!114 &-830900240938980272
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053115554608234454}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef8ba29cb49f5374284d314cd1d422a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::NPCInputDriver
 --- !u!1 &2165119010159754201
 GameObject:
   m_ObjectHideFlags: 0

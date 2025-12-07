@@ -69,7 +69,6 @@ public abstract class PolymorphicInterfaceDrawer : PropertyDrawer
         if (_customDrawers.TryGetValue(concreteType, out var drawer))
             return EditorGUIUtility.singleLineHeight + 2 + drawer.GetHeight(property, label);
 
-
         // Fallback => default height
         float height = EditorGUIUtility.singleLineHeight + 4;
 
@@ -86,39 +85,47 @@ public abstract class PolymorphicInterfaceDrawer : PropertyDrawer
         return height;
     }
 
-
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         Init();
 
+        Rect singleLinePosition = new(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+
         EditorGUI.BeginProperty(position, label, property);
 
-        var typeRect = new Rect(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
-        var valueRect = new Rect(position.x, position.y + EditorGUIUtility.singleLineHeight + 2,
+        if (property.managedReferenceValue == null)
+        {
+            Type currentType = property.managedReferenceValue?.GetType();
+            int currentIndex = Array.IndexOf(_implTypes, currentType);
+            int newIndex = EditorGUI.Popup(singleLinePosition, label.text, currentIndex, _implNames);
+
+            if (newIndex != currentIndex)
+                property.managedReferenceValue = Activator.CreateInstance(_implTypes[newIndex]);
+            
+            EditorGUI.EndProperty();
+            return; 
+        }
+        
+        Rect typeRect = new(position.x, position.y, position.width, EditorGUIUtility.singleLineHeight);
+        Rect valueRect = new(position.x, position.y + EditorGUIUtility.singleLineHeight + 2,
             position.width, position.height - EditorGUIUtility.singleLineHeight - 2);
 
-        // Dropdown to select concrete type
-        Type currentType = property.managedReferenceValue?.GetType();
-        int currentIndex = Array.IndexOf(_implTypes, currentType);
-        int newIndex = EditorGUI.Popup(typeRect, label.text, currentIndex, _implNames);
+        Type currentTypeNotNull = property.managedReferenceValue.GetType();
+        int currentIndexNotNull = Array.IndexOf(_implTypes, currentTypeNotNull);
+        int newIndexNotNull = EditorGUI.Popup(typeRect, label.text, currentIndexNotNull, _implNames);
 
-        if (newIndex != currentIndex)
-            property.managedReferenceValue = Activator.CreateInstance(_implTypes[newIndex]);
+        if (newIndexNotNull != currentIndexNotNull)
+            property.managedReferenceValue = Activator.CreateInstance(_implTypes[newIndexNotNull]);
 
-        if (property.managedReferenceValue != null)
-        {
-            var concreteType = property.managedReferenceValue.GetType();
 
-            if (_customDrawers.TryGetValue(concreteType, out var drawer))
-            {
-                drawer.Draw(property, valueRect, label);
-            }
-            else
-            {
-                DrawDefault(property, valueRect);
-            }
-        }
+        Type concreteType = property.managedReferenceValue.GetType();
 
+        if (_customDrawers.TryGetValue(concreteType, out var drawer))
+            drawer.Draw(property, valueRect, label);
+        else
+            DrawDefault(property, valueRect);
+        
         EditorGUI.EndProperty();
     }
+
 }

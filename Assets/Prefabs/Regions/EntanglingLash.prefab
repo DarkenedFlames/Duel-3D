@@ -216,8 +216,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed94d0a199367074ab229c988f8a6a4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MLinearScale
-  TargetScale: {x: 0.5, y: 0.5, z: 5}
-  ScaleRate: 15
+  ScaleSequence:
+  - Float: 0.33
+    Vector: {x: 0.5, y: 0.5, z: 5}
 --- !u!114 &7750696237327626735
 MonoBehaviour:
   m_ObjectHideFlags: 0

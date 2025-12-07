@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(RegionSetRegistrar))]
@@ -20,6 +21,8 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     FloatCounter seconds;
     FloatCounter pulse;
     IntegerCounter hits;
+
+    public event Action OnDestroyed;
 
     void Awake()
     {
@@ -44,6 +47,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     void DestroyRegion()
     {
         ExecuteAll(Definition.OnDestroyActions);
+        OnDestroyed?.Invoke();
         Destroy(gameObject);
     }
 
@@ -64,8 +68,9 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
     void OnTriggerEnter(Collider other)
     {
-        if (!FilterTarget(other, out GameObject target) || !_currentTargets.Add(target)) return;
-
+        if (!FilterTarget(other, out GameObject target)) return;
+        if(!_currentTargets.Add(target)) return;
+        
         Execute(Definition.OnEnterActions, target);
 
         hits?.Increment();
@@ -101,8 +106,8 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     {
         target = null;
         GameObject potentialTarget = other.gameObject;
-
         // Skip the owner if the region has one and if the Region is configured to skip it
+
         if (Owner != null
             && !Definition.AffectsSource
             && potentialTarget.TryGetComponent(out Character character)

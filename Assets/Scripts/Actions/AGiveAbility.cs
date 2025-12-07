@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum GiveAbilityMode { Specific, RandomBySlotFromSet }
@@ -28,13 +30,27 @@ public class AGiveAbility : IGameAction
         switch (mode)
         {
             case GiveAbilityMode.Specific: 
-                if (abilityDefinition != null) 
-                    abilities.LearnAbility(abilityDefinition);
+                if (abilityDefinition == null || abilities.HasAbility(abilityDefinition)) return;
+                
+                abilities.LearnAbility(abilityDefinition);
                 break;
 
             case GiveAbilityMode.RandomBySlotFromSet:
-                if (set != null && set.definitions.Count != 0)
-                    abilities.LearnAbility(set.GetAbilityWeightedByType());
+                if (set == null || set.definitions.Count == 0) return;
+                
+                List<AbilityDefinition> ownedAbilities = abilities.abilities.Values
+                    .Select(a => a.Definition)
+                    .ToList();
+
+                AbilityDefinition randomDefinition = set.GetAbilityWeightedByType(ownedAbilities);
+                
+                if (randomDefinition == null)
+                {
+                    Debug.LogWarning($"{context.Target.gameObject.name} already has all abilities from the set!");
+                    return;
+                }
+
+                abilities.LearnAbility(randomDefinition);
                 break;
         }
     }

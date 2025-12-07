@@ -22,20 +22,29 @@ MonoBehaviour:
     m_Bits: 64
   OnSpawnActions: []
   OnDestroyActions:
-  - rid: 1013435952863379457
+  - rid: 8378409551465545807
   OnPulseActions:
-  - rid: 1013435952863379456
+  - rid: 8378409551465545806
   OnEnterActions: []
   OnExitActions: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435952863379456
-      type: {class: AModifyStatModifier, ns: , asm: Assembly-CSharp}
+    - rid: 8378409551465545806
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        mode: 0
+        target: 0
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
+        modifierTarget: 0
         type: 2
         amount: 0.95
-    - rid: 1013435952863379457
-      type: {class: ACleanseStatModifiers, ns: , asm: Assembly-CSharp}
-      data: 
+    - rid: 8378409551465545807
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        mode: 1
+        target: 1
+        StatDefinition: {fileID: 0}
+        modifierTarget: 3
+        type: 0
+        amount: 0

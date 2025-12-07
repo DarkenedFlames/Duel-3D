@@ -5,9 +5,9 @@ using TMPro;
 public class EffectSlotUI : MonoBehaviour
 {
     [Header("UI Elements")]
-    [SerializeField] private Image iconImage;
-    [SerializeField] private Image cooldownOverlay;
-    [SerializeField] private TextMeshProUGUI stackText;
+    [SerializeField] Image iconImage;
+    [SerializeField] Image cooldownOverlay;
+    [SerializeField] TextMeshProUGUI stackText;
 
     private CharacterEffect effect;
 
