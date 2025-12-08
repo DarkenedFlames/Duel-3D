@@ -6,7 +6,7 @@ public enum EffectRemoveTarget { SpecificEffect, SpecificEffectFromSource, AllEf
 
 
 [System.Serializable]
-public class AModifyEffect : IGameAction
+public class AModifyEffect : ITargetedAction
 {
     [SerializeField] private EffectModifyMode mode;
 

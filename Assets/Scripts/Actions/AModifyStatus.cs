@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class AModifyStatus : IGameAction
+public class AModifyStatus : ITargetedAction
 {
     [Header("Status Configuration")]
     [Tooltip("Status to modify."), SerializeField]

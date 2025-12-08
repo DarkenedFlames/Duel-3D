@@ -32,6 +32,11 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("The conditions required for this ability to activate."), SerializeReference]
     public ActivationCondition[] activationConditions;
 
+    [Header("Source Actions")]
     [Tooltip("The actions this ability executes upon activation."), SerializeReference]
-    public List<IGameAction> actions = new();
+    public List<ISourceAction> OnCastSource = new();
+
+    [Header("Targeted Actions")]
+    [Tooltip("The actions this ability executes targeting the caster upon activation."), SerializeReference]
+    public List<ITargetedAction> OnCastTargeted = new();
 }

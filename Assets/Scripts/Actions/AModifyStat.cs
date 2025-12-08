@@ -5,7 +5,7 @@ public enum ModifyStatTarget { Specific, All }
 public enum StatModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
 
 [System.Serializable]
-public class AModifyStat : IGameAction
+public class AModifyStat : ITargetedAction
 {
     [Header("Stat Configuration")]
     [Tooltip("Whether to add or remove the modifier."), SerializeField]

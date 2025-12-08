@@ -42,11 +42,17 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
             pulse = new(Definition.Period, 0, Definition.Period, true, true);
     }
 
-    void Start() => ExecuteAll(Definition.OnSpawnActions);
+    void Start()
+    {
+        ExecuteSource(Definition.OnActiveActions);
+        ExecuteAllTargeted(Definition.OnSpawnActions);
+    }
     
     void DestroyRegion()
     {
-        ExecuteAll(Definition.OnDestroyActions);
+        ExecuteAllTargeted(Definition.OnDestroyActions);
+        ExecuteSource(Definition.OnInactiveActions);
+
         OnDestroyed?.Invoke();
         Destroy(gameObject);
     }
@@ -61,7 +67,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
         if (pulse != null && pulse.Expired)
         {
-            ExecuteAll(Definition.OnPulseActions);
+            ExecuteAllTargeted(Definition.OnPulseActions);
             pulse.Reset();
         }
     }
@@ -71,7 +77,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
         if (!FilterTarget(other, out GameObject target)) return;
         if(!_currentTargets.Add(target)) return;
         
-        Execute(Definition.OnEnterActions, target);
+        ExecuteTargeted(Definition.OnEnterActions, target);
 
         hits?.Increment();
         if (hits != null && hits.Exceeded)
@@ -82,23 +88,31 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     {
         if (!FilterTarget(other, out GameObject target) || !_currentTargets.Remove(target)) return;
 
-        Execute(Definition.OnExitActions, target);
+        ExecuteTargeted(Definition.OnExitActions, target);
     }
 
-    void Execute(List<IGameAction> actions, GameObject target)
+    void ExecuteTargeted(List<ITargetedAction> actions, GameObject target)
     {
         if (!target.TryGetComponent(out Character character)) return;
         
         ActionContext context = new(){ Source = this, Target = character };
         actions.ForEach(a => a.Execute(context));
     }
-    void ExecuteAll(List<IGameAction> actions)
+
+    void ExecuteSource(List<ISourceAction> actions)
+    {
+        ActionContext context = new(){ Source = this, Target = null };
+        actions.ForEach(a => a.Execute(context));
+    }
+
+    void ExecuteAllTargeted(List<ITargetedAction> actions)
     {
         List<GameObject> currentTargetList = _currentTargets.ToList();
         for (int i = currentTargetList.Count - 1; i >= 0; i--)
         {
-            if (currentTargetList[i] != null)
-                Execute(actions, currentTargetList[i]);
+            GameObject target = currentTargetList[i];
+            if (target != null)
+                ExecuteTargeted(actions, target);
         }
     }
 

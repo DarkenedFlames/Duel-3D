@@ -41,8 +41,11 @@ public class Ability : IActionSource
         );
         
         seconds.Reset();
-        ActionContext context = new(){ Source = this, Target = Owner };
-        Definition.actions.ForEach(a => a.Execute(context));
+        ActionContext sourceContext = new(){ Source = this, Target = null };
+        Definition.OnCastSource.ForEach(a => a.Execute(sourceContext));
+
+        ActionContext targetContext = new(){ Source = this, Target = Owner };
+        Definition.OnCastTargeted.ForEach(a => a.Execute(targetContext));
         return true;
     }
 }

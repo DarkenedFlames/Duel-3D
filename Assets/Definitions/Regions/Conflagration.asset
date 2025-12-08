@@ -27,6 +27,9 @@ MonoBehaviour:
   - rid: 1013435894806085756
   - rid: 1013435894806085757
   OnExitActions: []
+  OnActiveActions:
+  - rid: 8378409640323186803
+  OnInactiveActions: []
   references:
     version: 2
     RefIds:
@@ -46,3 +49,9 @@ MonoBehaviour:
         removeTarget: 0
         effectToRemove: {fileID: 0}
         stacksToRemove: 1
+    - rid: 8378409640323186803
+      type: {class: ASpawnParticles, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 1597943514804121045, guid: 046ab2479bbf98147b8f07230c2bc2a0, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

@@ -6,7 +6,7 @@ public enum MoveReferenceType { TowardsReference, LocalDirection }
 public enum MoveCharacterMode { Force, Reposition }
 
 [System.Serializable]
-public class AMoveCharacter : IGameAction
+public class AMoveCharacter : ITargetedAction
 {
     [Header("Movement Configuration")]
     [Tooltip("The character to be moved."), SerializeField]

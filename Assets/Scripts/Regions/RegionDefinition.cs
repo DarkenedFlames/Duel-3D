@@ -24,19 +24,26 @@ public class RegionDefinition : ScriptableObject
     [Tooltip("The layers with which the Region may interact.")]
     public LayerMask LayerMask;
 
-    [Header("Actions")]
+    [Header("Targeted Actions")]
     [Tooltip("The actions to execute on all valid targets in the region upon instantiation."), SerializeReference]
-    public List<IGameAction> OnSpawnActions = new();
+    public List<ITargetedAction> OnSpawnActions = new();
 
     [Tooltip("The actions to execute on all valid targets in the region upon destruction."), SerializeReference]
-    public List<IGameAction> OnDestroyActions = new();
+    public List<ITargetedAction> OnDestroyActions = new();
 
     [Tooltip("The actions to execute on all valid targets in the region periodically."), SerializeReference]
-    public List<IGameAction> OnPulseActions = new();
+    public List<ITargetedAction> OnPulseActions = new();
 
     [Tooltip("The actions to execute on each valid target that enters the region."), SerializeReference]
-    public List<IGameAction> OnEnterActions = new();
+    public List<ITargetedAction> OnEnterActions = new();
 
     [Tooltip("The actions to execute on each valid target that exits the region."), SerializeReference]
-    public List<IGameAction> OnExitActions = new();
+    public List<ITargetedAction> OnExitActions = new();
+
+    [Header("Source Actions")]
+    [Tooltip("The actions to execute for the region upon instantiation (no targets)."), SerializeReference]
+    public List<ISourceAction> OnActiveActions = new();
+
+    [Tooltip("The actions to execute for the region upon destruction (no targets)."), SerializeReference]
+    public List<ISourceAction> OnInactiveActions = new();
 }

@@ -5,7 +5,7 @@ public enum ModifyResourceTarget { Specific, All }
 public enum ResourceModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
 
 [System.Serializable]
-public class AModifyResource : IGameAction
+public class AModifyResource : ITargetedAction
 {
     [Header("Resource Configuration")]
     [Tooltip("The mode of resource modification."), SerializeField]

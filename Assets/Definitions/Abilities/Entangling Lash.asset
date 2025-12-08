@@ -22,14 +22,15 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  actions:
-  - rid: 1013435871330042032
+  OnCastSource:
+  - rid: 8378409640323186788
+  OnCastTargeted: []
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330042032
+    - rid: 8378409640323186788
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 6235790887478010368, guid: 4bad957f972119749a3f92f58afbd4b8, type: 3}
-        spawnOffset: {x: 0, y: 0.75, z: 0}
+        spawnOffset: {x: 0, y: 1, z: 1}
         localEulerRotation: {x: 0, y: 0, z: 0}

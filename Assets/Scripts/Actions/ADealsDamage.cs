@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class ADealsDamage : IGameAction
+public class ADealsDamage : ITargetedAction
 {
     [Header("Damage Configuration")]
     [Tooltip("Whether to reset regeneration if damage is dealt."), SerializeField]
@@ -10,8 +10,9 @@ public class ADealsDamage : IGameAction
     [Tooltip("The amount of damage dealt."), SerializeField, Min(0)]
     float amount = 1f;
 
-    [Header("Damage Number")]
+    [Header("Damage Effects")]
     [SerializeField] GameObject damageNumberPrefab;
+    [SerializeField] GameObject damageParticlesPrefab;
 
     public void Execute(ActionContext context)
     {
@@ -43,6 +44,15 @@ public class ADealsDamage : IGameAction
                 context.Target.transform.rotation
             );
             number.GetComponentInChildren<DamageNumberUI>().Initialize(Mathf.Abs(changed));
+
+
+            if (damageParticlesPrefab != null)
+                Object.Instantiate(
+                    damageParticlesPrefab,
+                    context.Target.transform.position,
+                    context.Target.transform.rotation
+                );
+
         }
     }
 }

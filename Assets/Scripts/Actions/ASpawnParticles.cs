@@ -1,5 +1,5 @@
 using UnityEngine;
-public class ASpawnParticles : IGameAction
+public class ASpawnParticles : ISourceAction
 {
     [Header("Particle Settings")]
     public GameObject prefab;

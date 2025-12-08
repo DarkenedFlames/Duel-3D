@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class ASpawnObject : IGameAction
+public class ASpawnObject : ISourceAction
 {
     [Header("SpawnArea Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 

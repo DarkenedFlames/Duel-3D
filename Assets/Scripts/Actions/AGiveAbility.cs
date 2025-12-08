@@ -5,7 +5,7 @@ using UnityEngine;
 public enum GiveAbilityMode { Specific, RandomBySlotFromSet }
 
 [System.Serializable]
-public class AGiveAbility : IGameAction
+public class AGiveAbility : ITargetedAction
 {
     [Header("Ability Configuration")]
     [Tooltip("Mode of Ability giving."), SerializeField]

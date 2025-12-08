@@ -24,18 +24,15 @@ MonoBehaviour:
   OnDestroyActions: []
   OnPulseActions: []
   OnEnterActions:
-  - rid: 1013435894806085722
   - rid: 8378409506690564174
   OnExitActions: []
+  OnActiveActions: []
+  OnInactiveActions:
+  - rid: 8378409640323186774
+  - rid: 8378409640323186775
   references:
     version: 2
     RefIds:
-    - rid: 1013435894806085722
-      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
-      data:
-        prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
-        spawnOffset: {x: 0, y: 0, z: 0}
-        localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409506690564174
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
@@ -46,3 +43,15 @@ MonoBehaviour:
         removeTarget: 0
         effectToRemove: {fileID: 0}
         stacksToRemove: 1
+    - rid: 8378409640323186774
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409640323186775
+      type: {class: ASpawnParticles, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 1597943514804121045, guid: 046ab2479bbf98147b8f07230c2bc2a0, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

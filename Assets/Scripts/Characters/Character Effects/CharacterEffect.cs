@@ -159,7 +159,7 @@ public class CharacterEffect : IActionSource
         if (Definition.ScalesWithStacks && scalesWithStacks)
             magnitude = currentStacks.Value;
 
-        ActionContext context = new() { Source = this, Target = GameObject.GetComponent<Character>(), Magnitude = magnitude };
+        ActionContext context = new() { Source = this, Target = Owner, Magnitude = magnitude };
         actions.ForEach(a => a.Execute(context));
     }
 }

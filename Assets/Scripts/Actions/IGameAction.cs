@@ -5,6 +5,18 @@ public interface IGameAction
     void Execute(ActionContext context);
 }
 
+/// <summary>
+/// Actions that require a target Character (e.g., damage, healing, status effects).
+/// These actions should only be used with lifecycle hooks that provide targets.
+/// </summary>
+public interface ITargetedAction : IGameAction { }
+
+/// <summary>
+/// Actions that only require a source (e.g., spawning objects, particles).
+/// These actions can be used with any lifecycle hook.
+/// </summary>
+public interface ISourceAction : IGameAction { }
+
 public class ActionContext
 {
     public IActionSource Source;

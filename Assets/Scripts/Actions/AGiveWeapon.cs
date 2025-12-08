@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class AGiveWeapon : IGameAction
+public class AGiveWeapon : ITargetedAction
 {
     [Header("Weapon Configuration")]
     [Tooltip("Weapon to give."), SerializeField]

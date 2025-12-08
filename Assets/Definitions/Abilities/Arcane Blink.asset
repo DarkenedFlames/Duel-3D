@@ -22,19 +22,13 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  actions:
-  - rid: 1013435871330041995
-  - rid: 8378409532984131653
+  OnCastSource: []
+  OnCastTargeted:
+  - rid: 8378409640323186781
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330041995
-      type: {class: ASpawnParticles, ns: , asm: Assembly-CSharp}
-      data:
-        prefab: {fileID: 2110487844416041743, guid: bacf0ad083095f74c913f0c0ba347f2b, type: 3}
-        spawnOffset: {x: 0, y: 0, z: 0}
-        localEulerRotation: {x: 0, y: 0, z: 0}
-    - rid: 8378409532984131653
+    - rid: 8378409640323186781
       type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
         target: 0
