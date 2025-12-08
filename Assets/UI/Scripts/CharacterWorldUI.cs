@@ -2,12 +2,19 @@ using UnityEngine;
 
 public class CharacterWorldUI : MonoBehaviour
 {
-    [Header("Settings")]
-    [SerializeField] ResourcePanelUI resourcePanel;
-    [SerializeField] EffectBarUI effectBar;
+    ResourcePanelUI resourcePanel;
+    EffectBarUI effectBar;
+    NameBarUI nameBar;
 
-    Vector3 offset = new(0, 2.5f, 0);
+    Vector3 offset = Vector3.zero;
     Character owner;
+
+    void Awake()
+    {
+        resourcePanel = GetComponentInChildren<ResourcePanelUI>();
+        effectBar = GetComponentInChildren<EffectBarUI>();
+        nameBar = GetComponentInChildren<NameBarUI>();
+    }
 
     void LateUpdate()
     {
@@ -31,5 +38,8 @@ public class CharacterWorldUI : MonoBehaviour
         
         if (effectBar != null)
             effectBar.SubscribeToHandler(owner.CharacterEffects);
+
+        if (nameBar != null)
+            nameBar.Initialize(owner);
     }
 }

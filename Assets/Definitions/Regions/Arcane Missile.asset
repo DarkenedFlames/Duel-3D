@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Arcane Missile
   AffectsSource: 0
-  RegionExpiryType: -1
   Duration: 10
   MaxHits: 1
   Period: 0
@@ -33,4 +32,6 @@ MonoBehaviour:
     - rid: 1013435894806085709
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
+        resetRegenerationIfChanged: 1
         amount: 5
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}

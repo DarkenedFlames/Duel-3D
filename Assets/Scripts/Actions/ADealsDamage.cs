@@ -4,11 +4,14 @@ using UnityEngine;
 public class ADealsDamage : IGameAction
 {
     [Header("Damage Configuration")]
-    [Tooltip("The 'health' resource definition."), SerializeField]
+    [Tooltip("Whether to reset regeneration if damage is dealt."), SerializeField]
     bool resetRegenerationIfChanged = true;
 
     [Tooltip("The amount of damage dealt."), SerializeField, Min(0)]
     float amount = 1f;
+
+    [Header("Damage Number")]
+    [SerializeField] GameObject damageNumberPrefab;
 
     public void Execute(ActionContext context)
     {
@@ -33,6 +36,13 @@ public class ADealsDamage : IGameAction
                 out float changed,
                 resetRegenerationIfChanged)
         )
-            Debug.Log($"{context.Source.GameObject.name} dealt {changed} damage to {context.Target.gameObject.name}");
+        {
+            GameObject number = Object.Instantiate(
+                damageNumberPrefab,
+                context.Target.transform.position,
+                context.Target.transform.rotation
+            );
+            number.GetComponentInChildren<DamageNumberUI>().Initialize(Mathf.Abs(changed));
+        }
     }
 }

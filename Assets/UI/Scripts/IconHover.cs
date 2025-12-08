@@ -17,5 +17,9 @@ public class IconHover : MonoBehaviour
         spawnedUI.Initialize(transform, uiOffset, iconToHover);
     }
 
-    void OnDestroy() => Destroy(spawnedUI.gameObject);
+    void OnDestroy()
+    {
+        if (spawnedUI != null)
+            Destroy(spawnedUI.gameObject);
+    }
 }

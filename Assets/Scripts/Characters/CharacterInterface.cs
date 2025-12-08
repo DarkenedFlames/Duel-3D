@@ -14,19 +14,7 @@ public class CharacterInterface : MonoBehaviour
     void Start()
     {
         owner = GetComponent<Character>();
-        SpawnWorldUI();
-    }
-
-    void SpawnWorldUI()
-    {
-        if (worldUIPrefab == null)
-        {
-            Debug.LogError($"World UI prefab not assigned on {gameObject.name}");
-            return;
-        }
-
-        GameObject uiInstance = Instantiate(worldUIPrefab);
-        spawnedUI = uiInstance.GetComponent<CharacterWorldUI>();
+        spawnedUI = Instantiate(worldUIPrefab).GetComponent<CharacterWorldUI>();
         spawnedUI.Initialize(owner, uiOffset);
     }
 

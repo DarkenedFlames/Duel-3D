@@ -30,4 +30,6 @@ MonoBehaviour:
     - rid: 1013435820514738273
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
+        resetRegenerationIfChanged: 1
         amount: 5
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}

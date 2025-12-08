@@ -30,10 +30,10 @@ public class AbilityDefinitionSet : ScriptableObject
         if (availableTypes.Count == 0)
             return null;
 
-        int r1 = Random.Range(0, availableTypes.Count + 1);
+        int r1 = Random.Range(0, availableTypes.Count);
         AbilityType type = availableTypes[r1].Key;
 
-        int r2 = Random.Range(0, abilityMap[type].Count + 1);
+        int r2 = Random.Range(0, abilityMap[type].Count);
         return abilityMap[type][r2];
     }
 }
