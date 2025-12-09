@@ -5,8 +5,12 @@ using UnityEngine;
 public enum GiveAbilityMode { Specific, RandomBySlotFromSet }
 
 [System.Serializable]
-public class AGiveAbility : ITargetedAction
+public class AGiveAbility : IGameAction
 {
+    [Header("Target Configuration")]
+    [Tooltip("Who to give ability to: Owner (caster/summoner) or Target (hit character)."), SerializeField]
+    ActionTargetMode targetMode = ActionTargetMode.Target;
+
     [Header("Ability Configuration")]
     [Tooltip("Mode of Ability giving."), SerializeField]
     GiveAbilityMode mode = GiveAbilityMode.Specific;
@@ -20,13 +24,20 @@ public class AGiveAbility : ITargetedAction
 
     public void Execute(ActionContext context)
     {
-        if (context.Target == null)
+        Character target = targetMode switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AGiveAbility), context.Source.GameObject);
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
+        };
+
+        if (target == null)
+        {
+            Debug.LogWarning($"{nameof(AGiveAbility)}: {targetMode} is null. Action skipped.");
             return;
         }
 
-        CharacterAbilities abilities = context.Target.CharacterAbilities;
+        CharacterAbilities abilities = target.CharacterAbilities;
         switch (mode)
         {
             case GiveAbilityMode.Specific: 
@@ -46,7 +57,7 @@ public class AGiveAbility : ITargetedAction
                 
                 if (randomDefinition == null)
                 {
-                    Debug.LogWarning($"{context.Target.gameObject.name} already has all abilities from the set!");
+                    Debug.LogWarning($"{target.gameObject.name} already has all abilities from the set!");
                     return;
                 }
 

@@ -22,13 +22,14 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  OnCastSource:
-  - rid: 8378409640323186786
-  OnCastTargeted: []
+  Actions:
+  - Action:
+      rid: 8378409663798444111
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 8378409640323186786
+    - rid: 8378409663798444111
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 5911693369258499101, guid: e8287c9d34d19774ab5b22c2f82a3b7b, type: 3}

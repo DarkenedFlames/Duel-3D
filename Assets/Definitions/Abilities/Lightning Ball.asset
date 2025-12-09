@@ -22,22 +22,26 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  OnCastSource:
-  - rid: 8378409640323186799
-  OnCastTargeted:
-  - rid: 8378409640323186804
+  Actions:
+  - Action:
+      rid: 8378409663798444120
+    Hook: 0
+  - Action:
+      rid: 8378409663798444121
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 8378409640323186799
+    - rid: 8378409663798444120
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 5722496870559824168, guid: 95f8aad0faa590a4e8ac9dded081bd00, type: 3}
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
-    - rid: 8378409640323186804
+    - rid: 8378409663798444121
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 0
         mode: 0
         effectToApply: {fileID: 11400000, guid: 41dedd6faf90a144fbf29e73117c3ea7, type: 2}
         stacksToApply: 1

@@ -30,7 +30,6 @@ public class Stat
     protected virtual void RecalculateValue()
     {
         _value = FinalValue();
-        Debug.Log($"[{Definition.statName}] changed to {_value}!");
         OnValueChanged?.Invoke(this);
     }
 

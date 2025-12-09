@@ -1,8 +1,15 @@
+using UnityEditor.EditorTools;
 using UnityEngine;
 
+public enum DamageType { Physical, Magical, True }
+
 [System.Serializable]
-public class ADealsDamage : ITargetedAction
+public class ADealsDamage : IGameAction
 {
+    [Header("Target Configuration")]
+    [Tooltip("Who to damage: Owner (caster/summoner) or Target (hit character)."), SerializeField]
+    ActionTargetMode targetMode = ActionTargetMode.Target;
+
     [Header("Damage Configuration")]
     [Tooltip("Whether to reset regeneration if damage is dealt."), SerializeField]
     bool resetRegenerationIfChanged = true;
@@ -10,49 +17,112 @@ public class ADealsDamage : ITargetedAction
     [Tooltip("The amount of damage dealt."), SerializeField, Min(0)]
     float amount = 1f;
 
+    [Tooltip("The type of damage dealt."), SerializeField]
+    DamageType damageType = DamageType.Physical;
+
+
     [Header("Damage Effects")]
     [SerializeField] GameObject damageNumberPrefab;
     [SerializeField] GameObject damageParticlesPrefab;
 
     public void Execute(ActionContext context)
     {
-        if (context.Source == null)
+        Character target = targetMode switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ADealsDamage), context.Source.GameObject);
-            return;
-        }
-        if (context.Target == null)
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
+        };
+
+        if (target == null)
         {
-            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(ADealsDamage), context.Source.GameObject);
+            Debug.LogWarning($"{nameof(ADealsDamage)}: {targetMode} is null. Action skipped.");
             return;
         }
 
         if (Mathf.Approximately(0, amount)) return;
 
-        CharacterResources resources = context.Target.CharacterResources;
+        float adjustedAmount = amount;
+
+        Character owner = context.Source.Owner;
+        if (owner != null)
+        {
+            CharacterStats ownerStats = owner.CharacterStats;
+            Stat ownerAttack = ownerStats.GetStat(StatType.Attack, this);
+            Stat ownerCriticalChance = ownerStats.GetStat(StatType.CriticalChance, this);
+            Stat ownerCriticalDamage = ownerStats.GetStat(StatType.CriticalDamage, this);
+
+            adjustedAmount *= ownerAttack.Value / 100f;
+
+            float critRoll = Random.Range(0f, 100f);
+            if (critRoll <= ownerCriticalChance.Value)
+                adjustedAmount *= 1 + ownerCriticalDamage.Value / 100f;
+        
+        }
+
+        CharacterResources targetResources = target.CharacterResources;
+        CharacterStats targetStats = target.CharacterStats;
+
+        Stat targetArmor = targetStats.GetStat(StatType.Armor, this);
+        Stat targetShield = targetStats.GetStat(StatType.Shield, this);
+        Stat targetDefense = targetStats.GetStat(StatType.Defense, this);
+
+
+
+        adjustedAmount -= targetDefense.Value;
+        adjustedAmount = Mathf.Max(1f, adjustedAmount);
+
+        float armorMultiplier = 100 / (targetArmor.Value + 100);
+        float shieldMultiplier = 100 / (targetShield.Value + 100);
+
+        Color color;
+
+        switch (damageType)
+        {
+            case DamageType.Physical:
+                adjustedAmount *= armorMultiplier;
+                color = Color.red; 
+                break;
+            case DamageType.Magical:
+                adjustedAmount *= shieldMultiplier;
+                color = Color.blue;
+                break;
+            case DamageType.True:
+                color = Color.white;
+                break;
+            default:
+                color = Color.black;
+                break;
+        }
+
+        if (adjustedAmount <= 0f)
+            return;
  
-        if (resources.ChangeResourceValue(
-                resources.healthDefinition,
-                -1f * amount * context.Magnitude,
+        if (targetResources.ChangeResourceValue(
+                ResourceType.Health,
+                -1f * adjustedAmount * context.Magnitude,
                 out float changed,
                 resetRegenerationIfChanged)
         )
         {
-            GameObject number = Object.Instantiate(
-                damageNumberPrefab,
-                context.Target.transform.position,
-                context.Target.transform.rotation
-            );
-            number.GetComponentInChildren<DamageNumberUI>().Initialize(Mathf.Abs(changed));
-
+            if (damageNumberPrefab != null)
+            {
+                GameObject number = Object.Instantiate(
+                    damageNumberPrefab,
+                    target.transform.position,
+                    target.transform.rotation
+                );
+                number.GetComponentInChildren<DamageNumberUI>().Initialize(Mathf.Abs(changed), color);
+            }
 
             if (damageParticlesPrefab != null)
                 Object.Instantiate(
                     damageParticlesPrefab,
-                    context.Target.transform.position,
-                    context.Target.transform.rotation
+                    target.transform.position,
+                    target.transform.rotation
                 );
 
+            target.CharacterAnimation.HandleHit();
         }
     }
 }

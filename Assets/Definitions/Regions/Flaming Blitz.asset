@@ -20,25 +20,28 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions:
-  - rid: 1013435894806085743
-  - rid: 1013435894806085744
-  OnEnterActions: []
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444167
+    Hook: 7
+  - Action:
+      rid: 8378409663798444168
+    Hook: 7
   references:
     version: 2
     RefIds:
-    - rid: 1013435894806085743
+    - rid: 8378409663798444167
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         resetRegenerationIfChanged: 1
         amount: 1
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-    - rid: 1013435894806085744
+        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+    - rid: 8378409663798444168
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         effectToApply: {fileID: 11400000, guid: 66c53f2cb255b43408a35a59782e09d4, type: 2}
         stacksToApply: 1

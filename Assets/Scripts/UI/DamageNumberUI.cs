@@ -14,7 +14,6 @@ public class DamageNumberUI : MonoBehaviour
     [SerializeField] float duration = 1.5f;
     [SerializeField] AnimationCurve arcCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
     [SerializeField] AnimationCurve fadeCurve = AnimationCurve.EaseInOut(0, 1, 1, 0);
-    [SerializeField] Color spawnColor = Color.red;
     [SerializeField] float horizontalRandomRange = 0.5f;
     [SerializeField] Vector3 totalArcOffset = new(0, 2f, 0);
     [SerializeField] Vector3 spawnOffset = new(0, 1f, 0);
@@ -22,11 +21,16 @@ public class DamageNumberUI : MonoBehaviour
     private Vector3 startPosition;
     private FloatCounter seconds;
     private Camera mainCamera;
+    private Color startingColor;
 
-    void Awake()
+    private bool initialized = false;
+
+    public void Initialize(float damage, Color color)
     {
         seconds = new(0, 0, duration, resetToMax: false);
         mainCamera = Camera.main;
+        damageText.text = Mathf.RoundToInt(damage).ToString();
+        startingColor = color;
         
         Vector3 randomOffset = new(
             Random.Range(-horizontalRandomRange, horizontalRandomRange),
@@ -35,12 +39,17 @@ public class DamageNumberUI : MonoBehaviour
         );
         transform.position += spawnOffset + randomOffset;
         startPosition = transform.position;
+
+        initialized = true;
     }
 
     void Update()
     {
+        if (!initialized)
+            return;
+
         seconds.Increase(Time.deltaTime);
-        float progress = seconds.Value / duration;
+        float progress = seconds.Value / seconds.Max;
 
         if (progress >= 1f)
         {
@@ -48,22 +57,16 @@ public class DamageNumberUI : MonoBehaviour
             return;
         }
 
+        // Arc and face camera
         float arcAmount = arcCurve.Evaluate(progress);
-        transform.position = startPosition + (totalArcOffset * arcAmount);
-        
-        if (mainCamera != null)
-            transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
+        transform.SetPositionAndRotation(
+            startPosition + (totalArcOffset * arcAmount), 
+            Quaternion.LookRotation(transform.position - mainCamera.transform.position)
+        );
 
         // Fade out
-        Color textColor = spawnColor;
+        Color textColor = startingColor;
         textColor.a = fadeCurve.Evaluate(progress);
         damageText.color = textColor;
-    }
-
-    public void Initialize(float damage)
-    {
-        damageText.text = Mathf.RoundToInt(damage).ToString();
-        damageText.color = spawnColor;
-        seconds.Reset();
     }
 }

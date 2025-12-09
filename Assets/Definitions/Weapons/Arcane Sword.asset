@@ -22,14 +22,18 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnHitActions:
-  - rid: 1013435820514738273
+  Actions:
+  - Action:
+      rid: 8378409663798444181
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 1013435820514738273
+    - rid: 8378409663798444181
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         resetRegenerationIfChanged: 1
-        amount: 5
+        amount: 1
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
+        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}

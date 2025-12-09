@@ -20,18 +20,17 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions: []
-  OnEnterActions:
-  - rid: 1013435871330041985
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444180
+    Hook: 2
   references:
     version: 2
     RefIds:
-    - rid: 1013435871330041985
+    - rid: 8378409663798444180
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         effectToApply: {fileID: 11400000, guid: 5a38d5b7bc171464ebd60560a218ff04, type: 2}
         stacksToApply: 1

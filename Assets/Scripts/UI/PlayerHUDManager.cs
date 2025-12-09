@@ -3,10 +3,12 @@ using UnityEngine;
 public class PlayerHUDManager : MonoBehaviour
 {
     AbilityBarUI abilityBar;
+    WeaponSlotUI weaponSlot;
 
     void Start()
     {
         abilityBar = GetComponentInChildren<AbilityBarUI>(true);
+        weaponSlot = GetComponentInChildren<WeaponSlotUI>(true);
 
         var localPlayer = FindLocalPlayer();
         if (localPlayer == null)
@@ -17,6 +19,8 @@ public class PlayerHUDManager : MonoBehaviour
 
         if (localPlayer.TryGetComponent(out CharacterAbilities abilities))
             abilityBar.SubscribeToHandler(abilities);
+        if (localPlayer.TryGetComponent(out CharacterWeapons weapons))
+            weaponSlot.SubscribeToHandler(weapons);
     }
 
     private GameObject FindLocalPlayer()

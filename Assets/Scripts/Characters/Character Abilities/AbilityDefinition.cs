@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 public enum AbilityAnimationTrigger { None, Cast, Channel }
 public enum AbilityType { Primary, Secondary, Utility, Special }
@@ -21,7 +22,7 @@ public class AbilityDefinition : ScriptableObject
     public AbilityAnimationTrigger castAnimationTrigger = AbilityAnimationTrigger.Cast;
 
     [Tooltip("The resource that this ability expends.")]
-    public ResourceDefinition expendedResource;
+    public ResourceType ExpendedResource = ResourceType.Mana;
 
     [Tooltip("The amount of the expended resource spent per cast."), Min(0)]
     public float resourceCost = 0f;
@@ -32,11 +33,12 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("The conditions required for this ability to activate."), SerializeReference]
     public ActivationCondition[] activationConditions;
 
-    [Header("Source Actions")]
-    [Tooltip("The actions this ability executes upon activation."), SerializeReference]
-    public List<ISourceAction> OnCastSource = new();
+    [Header("Actions")]
+    [Tooltip("Configure actions to execute when ability is cast.")]
+    public List<AbilityActionEntry> Actions = new();
 
-    [Header("Targeted Actions")]
-    [Tooltip("The actions this ability executes targeting the caster upon activation."), SerializeReference]
-    public List<ITargetedAction> OnCastTargeted = new();
+    public void ExecuteActions(AbilityHook hook, ActionContext context) =>
+        Actions
+            .FindAll(e => e.Hook == hook)
+            .ForEach(e => e.Action?.Execute(context));
 }

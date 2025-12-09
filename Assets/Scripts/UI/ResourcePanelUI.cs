@@ -14,16 +14,13 @@ public class ResourcePanelUI : MonoBehaviour
 
         foreach (ResourceBarUI bar in bars)
         {
-            if (trackedResources.TryGetResource(bar.LinkedResource, out CharacterResource trackedResource))
-            {
-                trackedResource.MaxStat.OnValueChanged += HandleStatChanged;
-                trackedResource.OnValueChanged += HandleResourceChanged;
+            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType, this);
 
-                HandleStatChanged(trackedResource.MaxStat);
-                HandleResourceChanged(trackedResource);
-            }
-            else
-                Debug.LogError($"{name} couldn't find stat {bar.LinkedResource.ResourceName} provided by {bar.name} for UI subscription");
+            trackedResource.MaxStat.OnValueChanged += HandleStatChanged;
+            trackedResource.OnValueChanged += HandleResourceChanged;
+
+            HandleStatChanged(trackedResource.MaxStat);
+            HandleResourceChanged(trackedResource);
         }
     }
 
@@ -33,13 +30,9 @@ public class ResourcePanelUI : MonoBehaviour
 
         foreach (ResourceBarUI bar in bars)
         {
-            if (trackedResources.TryGetResource(bar.LinkedResource, out CharacterResource trackedResource))
-            {
-                trackedResource.OnValueChanged -= HandleResourceChanged;
-                trackedResource.MaxStat.OnValueChanged -= HandleStatChanged;
-            }
-            else
-                Debug.LogError($"{name} couldn't find stat {bar.LinkedResource.ResourceName} provided by {bar.name} for UI unsubscription");
+            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType, this);
+            trackedResource.OnValueChanged -= HandleResourceChanged;
+            trackedResource.MaxStat.OnValueChanged -= HandleStatChanged;
         }
     }
 

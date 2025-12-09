@@ -14,23 +14,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Arcane Sword Pickup
   AffectsSource: 0
-  RegionExpiryType: -1
   Duration: 100
   MaxHits: 1
   Period: 0
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions: []
-  OnEnterActions:
-  - rid: 1013435894806085710
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444152
+    Hook: 2
   references:
     version: 2
     RefIds:
-    - rid: 1013435894806085710
+    - rid: 8378409663798444152
       type: {class: AGiveWeapon, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         weaponPrefab: {fileID: 3970288745387636526, guid: 54c998da6b469904fbf848905ce5bfef, type: 3}

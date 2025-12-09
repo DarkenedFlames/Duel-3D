@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour, IActionSource
         if (!FilterTarget(other, out GameObject target)) return;
 
         _hitThisSwing.Add(target);
-        Execute(Definition.OnHitActions, target);
+        Execute(target);
     }
 
     bool FilterTarget(Collider other, out GameObject target)
@@ -57,9 +57,9 @@ public class Weapon : MonoBehaviour, IActionSource
     public bool TryUse()
     {   
         CharacterResources resources = Owner.CharacterResources;
+        CharacterResource resource = resources.GetResource(Definition.ExpendedResource, this);
 
-        if (resources.TryGetResource(Definition.ExpendedResource, out CharacterResource resource) 
-            && Definition.ResourceCost <= resource.Value && seconds.Expired)
+        if (Definition.ResourceCost <= resource.Value && seconds.Expired)
         {
             resources.ChangeResourceValue(
                 Definition.ExpendedResource,
@@ -83,11 +83,11 @@ public class Weapon : MonoBehaviour, IActionSource
         col.enabled = false;
     }
 
-    void Execute(List<IGameAction> actions, GameObject target)
+    void Execute(GameObject target)
     {
         if (!target.TryGetComponent(out Character character)) return;
         
         ActionContext context = new(){ Source = this, Target = character };
-        actions.ForEach(a => a.Execute(context));
+        Definition.ExecuteActions(WeaponHook.OnHit, context);
     }
 }

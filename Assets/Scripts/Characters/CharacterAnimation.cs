@@ -51,4 +51,5 @@ public class CharacterAnimation : MonoBehaviour
 
     void HandleAbilityActivated(Ability _) => animator.SetTrigger(AbilityAnimationTrigger.Cast.ToString());
     void HandleWeaponUsed(Weapon weaponComponent) => animator.SetTrigger(weaponComponent.Definition.AnimationTrigger);
+    public void HandleHit() => animator.SetTrigger("HitTrigger");
 }

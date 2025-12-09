@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [System.Serializable]
-public class ASpawnObject : ISourceAction
+public class ASpawnObject : IGameAction
 {
     [Header("SpawnArea Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 
@@ -37,10 +37,10 @@ public class ASpawnObject : ISourceAction
             newSource.Owner = context.Source.Owner;
         }
 
-        // Spawned object must be ISpawnable, then set the spawned object's Spawner.
+        // If Spawned object is ISpawnable, then set the spawned object's Spawner.
         if (!instance.TryGetComponent(out ISpawnable spawned))
-            Debug.LogError($"{instance.name} tried to spawn with no ISpawnable.");
-        else
-            spawned.Spawner = context.Source;
+            return;
+    
+        spawned.Spawner = context.Source;
     }
 }

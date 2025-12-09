@@ -8,6 +8,9 @@ public class FloatCounter
     readonly float _min;
     float _max;
 
+    public float Max => _max;
+    public float Min => _min;
+
     readonly bool _inclusive;
     readonly bool _resetToMax;
 

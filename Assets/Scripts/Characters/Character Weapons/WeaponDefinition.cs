@@ -13,7 +13,7 @@ public class WeaponDefinition : ScriptableObject
 
     [Header("Weapon Settings")]
     [Tooltip("The resource that is expended when the weapon is used.")]
-    public ResourceDefinition ExpendedResource;
+    public ResourceType ExpendedResource = ResourceType.Stamina;
 
     [Tooltip("The amount of the expended resouce that is expended when the weapon is used.")]
     public float ResourceCost;
@@ -30,6 +30,11 @@ public class WeaponDefinition : ScriptableObject
     [Tooltip("The layers this weapon can hit.")]
     public LayerMask layerMask;
 
-    [Tooltip("The actions to be executed on the targets the weapon hits."), SerializeReference]
-    public List<IGameAction> OnHitActions;
+    [Tooltip("The actions to be executed on the targets the weapon hits.")]
+    public List<WeaponActionEntry> Actions;
+
+    public void ExecuteActions(WeaponHook hook, ActionContext context) =>
+        Actions
+            .FindAll(e => e.Hook == hook)
+            .ForEach(e => e.Action?.Execute(context));
 }

@@ -22,16 +22,17 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  OnCastSource: []
-  OnCastTargeted:
-  - rid: 8378409640323186781
+  Actions:
+  - Action:
+      rid: 8378409663798444107
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 8378409640323186781
+    - rid: 8378409663798444107
       type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
-        target: 0
+        characterToMove: 0
         referenceType: 1
         reference: 2
         mode: 1

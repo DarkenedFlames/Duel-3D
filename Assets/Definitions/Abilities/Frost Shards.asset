@@ -22,34 +22,41 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  OnCastSource:
-  - rid: 8378409640323186792
-  - rid: 8378409640323186794
-  - rid: 8378409640323186795
-  - rid: 8378409640323186796
-  OnCastTargeted: []
+  Actions:
+  - Action:
+      rid: 8378409663798444117
+    Hook: 0
+  - Action:
+      rid: 8378409663798444133
+    Hook: 0
+  - Action:
+      rid: 8378409663798444134
+    Hook: 0
+  - Action:
+      rid: 8378409663798444135
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 8378409640323186792
-      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
-      data:
-        prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
-        spawnOffset: {x: 0, y: 1, z: 0}
-        localEulerRotation: {x: -5, y: 0, z: 0}
-    - rid: 8378409640323186794
+    - rid: 8378409663798444117
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 5, y: 0, z: 0}
-    - rid: 8378409640323186795
+    - rid: 8378409663798444133
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 5, z: 0}
-    - rid: 8378409640323186796
+    - rid: 8378409663798444134
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        spawnOffset: {x: 0, y: 1, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
+    - rid: 8378409663798444135
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}

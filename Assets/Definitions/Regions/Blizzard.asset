@@ -20,31 +20,33 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions:
-  - rid: 8378409551465545807
-  OnPulseActions:
-  - rid: 8378409551465545806
-  OnEnterActions: []
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444153
+    Hook: 7
+  - Action:
+      rid: 8378409663798444154
+    Hook: 6
   references:
     version: 2
     RefIds:
-    - rid: 8378409551465545806
+    - rid: 8378409663798444153
       type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
-        target: 0
+        targetStat: 0
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
         modifierTarget: 0
         type: 2
         amount: 0.95
-    - rid: 8378409551465545807
+    - rid: 8378409663798444154
       type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 1
-        target: 1
-        StatDefinition: {fileID: 0}
+        targetStat: 1
+        StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
         modifierTarget: 3
-        type: 0
+        type: 2
         amount: 0

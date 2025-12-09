@@ -6,8 +6,12 @@ public enum EffectRemoveTarget { SpecificEffect, SpecificEffectFromSource, AllEf
 
 
 [System.Serializable]
-public class AModifyEffect : ITargetedAction
+public class AModifyEffect : IGameAction
 {
+    [Header("Target Configuration")]
+    [SerializeField, Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character).")] 
+    private ActionTargetMode targetMode = ActionTargetMode.Target;
+
     [SerializeField] private EffectModifyMode mode;
 
     [Header("Apply Settings")]
@@ -23,13 +27,20 @@ public class AModifyEffect : ITargetedAction
     
     public void Execute(ActionContext context)
     {
-        if (context.Target == null)
+        Character target = targetMode switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyEffect), context.Source.GameObject);
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
+        };
+
+        if (target == null)
+        {
+            Debug.LogWarning($"{nameof(AModifyEffect)}: {targetMode} is null. Action skipped.");
             return;
         }
 
-        var effects = context.Target.CharacterEffects;
+        CharacterEffects effects = target.CharacterEffects;
 
         if (mode == EffectModifyMode.Apply)
         {

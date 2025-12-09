@@ -5,61 +5,67 @@ public enum ModifyStatTarget { Specific, All }
 public enum StatModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
 
 [System.Serializable]
-public class AModifyStat : ITargetedAction
+public class AModifyStat : IGameAction
 {
+    [Header("Target Configuration")]
+    [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
+    ActionTargetMode targetMode = ActionTargetMode.Target;
+
     [Header("Stat Configuration")]
     [Tooltip("Whether to add or remove the modifier."), SerializeField]
     ModifyStatMode mode = ModifyStatMode.AddModifier;
 
     [Tooltip("Targeting mode for which stats to modify."), SerializeField]
-    ModifyStatTarget target = ModifyStatTarget.Specific;
+    ModifyStatTarget targetStat = ModifyStatTarget.Specific;
 
     [Tooltip("The stat to modify."), SerializeField]
-    StatDefinition StatDefinition;
+    StatType statType;
 
     [Tooltip("Targeting mode for which modifiers to modify."), SerializeField]
-    StatModifierTarget modifierTarget = StatModifierTarget.Specific;
+    StatModifierTarget targetModifier = StatModifierTarget.Specific;
 
     [Tooltip("The type of modifier to modify."), SerializeField]
-    StatModifierType type = StatModifierType.Flat;
+    StatModifierType targetModifierType = StatModifierType.Flat;
 
     [Tooltip("The modifier value to modify."), SerializeField]
     float amount = 0f;
 
     public void Execute(ActionContext context)
     {
-        if (context.Target == null)
+        Character target = targetMode switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyStat), context.Source.GameObject);
-            return;
-        }
-        if (context.Source == null)
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
+        };
+
+        if (target == null)
         {
-            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(AModifyStat), context.Source.GameObject);
+            Debug.LogWarning($"{nameof(AModifyStat)}: {targetMode} is null. Action skipped.");
             return;
         }
         
-        CharacterStats stats = context.Target.CharacterStats;
+        CharacterStats stats = target.CharacterStats;
         switch (mode)
         {
-            case ModifyStatMode.AddModifier: stats.AddModifierToStat(StatDefinition, type, amount, context.Source); break;
+            case ModifyStatMode.AddModifier: stats.AddModifierToStat(statType, targetModifierType, amount, context.Source); break;
             case ModifyStatMode.RemoveModifier:
-                switch (target)
+                switch (targetStat)
                 {
                     case ModifyStatTarget.Specific:
-                        switch (modifierTarget)
+                        switch (targetModifier)
                         {
-                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromStat(StatDefinition, type, amount, source: null); break;
-                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromStat(StatDefinition, type, amount, context.Source); break;
-                            case StatModifierTarget.All:                stats.RemoveAllModifiersFromStat(StatDefinition, source: null); break;
-                            case StatModifierTarget.AllFromSource:      stats.RemoveAllModifiersFromStat(StatDefinition, context.Source); break;
+                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromStat(statType, targetModifierType, amount, source: null); break;
+                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromStat(statType, targetModifierType, amount, context.Source); break;
+                            case StatModifierTarget.All:                stats.RemoveAllModifiersFromStat(statType, source: null); break;
+                            case StatModifierTarget.AllFromSource:      stats.RemoveAllModifiersFromStat(statType, context.Source); break;
                         }
                         break;
                     case ModifyStatTarget.All:
-                        switch (modifierTarget)
+                        switch (targetModifier)
                         {
-                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromAllStats(type, amount, source: null); break;
-                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromAllStats(type, amount, context.Source); break;
+                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromAllStats(targetModifierType, amount, source: null); break;
+                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromAllStats(targetModifierType, amount, context.Source); break;
                             case StatModifierTarget.All:                stats.RemoveAllModifiersFromAllStats(source: null); break;
                             case StatModifierTarget.AllFromSource:      stats.RemoveAllModifiersFromAllStats(context.Source); break;
                         }

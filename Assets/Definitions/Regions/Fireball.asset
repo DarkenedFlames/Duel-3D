@@ -20,38 +20,41 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 192
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions: []
-  OnEnterActions:
-  - rid: 8378409506690564174
-  OnExitActions: []
-  OnActiveActions: []
-  OnInactiveActions:
-  - rid: 8378409640323186774
-  - rid: 8378409640323186775
+  Actions:
+  - Action:
+      rid: 8378409663798444164
+    Hook: 2
+  - Action:
+      rid: 8378409663798444165
+    Hook: 2
+  - Action:
+      rid: 8378409663798444166
+    Hook: 1
   references:
     version: 2
     RefIds:
-    - rid: 8378409506690564174
+    - rid: 8378409663798444164
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        targetMode: 1
+        resetRegenerationIfChanged: 1
+        amount: 5
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
+        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+    - rid: 8378409663798444165
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         effectToApply: {fileID: 11400000, guid: 66c53f2cb255b43408a35a59782e09d4, type: 2}
-        stacksToApply: 3
+        stacksToApply: 1
         removeMode: 0
         removeTarget: 0
         effectToRemove: {fileID: 0}
         stacksToRemove: 1
-    - rid: 8378409640323186774
+    - rid: 8378409663798444166
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
-        spawnOffset: {x: 0, y: 0, z: 0}
-        localEulerRotation: {x: 0, y: 0, z: 0}
-    - rid: 8378409640323186775
-      type: {class: ASpawnParticles, ns: , asm: Assembly-CSharp}
-      data:
-        prefab: {fileID: 1597943514804121045, guid: 046ab2479bbf98147b8f07230c2bc2a0, type: 3}
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

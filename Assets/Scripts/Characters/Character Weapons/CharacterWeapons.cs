@@ -12,7 +12,7 @@ public class CharacterWeapons : MonoBehaviour
     IInputDriver input;
 
     [NonSerialized] public GameObject currentWeapon;
-    public event Action<GameObject> OnEquipWeapon;
+    public event Action<Weapon> OnEquipWeapon;
     public event Action<Weapon> OnWeaponUsed;
 
     void Awake()
@@ -40,7 +40,7 @@ public class CharacterWeapons : MonoBehaviour
             Debug.LogError($"{gameObject.name}'s weapon is missing a component: {currentWeapon.name} missing {nameof(Weapon)}!");
             return;
         }
-        OnEquipWeapon?.Invoke(currentWeapon);
+        OnEquipWeapon?.Invoke(weaponComponent);
     }
 
     void HandleWeaponInput()

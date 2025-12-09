@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [CreateAssetMenu]
 public class RegionDefinition : ScriptableObject
@@ -24,26 +25,12 @@ public class RegionDefinition : ScriptableObject
     [Tooltip("The layers with which the Region may interact.")]
     public LayerMask LayerMask;
 
-    [Header("Targeted Actions")]
-    [Tooltip("The actions to execute on all valid targets in the region upon instantiation."), SerializeReference]
-    public List<ITargetedAction> OnSpawnActions = new();
+    [Header("Actions")]
+    [Tooltip("Configure actions to execute at various region lifecycle hooks.")]
+    public List<RegionActionEntry> Actions = new();
 
-    [Tooltip("The actions to execute on all valid targets in the region upon destruction."), SerializeReference]
-    public List<ITargetedAction> OnDestroyActions = new();
-
-    [Tooltip("The actions to execute on all valid targets in the region periodically."), SerializeReference]
-    public List<ITargetedAction> OnPulseActions = new();
-
-    [Tooltip("The actions to execute on each valid target that enters the region."), SerializeReference]
-    public List<ITargetedAction> OnEnterActions = new();
-
-    [Tooltip("The actions to execute on each valid target that exits the region."), SerializeReference]
-    public List<ITargetedAction> OnExitActions = new();
-
-    [Header("Source Actions")]
-    [Tooltip("The actions to execute for the region upon instantiation (no targets)."), SerializeReference]
-    public List<ISourceAction> OnActiveActions = new();
-
-    [Tooltip("The actions to execute for the region upon destruction (no targets)."), SerializeReference]
-    public List<ISourceAction> OnInactiveActions = new();
+    public void ExecuteActions(RegionHook hook, ActionContext context) =>
+        Actions
+            .FindAll(e => e.Hook == hook)
+            .ForEach(e => e.Action?.Execute(context));
 }

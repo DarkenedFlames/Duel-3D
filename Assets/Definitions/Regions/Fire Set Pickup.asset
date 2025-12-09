@@ -20,32 +20,37 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions: []
-  OnEnterActions:
-  - rid: 8378409617588748516
-  - rid: 8378409617588748517
-  - rid: 8378409617588748518
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444159
+    Hook: 2
+  - Action:
+      rid: 8378409663798444160
+    Hook: 2
+  - Action:
+      rid: 8378409663798444161
+    Hook: 2
   references:
     version: 2
     RefIds:
-    - rid: 8378409617588748516
+    - rid: 8378409663798444159
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         abilityDefinition: {fileID: 11400000, guid: c56eda6116c594f45ae6abf5daa2ca53, type: 2}
         set: {fileID: 0}
-    - rid: 8378409617588748517
+    - rid: 8378409663798444160
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         abilityDefinition: {fileID: 11400000, guid: 4e033ba0b8e53144e9dfc44dd7d33dec, type: 2}
         set: {fileID: 0}
-    - rid: 8378409617588748518
+    - rid: 8378409663798444161
       type: {class: AGiveAbility, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 1
         mode: 0
         abilityDefinition: {fileID: 11400000, guid: b93cdbe405c62d44f863b3a8d3495ec5, type: 2}
         set: {fileID: 0}

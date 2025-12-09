@@ -20,33 +20,32 @@ MonoBehaviour:
   maxStacks: 1
   duration: 2
   period: 1
-  OnApplyActions:
-  - rid: 8378409551465545798
-  OnPulseActions: []
-  OnExpireActions:
-  - rid: 8378409551465545799
-  OnMaxStackReachedActions: []
-  OnRefreshedActions: []
-  OnStackGainedActions: []
-  OnStackLostActions: []
-  OnExtendedActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444140
+    Hook: 0
+  - Action:
+      rid: 8378409663798444141
+    Hook: 1
   references:
     version: 2
     RefIds:
-    - rid: 8378409551465545798
+    - rid: 8378409663798444140
       type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 0
         mode: 0
-        target: 0
+        targetStat: 0
         StatDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
         modifierTarget: 0
         type: 2
         amount: 0
-    - rid: 8378409551465545799
+    - rid: 8378409663798444141
       type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 0
         mode: 1
-        target: 1
+        targetStat: 1
         StatDefinition: {fileID: 0}
         modifierTarget: 3
         type: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 
@@ -35,29 +36,12 @@ public class EffectDefinition : ScriptableObject
     [Tooltip("The amount of time between pulses (active if greater than 0)."), Min(0)]
     public float period = 1f;
 
+    [Header("Actions")]
+    [Tooltip("Configure actions to execute at various effect lifecycle hooks.")]
+    public List<EffectActionEntry> Actions = new();
 
-    [Tooltip("The actions that will be executed on the afflicted target upon application."), SerializeReference]
-    public List<IGameAction> OnApplyActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon pulsing."), SerializeReference]
-    public List<IGameAction> OnPulseActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon expiration."), SerializeReference]
-    public List<IGameAction> OnExpireActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon reaching maximum stacks."), SerializeReference]
-    public List<IGameAction> OnMaxStackReachedActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon refreshing duration."), SerializeReference]
-    public List<IGameAction> OnRefreshedActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon gaining a stack."), SerializeReference]
-    public List<IGameAction> OnStackGainedActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon losing a stack."), SerializeReference]
-    public List<IGameAction> OnStackLostActions;
-
-    [Tooltip("The actions that will be executed on the afflicted target upon extending duration."), SerializeReference]
-    public List<IGameAction> OnExtendedActions;
-
+    public void ExecuteActions(EffectHook hook, ActionContext context) =>
+        Actions
+            .FindAll(e => e.Hook == hook)
+            .ForEach(e => e.Action?.Execute(context));
 }

@@ -5,65 +5,44 @@ using UnityEngine;
 public class CharacterStats : MonoBehaviour
 {
     public List<StatDefinition> InitialStats;
-    public List<Stat> Stats { get; private set; } = new();
-    public event Action<Stat> OnStatLearned;
+
+    public Dictionary<StatType, Stat> Stats { get; private set; } = new();
 
     void Awake()
     {
         foreach (StatDefinition definition in InitialStats)
-        {
-            if (!TryLearnStat(definition, out Stat _))
-                continue;
-        }
+            Stats[definition.statType] = new(definition);
     }
 
-    public bool TryGetStat(StatDefinition definition, out Stat stat)
+    public Stat GetStat(StatType type, object caller = null)
     {
-        stat = Stats.Find(s => s.Definition == definition);
-        return stat != null;
-    }
-
-    bool TryLearnStat(StatDefinition definition, out Stat newStat)
-    {
-        if (TryGetStat(definition, out Stat _))
-        {
-            newStat = null;
-            Debug.LogWarning($"{gameObject.name}'s {nameof(CharacterStats)} tried to learn a duplicate stat from definition {definition.name}!");
-        }
+        if (Stats.TryGetValue(type, out Stat stat))
+            return stat;
         else
         {
-            newStat = new(definition);
-            Stats.Add(newStat);
-            OnStatLearned?.Invoke(newStat);
+            Debug.LogError($"{caller} could not find stat of type {type} in {gameObject.name}'s {nameof(CharacterStats)}!");
+            return null;
         }
-
-        return newStat != null;
     }
-    public void AddModifierToStat(StatDefinition definition, StatModifierType type, float value, object source = null)
+    
+    public void AddModifierToStat(StatType type, StatModifierType modType, float value, object source = null) =>
+        GetStat(type, this).AddModifier(new(modType, value, source));
+
+    public void RemoveSpecificModifierFromStat(StatType type, StatModifierType modType, float value, object source = null) =>
+        GetStat(type, this).RemoveSpecificModifier(modType, value, source);
+    
+    public void RemoveAllModifiersFromStat(StatType type, object source = null) =>
+        GetStat(type, this).RemoveAllModifiers(source);
+
+    public void RemoveSpecificModifierFromAllStats(StatModifierType type, float value, object source = null)
     {
-        if (!TryGetStat(definition, out Stat stat))
-            return;
-
-        stat.AddModifier(new(type, value, source));
+        foreach (var stat in Stats.Values)
+            stat.RemoveSpecificModifier(type, value, source);
     }
 
-    public void RemoveSpecificModifierFromStat(StatDefinition definition, StatModifierType type, float value, object source = null)
+    public void RemoveAllModifiersFromAllStats(object source = null)
     {
-        if (!TryGetStat(definition, out Stat stat))
-            return;
-
-        stat.RemoveSpecificModifier(type, value, source);
+        foreach (var stat in Stats.Values)
+            stat.RemoveAllModifiers(source);
     }
-
-    public void RemoveAllModifiersFromStat(StatDefinition definition, object source = null)
-    {
-        if (!TryGetStat(definition, out Stat stat))
-            return;
-
-        stat.RemoveAllModifiers(source);
-    }
-
-    public void RemoveSpecificModifierFromAllStats(StatModifierType type, float value, object source = null) => Stats.ForEach(s => s.RemoveSpecificModifier(type, value, source));
-
-    public void RemoveAllModifiersFromAllStats(object source = null) => Stats.ForEach(s => s.RemoveAllModifiers(source));
 }

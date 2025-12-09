@@ -44,14 +44,17 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
     void Start()
     {
-        ExecuteSource(Definition.OnActiveActions);
-        ExecuteAllTargeted(Definition.OnSpawnActions);
+        ActionContext context = new() { Source = this, Target = null };
+        Definition.ExecuteActions(RegionHook.OnSpawn, context);
+        ExecuteAllTargeted(RegionHook.OnSpawnPerTarget);
     }
     
     void DestroyRegion()
     {
-        ExecuteAllTargeted(Definition.OnDestroyActions);
-        ExecuteSource(Definition.OnInactiveActions);
+        ExecuteAllTargeted(RegionHook.OnDestroyPerTarget);
+        
+        ActionContext context = new() { Source = this, Target = null };
+        Definition.ExecuteActions(RegionHook.OnDestroy, context);
 
         OnDestroyed?.Invoke();
         Destroy(gameObject);
@@ -67,7 +70,9 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
         if (pulse != null && pulse.Expired)
         {
-            ExecuteAllTargeted(Definition.OnPulseActions);
+            ActionContext context = new() { Source = this, Target = null };
+            Definition.ExecuteActions(RegionHook.OnPulse, context);
+            ExecuteAllTargeted(RegionHook.OnPulsePerTarget);
             pulse.Reset();
         }
     }
@@ -77,7 +82,11 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
         if (!FilterTarget(other, out GameObject target)) return;
         if(!_currentTargets.Add(target)) return;
         
-        ExecuteTargeted(Definition.OnEnterActions, target);
+        if (target.TryGetComponent(out Character character))
+        {
+            ActionContext context = new() { Source = this, Target = character };
+            Definition.ExecuteActions(RegionHook.OnTargetEnter, context);
+        }
 
         hits?.Increment();
         if (hits != null && hits.Exceeded)
@@ -88,31 +97,24 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     {
         if (!FilterTarget(other, out GameObject target) || !_currentTargets.Remove(target)) return;
 
-        ExecuteTargeted(Definition.OnExitActions, target);
+        if (target.TryGetComponent(out Character character))
+        {
+            ActionContext context = new() { Source = this, Target = character };
+            Definition.ExecuteActions(RegionHook.OnTargetExit, context);
+        }
     }
 
-    void ExecuteTargeted(List<ITargetedAction> actions, GameObject target)
-    {
-        if (!target.TryGetComponent(out Character character)) return;
-        
-        ActionContext context = new(){ Source = this, Target = character };
-        actions.ForEach(a => a.Execute(context));
-    }
-
-    void ExecuteSource(List<ISourceAction> actions)
-    {
-        ActionContext context = new(){ Source = this, Target = null };
-        actions.ForEach(a => a.Execute(context));
-    }
-
-    void ExecuteAllTargeted(List<ITargetedAction> actions)
+    void ExecuteAllTargeted(RegionHook hook)
     {
         List<GameObject> currentTargetList = _currentTargets.ToList();
         for (int i = currentTargetList.Count - 1; i >= 0; i--)
         {
             GameObject target = currentTargetList[i];
-            if (target != null)
-                ExecuteTargeted(actions, target);
+            if (target != null && target.TryGetComponent(out Character character))
+            {
+                ActionContext context = new() { Source = this, Target = character };
+                Definition.ExecuteActions(hook, context);
+            }
         }
     }
 

@@ -1,8 +1,12 @@
 using UnityEngine;
 
 [System.Serializable]
-public class AModifyStatus : ITargetedAction
+public class AModifyStatus : IGameAction
 {
+    [Header("Target Configuration")]
+    [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
+    ActionTargetMode targetMode = ActionTargetMode.Target;
+
     [Header("Status Configuration")]
     [Tooltip("Status to modify."), SerializeField]
     StatusDefinition statusDefinition;
@@ -12,11 +16,19 @@ public class AModifyStatus : ITargetedAction
     
     public void Execute(ActionContext context)
     {
-        if (context.Target == null)
+        Character target = targetMode switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Target), nameof(Execute), nameof(AModifyStatus), context.Source.GameObject);
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
+        };
+
+        if (target == null)
+        {
+            Debug.LogWarning($"{nameof(AModifyStatus)}: {targetMode} is null. Action skipped.");
             return;
         }
+
         if (statusDefinition == null)
         {
             LogFormatter.LogNullField(nameof(statusDefinition), nameof(AModifyStatus), context.Source.GameObject);
@@ -24,8 +36,8 @@ public class AModifyStatus : ITargetedAction
         }
 
         if (mode)
-            context.Target.CharacterStatuses.AddStatus(statusDefinition);
+            target.CharacterStatuses.AddStatus(statusDefinition);
         else
-            context.Target.CharacterStatuses.RemoveStatus(statusDefinition);
+            target.CharacterStatuses.RemoveStatus(statusDefinition);
     }
 }

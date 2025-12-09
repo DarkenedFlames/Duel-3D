@@ -1,16 +1,15 @@
 using UnityEngine;
 
-public enum MoveCharacterTarget { Owner, Target }
 public enum MoveTargetReference { Owner, Target, Source }
 public enum MoveReferenceType { TowardsReference, LocalDirection }
 public enum MoveCharacterMode { Force, Reposition }
 
 [System.Serializable]
-public class AMoveCharacter : ITargetedAction
+public class AMoveCharacter : IGameAction
 {
     [Header("Movement Configuration")]
-    [Tooltip("The character to be moved."), SerializeField]
-    MoveCharacterTarget target = MoveCharacterTarget.Target;
+    [Tooltip("The character to be moved: Owner (caster/summoner) or Target (hit character)."), SerializeField]
+    ActionTargetMode characterToMove = ActionTargetMode.Target;
 
     [Tooltip("Is the character moved relative to themselves or a reference?"), SerializeField]
     MoveReferenceType referenceType = MoveReferenceType.LocalDirection;
@@ -26,23 +25,18 @@ public class AMoveCharacter : ITargetedAction
     
     public void Execute(ActionContext context)
     {
-        if (context.Target == null)
+        Character target = characterToMove switch
         {
-            LogFormatter.LogNullField(nameof(context.Target), nameof(AMoveCharacter), context.Source.GameObject);
-            return;
-        }
-        if (context.Source == null)
-        {
-            LogFormatter.LogNullField(nameof(context.Source), nameof(AMoveCharacter), context.Source.GameObject);
-            return;
-        }
-
-        Character characterToMove = target switch
-        {
-            MoveCharacterTarget.Owner  => context.Source.Owner,
-            MoveCharacterTarget.Target => context.Target,
-            _ => null
+            ActionTargetMode.Owner => context.Source.Owner,
+            ActionTargetMode.Target => context.Target,
+            _ => null,
         };
+
+        if (target == null)
+        {
+            Debug.LogWarning($"{nameof(AMoveCharacter)}: {characterToMove} is null. Action skipped.");
+            return;
+        }
 
         Vector3 movementDirection;
         if (referenceType == MoveReferenceType.TowardsReference)
@@ -55,16 +49,22 @@ public class AMoveCharacter : ITargetedAction
                 _ => null
             };
 
-            Vector3 worldDirectionOfReference = (referenceTransform.position - characterToMove.transform.position).normalized;
+            if (referenceTransform == null)
+            {
+                Debug.LogWarning($"{nameof(AMoveCharacter)}: Reference transform is null. Action skipped.");
+                return;
+            }
+
+            Vector3 worldDirectionOfReference = (referenceTransform.position - target.transform.position).normalized;
             Quaternion localRotation = Quaternion.LookRotation(worldDirectionOfReference, Vector3.up);
             movementDirection = localRotation * direction;
         }
         else
-            movementDirection = characterToMove.transform.TransformDirection(direction);
+            movementDirection = target.transform.TransformDirection(direction);
         
         if (mode == MoveCharacterMode.Force)
-            characterToMove.CharacterMovement.ApplyExternalVelocity(movementDirection);
+            target.CharacterMovement.ApplyExternalVelocity(movementDirection);
         else
-            characterToMove.transform.position += movementDirection; // Could multiply by context.Magnitude if desired
+            target.transform.position += movementDirection; // Could multiply by context.Magnitude if desired
     }
 }

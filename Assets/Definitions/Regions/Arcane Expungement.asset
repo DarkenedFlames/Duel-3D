@@ -20,19 +20,17 @@ MonoBehaviour:
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
-  OnSpawnActions: []
-  OnDestroyActions: []
-  OnPulseActions: []
-  OnEnterActions:
-  - rid: 8378409532984131654
-  OnExitActions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444149
+    Hook: 2
   references:
     version: 2
     RefIds:
-    - rid: 8378409532984131654
+    - rid: 8378409663798444149
       type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
       data:
-        target: 1
+        characterToMove: 1
         referenceType: 0
         reference: 2
         mode: 0

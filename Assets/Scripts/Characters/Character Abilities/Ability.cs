@@ -27,25 +27,22 @@ public class Ability : IActionSource
 
         if (!seconds.Expired) return false;
 
-        if(!Owner.CharacterResources.TryGetResource(Definition.expendedResource, out CharacterResource resource))
-        {
-            Debug.LogError($"{GameObject.name}'s Ability {Definition.abilityName} expected {GameObject.name} to have {Definition.expendedResource.ResourceName} but it was missing!");
-            return false;
-        }
+        CharacterResource resource = Owner.CharacterResources.GetResource(Definition.ExpendedResource, this);
+        
+        if (resource.Value < Definition.resourceCost) return false;
 
         Owner.CharacterResources.ChangeResourceValue(
-            Definition.expendedResource,
+            Definition.ExpendedResource,
             -1f * Definition.resourceCost,
             out float _,
             true
         );
         
         seconds.Reset();
-        ActionContext sourceContext = new(){ Source = this, Target = null };
-        Definition.OnCastSource.ForEach(a => a.Execute(sourceContext));
-
-        ActionContext targetContext = new(){ Source = this, Target = Owner };
-        Definition.OnCastTargeted.ForEach(a => a.Execute(targetContext));
+        
+        ActionContext context = new(){ Source = this, Target = Owner };
+        Definition.ExecuteActions(AbilityHook.OnCast, context);
+        
         return true;
     }
 }

@@ -25,7 +25,7 @@ public class CharacterEffect : IActionSource
         maxStacksReached = currentStacks.Exceeded;
         
         if (maxStacksReached)
-	        Execute(Definition.OnMaxStackReachedActions);
+            Execute(EffectHook.OnMaxStackReached);
             
         if (def.duration > 0)
         {
@@ -35,10 +35,10 @@ public class CharacterEffect : IActionSource
         if (def.period > 0)
             pulse = new(def.period, 0, def.period);
         
-        Execute(Definition.OnApplyActions);
+        Execute(EffectHook.OnApply);
         
         for (int i = 0; i < currentStacks.Value; i++)
-	        Execute(Definition.OnStackGainedActions, false);
+            Execute(EffectHook.OnStackGained, false);
 	          
         Debug.Log($"{GameObject.name} gained {currentStacks.Value}x {Definition.effectName} ({seconds.Value}s)!");
     }
@@ -51,7 +51,7 @@ public class CharacterEffect : IActionSource
         
         if (pulse != null && pulse.Expired)
         {
-            Execute(Definition.OnPulseActions);
+            Execute(EffectHook.OnPulse);
             pulse.Reset();
             return true;
         }
@@ -74,12 +74,12 @@ public class CharacterEffect : IActionSource
                 if (stacksToAdd > 0)
                 {
                     currentStacks.Increase(stacksToAdd);
-				    for (int i = 0; i < stacksToAdd; i++)
-	                    Execute(Definition.OnStackGainedActions, false);
+                    for (int i = 0; i < stacksToAdd; i++)
+                        Execute(EffectHook.OnStackGained, false);
                     stacksGained = true;
                     maxStacksReached = currentStacks.Exceeded;
                     if (maxStacksReached)
-						Execute(Definition.OnMaxStackReachedActions);    
+                        Execute(EffectHook.OnMaxStackReached);    
                 }
                 break;
             case EffectStackingType.ExtendDuration:
@@ -88,7 +88,7 @@ public class CharacterEffect : IActionSource
                     CurrentDuration += Definition.duration;
                     seconds.SetMax(CurrentDuration);
                     extended = true;
-					Execute(Definition.OnExtendedActions);
+                    Execute(EffectHook.OnExtended);
                 }
                 break;
         }
@@ -96,7 +96,7 @@ public class CharacterEffect : IActionSource
         
         seconds.Reset();
         refreshed = true;
-        Execute(Definition.OnRefreshedActions);
+        Execute(EffectHook.OnRefreshed);
     }
     
     public void RemoveStacks(int stacks, out bool stacksLost, out bool zeroStacks)
@@ -109,7 +109,7 @@ public class CharacterEffect : IActionSource
         {
             currentStacks.Decrease(stacksToRemove);
             for (int i = 0; i < stacksToRemove; i++)
-                Execute(Definition.OnStackLostActions, false);
+                Execute(EffectHook.OnStackLost, false);
             stacksLost = true;
             zeroStacks = currentStacks.Expired;
         }
@@ -132,11 +132,11 @@ public class CharacterEffect : IActionSource
             if (!currentStacks.Expired)
             {
                 for (int i = 0; i < currentStacks.Value; i++)
-                    Execute(Definition.OnStackLostActions, false);
+                    Execute(EffectHook.OnStackLost, false);
             }
 
             stacksLost = !currentStacks.Expired;
-            Execute(Definition.OnExpireActions);
+            Execute(EffectHook.OnRemove);
             expired = true;
             Debug.Log($"{GameObject.name} lost {Definition.effectName}!");
             return;
@@ -148,18 +148,18 @@ public class CharacterEffect : IActionSource
             seconds.Reset();
             stacksLost = true;
             refreshed = true;
-            Execute(Definition.OnStackLostActions, false);
-            Execute(Definition.OnRefreshedActions);
+            Execute(EffectHook.OnStackLost, false);
+            Execute(EffectHook.OnRefreshed);
         }
     }
 
-    void Execute(List<IGameAction> actions, bool scalesWithStacks = true)
+    void Execute(EffectHook hook, bool scalesWithStacks = true)
     {
         float magnitude = 1f;
         if (Definition.ScalesWithStacks && scalesWithStacks)
             magnitude = currentStacks.Value;
 
         ActionContext context = new() { Source = this, Target = Owner, Magnitude = magnitude };
-        actions.ForEach(a => a.Execute(context));
+        Definition.ExecuteActions(hook, context);
     }
 }

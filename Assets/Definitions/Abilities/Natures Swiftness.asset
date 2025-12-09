@@ -22,15 +22,17 @@ MonoBehaviour:
   activationConditions:
   - {fileID: 11400000, guid: dc730da09e86afd4d8aa96e90503451e, type: 2}
   - {fileID: 11400000, guid: df042e476575b264db4ae1d379233eab, type: 2}
-  OnCastSource: []
-  OnCastTargeted:
-  - rid: 8378409640323186801
+  Actions:
+  - Action:
+      rid: 8378409663798444123
+    Hook: 0
   references:
     version: 2
     RefIds:
-    - rid: 8378409640323186801
+    - rid: 8378409663798444123
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        targetMode: 0
         mode: 0
         effectToApply: {fileID: 11400000, guid: 70993c110f2254042a6e1d0741dc9030, type: 2}
         stacksToApply: 1
