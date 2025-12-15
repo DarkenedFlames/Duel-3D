@@ -13,7 +13,6 @@ public class EffectSetCondition : IActionCondition
         NoneArePresent
     }
 
-    [Header("Condition Settings")]
     [Tooltip("The set of effects to check for."), SerializeField]
     EffectDefinitionSet EffectSet;
     [Tooltip("The target to check for effects."), SerializeField]

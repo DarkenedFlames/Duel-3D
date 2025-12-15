@@ -205,33 +205,33 @@ public class PolymorphicActionDrawer : PropertyDrawer
             
             // Draw header with buttons
             Rect headerRect = new Rect(pos.x, y, pos.width, EditorGUIUtility.singleLineHeight);
-            Rect labelRect = new Rect(pos.x, y, pos.width - 120, EditorGUIUtility.singleLineHeight);
+            Rect labelRect = new Rect(pos.x, y, pos.width - 145, EditorGUIUtility.singleLineHeight);
             
             EditorGUI.LabelField(labelRect, $"Condition #{i + 1}", EditorStyles.boldLabel);
 
             // Move up button
-            Rect upRect = new Rect(pos.x + pos.width - 120, y, 22, EditorGUIUtility.singleLineHeight);
+            Rect upRect = new Rect(pos.x + pos.width - 145, y, 22, EditorGUIUtility.singleLineHeight);
             GUI.enabled = i > 0;
             if (GUI.Button(upRect, "▲"))
                 listProperty.MoveArrayElement(i, i - 1);
             GUI.enabled = true;
 
             // Move down button
-            Rect downRect = new Rect(pos.x + pos.width - 96, y, 22, EditorGUIUtility.singleLineHeight);
+            Rect downRect = new Rect(pos.x + pos.width - 121, y, 22, EditorGUIUtility.singleLineHeight);
             GUI.enabled = i < listProperty.arraySize - 1;
             if (GUI.Button(downRect, "▼"))
                 listProperty.MoveArrayElement(i, i + 1);
             GUI.enabled = true;
 
             // Duplicate button
-            Rect dupRect = new Rect(pos.x + pos.width - 72, y, 70, EditorGUIUtility.singleLineHeight);
+            Rect dupRect = new Rect(pos.x + pos.width - 97, y, 70, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(dupRect, "Duplicate"))
             {
                 DuplicateCondition(listProperty, i);
             }
 
             // Delete button
-            Rect delRect = new Rect(pos.x + pos.width - 2, y, 25, EditorGUIUtility.singleLineHeight);
+            Rect delRect = new Rect(pos.x + pos.width - 25, y, 25, EditorGUIUtility.singleLineHeight);
             if (GUI.Button(delRect, "X"))
             {
                 listProperty.DeleteArrayElementAtIndex(i);

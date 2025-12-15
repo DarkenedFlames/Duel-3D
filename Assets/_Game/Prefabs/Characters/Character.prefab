@@ -453,7 +453,6 @@ GameObject:
   - component: {fileID: 407782506930456008}
   - component: {fileID: 2573011409523793657}
   - component: {fileID: 6609455820952798390}
-  - component: {fileID: 8419923175194643824}
   - component: {fileID: -8231788482048056667}
   - component: {fileID: -830900240938980272}
   m_Layer: 6
@@ -555,7 +554,6 @@ MonoBehaviour:
   CharacterAbilities: {fileID: 407782506930456008}
   CharacterWeapons: {fileID: 6609455820952798390}
   CharacterEffects: {fileID: 2573011409523793657}
-  CharacterStatuses: {fileID: 8419923175194643824}
   CharacterMovement: {fileID: 8189405104246574740}
   CharacterResources: {fileID: 2146435258925756317}
   CharacterAnimation: {fileID: 1410149350425854575}
@@ -669,19 +667,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterWeapons
   initialWeapon: {fileID: 3970288745387636526, guid: 54c998da6b469904fbf848905ce5bfef, type: 3}
   WeaponSlot: {fileID: 4523908610206082475}
---- !u!114 &8419923175194643824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2053115554608234454}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c209fafecf6f5d84a9b6ecbc96f63a9e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterStatuses
-  initialStatuses: []
 --- !u!114 &-8231788482048056667
 MonoBehaviour:
   m_ObjectHideFlags: 0

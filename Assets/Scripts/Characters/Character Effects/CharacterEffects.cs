@@ -10,6 +10,8 @@ public class CharacterEffects : MonoBehaviour
     public ReadOnlyCollection<CharacterEffect> Effects => effects.AsReadOnly();
     private readonly List<CharacterEffect> effects = new();
 
+    Character owner;
+
     public event Action OnInitialized;
     public event Action<CharacterEffect> OnEffectGained;
     public event Action<CharacterEffect> OnEffectLost;
@@ -21,6 +23,7 @@ public class CharacterEffects : MonoBehaviour
 
     void Awake()
     {
+        owner = GetComponent<Character>();
         foreach (EffectDefinition definition in initialEffects)
             AddEffect(definition, 1, null);
         OnInitialized?.Invoke();
@@ -55,21 +58,15 @@ public class CharacterEffects : MonoBehaviour
         if (TryGetEffect(definition, out CharacterEffect existing))
         {
             existing.ApplyStacking(stacks, out bool refreshed, out bool extended, out bool stacksGained, out bool maxStacksReached);
-            
-            Debug.Log($"AddEffect on existing {definition.effectName}: refreshed={refreshed}, extended={extended}, stacksGained={stacksGained}, maxStacksReached={maxStacksReached}");
-            
-            if (refreshed) OnEffectRefreshed?.Invoke(existing);
-            if (extended) OnEffectExtended?.Invoke(existing);
-            if (stacksGained)
-            {
-                Debug.Log($"Firing OnEffectStackChanged for {definition.effectName}");
-                OnEffectStackChanged?.Invoke(existing);
-            }
+                        
+            if (refreshed)        OnEffectRefreshed?.Invoke(existing);
+            if (extended)         OnEffectExtended?.Invoke(existing);
+            if (stacksGained)     OnEffectStackChanged?.Invoke(existing);
             if (maxStacksReached) OnEffectMaxStacksReached?.Invoke(existing);
         }
         else
         {
-            CharacterEffect newEffect = new(GetComponent<Character>(), definition, stacks, source, out bool maxStacksReached);
+            CharacterEffect newEffect = new(owner, definition, stacks, source, out bool maxStacksReached);
             effects.Add(newEffect);
             OnEffectGained?.Invoke(newEffect);
             if (maxStacksReached) OnEffectMaxStacksReached?.Invoke(newEffect);

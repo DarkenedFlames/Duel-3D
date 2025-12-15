@@ -34,7 +34,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         ModifyResourceTarget enabledTarget = (ModifyResourceTarget)targetResourceProp.enumValueIndex;
         ResourceModifierTarget enabledModifierTarget = (ResourceModifierTarget)targetModifierProp.enumValueIndex;
 
-        AddHeight(targetResourceProp);
+        AddHeight(targetModeProp);
         AddHeight(modeProp);
         
         switch(enabledMode)

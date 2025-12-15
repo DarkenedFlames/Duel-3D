@@ -13,7 +13,6 @@ public class AbilitySetCondition : IActionCondition
         NoneArePresent
     }
 
-    [Header("Condition Settings")]
     [Tooltip("The set of abilities to check for."), SerializeField]
     AbilityDefinitionSet abilitySet;
     [Tooltip("The target to check for abilities."), SerializeField]
