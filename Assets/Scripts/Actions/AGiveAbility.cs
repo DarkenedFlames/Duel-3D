@@ -7,6 +7,10 @@ public enum GiveAbilityMode { Specific, RandomBySlotFromSet }
 [System.Serializable]
 public class AGiveAbility : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Target Configuration")]
     [Tooltip("Who to give ability to: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
@@ -35,6 +39,13 @@ public class AGiveAbility : IGameAction
         {
             Debug.LogWarning($"{nameof(AGiveAbility)}: {targetMode} is null. Action skipped.");
             return;
+        }
+
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
         }
 
         CharacterAbilities abilities = target.CharacterAbilities;

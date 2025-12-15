@@ -1,6 +1,11 @@
 using UnityEngine;
+using System.Collections.Generic;
 public class ASpawnParticles : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Particle Settings")]
     public GameObject prefab;
 
@@ -21,6 +26,13 @@ public class ASpawnParticles : IGameAction
         {
             LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ASpawnParticles), context.Source.GameObject);
             return;
+        }
+
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
         }
 
         Vector3 spawnPosition = context.Source.Transform.TransformPoint(spawnOffset);

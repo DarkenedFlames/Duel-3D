@@ -3,21 +3,39 @@ using UnityEngine;
 public class CameraOrbit : MonoBehaviour
 {
     [Header("Orbit Settings")]
-    [SerializeField] Transform target;
-    [SerializeField] float distance = 8f;
-    [SerializeField] float sensitivityY = 5f;
-    [SerializeField] float minY = -30f;
-    [SerializeField] float maxY = 60f;
+    [Tooltip("The global character set."), SerializeField]
+    CharacterSet allCharacters;
+
+    [Tooltip("The layers that the camera does not collide with."), SerializeField]
+    LayerMask layerMask;
+
+    [Tooltip("The distance the camera follows at."), SerializeField]
+    float distance = 8f;
+
+    [Tooltip("The sensitivity of changing pitch."), SerializeField]
+    float sensitivityY = 5f;
+
+    [Tooltip("The minimum pitch angle (degrees)."), SerializeField]
+    float minY = -30f;
+
+    [Tooltip("The maximum pitch angle (degrees)."), SerializeField]
+    float maxY = 60f;
 
     float _pitch;
 
     IInputDriver input;
+    Character target;
 
     void Awake()
     {
-        if (!target.TryGetComponent(out IInputDriver inputDriver))
-            Debug.LogError($"{target.name}'s {nameof(CameraOrbit)} expected a component but it was missing: {nameof(IInputDriver)} missing!");
-        else input = inputDriver;
+        if (allCharacters == null || !allCharacters.TryGetSinglePlayer(out Character localPlayer))
+        {
+            Debug.LogError("No player found for Camera initialization.");
+            return;
+        }
+        
+        target = localPlayer;
+        input = target.CharacterInput;
     }
 
     void Start()
@@ -33,18 +51,19 @@ public class CameraOrbit : MonoBehaviour
     void LateUpdate()
     {
         if (input == null || target == null) return;
+        Transform targetTransform = target.transform;
 
         _pitch -= input.LookInput.y * sensitivityY;
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
 
-        Quaternion rotation = Quaternion.Euler(_pitch, target.eulerAngles.y, 0f);
-        Vector3 desiredPosition = target.position - rotation * Vector3.forward * distance;
-        Vector3 direction = (desiredPosition - target.position).normalized;
+        Quaternion rotation = Quaternion.Euler(_pitch, targetTransform.eulerAngles.y, 0f);
+        Vector3 desiredPosition = targetTransform.position - rotation * Vector3.forward * distance;
+        Vector3 direction = (desiredPosition - targetTransform.position).normalized;
 
-        if (Physics.Raycast(target.position, direction, out RaycastHit hit, distance, ~LayerMask.GetMask("Characters")))
-            desiredPosition = target.position - rotation * Vector3.forward * hit.distance * 0.9f;
+        if (Physics.Raycast(targetTransform.position, direction, out RaycastHit hit, distance, ~layerMask))
+            desiredPosition = targetTransform.position - rotation * Vector3.forward * hit.distance * 0.9f;
         
         transform.position = desiredPosition;
-        transform.LookAt(target.position + Vector3.up);
+        transform.LookAt(targetTransform.position + Vector3.up);
     }
 }

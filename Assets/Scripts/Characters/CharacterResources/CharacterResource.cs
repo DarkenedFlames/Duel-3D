@@ -30,7 +30,6 @@ public class CharacterResource
         Modifiers = modifiers.AsReadOnly();
     }
 
-    // This is being called every frame probably because regen even at max. Fix.
     public bool ChangeValue(float delta, out float changed)
     {
         changed = 0;
@@ -55,7 +54,7 @@ public class CharacterResource
     {
         changed = 0;
         RegenerationCounter.Decrease(Time.deltaTime);
-        if (!RegenerationCounter.Expired) return false;
+        if (!RegenerationCounter.Expired || _value >= MaxStat.Value) return false;
 
         float regenAmount = MaxStat.Value * Definition.RegenerationPercentage * Time.deltaTime;
         

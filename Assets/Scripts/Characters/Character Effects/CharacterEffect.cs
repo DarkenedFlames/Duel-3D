@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CharacterEffect : IActionSource
@@ -10,10 +9,10 @@ public class CharacterEffect : IActionSource
 
     public EffectDefinition Definition;
     public IntegerCounter currentStacks;
-    public FloatCounter seconds; // null if duration <= 0, reference must null check
-    public FloatCounter pulse;  // null if period <= 0, references must null check
+    public FloatCounter seconds;
+    public FloatCounter pulse;
     
-    public float CurrentDuration; // null if duration <= 0, references must null check
+    public float CurrentDuration;
 
     public CharacterEffect(Character owner, EffectDefinition def, int initialStacks, object source, out bool maxStacksReached)
     {
@@ -39,8 +38,6 @@ public class CharacterEffect : IActionSource
         
         for (int i = 0; i < currentStacks.Value; i++)
             Execute(EffectHook.OnStackGained, false);
-	          
-        Debug.Log($"{GameObject.name} gained {currentStacks.Value}x {Definition.effectName} ({seconds.Value}s)!");
     }
 
     public bool OnUpdate()
@@ -138,7 +135,6 @@ public class CharacterEffect : IActionSource
             stacksLost = !currentStacks.Expired;
             Execute(EffectHook.OnRemove);
             expired = true;
-            Debug.Log($"{GameObject.name} lost {Definition.effectName}!");
             return;
         }
 

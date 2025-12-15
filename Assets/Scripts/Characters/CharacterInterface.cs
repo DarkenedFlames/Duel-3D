@@ -20,8 +20,7 @@ public class CharacterInterface : MonoBehaviour
 
     void OnDestroy()
     {
-        if (spawnedUI == null) return;
-        
-        Destroy(spawnedUI.gameObject);
+        if (spawnedUI != null)
+            Destroy(spawnedUI.gameObject);
     }
 }

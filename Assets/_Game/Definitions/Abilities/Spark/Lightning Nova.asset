@@ -1,0 +1,176 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Lightning Nova
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Lightning Nova
+  icon: {fileID: 21300000, guid: 1004de33e24bfff4f8a7dccc2482ef87, type: 3}
+  abilityType: 3
+  castAnimationTrigger: 1
+  ExpendedResource: 1
+  resourceCost: 30
+  cooldown: 1
+  activationConditions: []
+  Actions:
+  - Action:
+      rid: 8378409798152224927
+    Hook: 0
+  - Action:
+      rid: 8378409798152224930
+    Hook: 0
+  - Action:
+      rid: 8378409798152224933
+    Hook: 0
+  - Action:
+      rid: 8378409798152224942
+    Hook: 0
+  - Action:
+      rid: 8378409798152224945
+    Hook: 0
+  - Action:
+      rid: 8378409798152224948
+    Hook: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409798152224927
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224928
+        - rid: 8378409798152224929
+        prefab: {fileID: 6594564671811314498, guid: 69a8d5968afd3cf4697ee4b3dd274cf8, type: 3}
+        reference: 1
+        spawnOffset: {x: -1, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: -5}
+    - rid: 8378409798152224928
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409798152224929
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224930
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224931
+        - rid: 8378409798152224932
+        prefab: {fileID: 6594564671811314498, guid: 69a8d5968afd3cf4697ee4b3dd274cf8, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: 0}
+    - rid: 8378409798152224931
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409798152224932
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224933
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224934
+        - rid: 8378409798152224935
+        prefab: {fileID: 6594564671811314498, guid: 69a8d5968afd3cf4697ee4b3dd274cf8, type: 3}
+        reference: 1
+        spawnOffset: {x: 1, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: 5}
+    - rid: 8378409798152224934
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409798152224935
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224942
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224943
+        - rid: 8378409798152224944
+        prefab: {fileID: 6594564671811314498, guid: 12b3f00fb9f025b479a83caca1e1cc32, type: 3}
+        reference: 1
+        spawnOffset: {x: -1, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: -5}
+    - rid: 8378409798152224943
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409798152224944
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224945
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224946
+        - rid: 8378409798152224947
+        prefab: {fileID: 6594564671811314498, guid: 12b3f00fb9f025b479a83caca1e1cc32, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: 0}
+    - rid: 8378409798152224946
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409798152224947
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224948
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224949
+        - rid: 8378409798152224950
+        prefab: {fileID: 6594564671811314498, guid: 12b3f00fb9f025b479a83caca1e1cc32, type: 3}
+        reference: 1
+        spawnOffset: {x: 1, y: 2, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: 5}
+    - rid: 8378409798152224949
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409798152224950
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3

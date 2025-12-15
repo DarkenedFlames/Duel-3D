@@ -1,12 +1,19 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum ModifyStatMode { AddModifier, RemoveModifier }
 public enum ModifyStatTarget { Specific, All }
 public enum StatModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
 
+
+
 [System.Serializable]
 public class AModifyStat : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Target Configuration")]
     [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
@@ -43,6 +50,13 @@ public class AModifyStat : IGameAction
         {
             Debug.LogWarning($"{nameof(AModifyStat)}: {targetMode} is null. Action skipped.");
             return;
+        }
+
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
         }
         
         CharacterStats stats = target.CharacterStats;

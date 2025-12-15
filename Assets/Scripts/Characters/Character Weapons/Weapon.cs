@@ -21,7 +21,7 @@ public class Weapon : MonoBehaviour, IActionSource
     {
         Owner = GetComponentInParent<Character>();
         if (Owner == null)
-            Debug.LogError($"{Owner.gameObject.name}'s {Definition.WeaponName} expected a {nameof(Character)} component but it was missing!");
+            Debug.LogError($"{Definition.WeaponName} expected a {nameof(Character)} component but it was missing!");
 
         col = GetComponent<Collider>();
         col.enabled = false;

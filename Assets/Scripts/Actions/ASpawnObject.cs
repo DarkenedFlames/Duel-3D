@@ -1,11 +1,27 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 [System.Serializable]
 public class ASpawnObject : IGameAction
 {
-    [Header("SpawnArea Configuration")]
+
+    public enum ReferenceTransform
+    {
+        Owner,
+        Source,
+        Target
+    }
+
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
+    [Header("Spawn Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 
-    GameObject prefab; // Must implement ISpawnable, might be an IActionSource
+    GameObject prefab;
+
+    [Tooltip("Transform to spawn at an offset from."), SerializeField]
+    ReferenceTransform reference = ReferenceTransform.Source;
 
     [Tooltip("Local spawn offset."), SerializeField]
     Vector3 spawnOffset = Vector3.zero;
@@ -20,27 +36,39 @@ public class ASpawnObject : IGameAction
             LogFormatter.LogNullField(nameof(prefab), nameof(ASpawnObject), context.Source.GameObject);
             return;
         }
-        if (context.Source == null)
+
+        Transform referenceTransform = reference switch
         {
-            LogFormatter.LogNullArgument(nameof(context.Source), nameof(Execute), nameof(ASpawnObject), context.Source.GameObject);
+            ReferenceTransform.Owner  => context.Source.Owner.transform,
+            ReferenceTransform.Target => context.Target.transform,
+            ReferenceTransform.Source => context.Source.Transform,
+            _ => null
+        };
+
+        if (referenceTransform == null)
+        {
+            LogFormatter.LogNullArgument(nameof(referenceTransform), nameof(Execute), nameof(ASpawnObject), context.Source.GameObject);
             return;
         }
 
-        Vector3 spawnPosition = context.Source.Transform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = context.Source.Transform.rotation * Quaternion.Euler(localEulerRotation);
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
+        }
+
+        Vector3 spawnPosition = referenceTransform.TransformPoint(spawnOffset);
+        Quaternion spawnRotation = referenceTransform.rotation * Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
 
         // If what we spawn is an action source, set its owner to the Spawner's owner.
         if (instance.TryGetComponent(out IActionSource newSource))
-        {
             newSource.Owner = context.Source.Owner;
-        }
-
+        
         // If Spawned object is ISpawnable, then set the spawned object's Spawner.
-        if (!instance.TryGetComponent(out ISpawnable spawned))
-            return;
-    
-        spawned.Spawner = context.Source;
+        if (instance.TryGetComponent(out ISpawnable spawned))
+            spawned.Spawner = context.Source;
     }
 }

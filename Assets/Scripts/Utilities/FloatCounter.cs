@@ -1,5 +1,5 @@
 
-
+using UnityEngine;
 public class FloatCounter
 {
     float _value;
@@ -37,4 +37,6 @@ public class FloatCounter
         
     }
     public void SetMax(float newMax) => _max = newMax;
+
+    public float Progress => Mathf.Clamp01((_value - _min) / (_max - _min));
 }

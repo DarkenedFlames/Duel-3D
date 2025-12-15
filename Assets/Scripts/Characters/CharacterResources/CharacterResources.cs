@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(Character))]
@@ -50,7 +51,14 @@ public class CharacterResources : MonoBehaviour
 
     void TryDie()
     {
-        if (GetResource(ResourceType.Health, this).Value > 0)
+        CharacterResource health = GetResource(ResourceType.Health, this);
+        if (health == null)
+        {
+            Debug.LogError($"{gameObject.name} has no Health resource!");
+            return;
+        }
+
+        if (health.Value > 0)
             return;
         
         Debug.Log($"{gameObject.name} died!");
@@ -91,5 +99,23 @@ public class CharacterResources : MonoBehaviour
     {
         foreach (var resource in Resources.Values)
             resource.RemoveAllModifiers(source);
+    }
+
+    public void RemoveModifiers(ResourceType? type = null, ResourceModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    {  
+        List<ResourceModifier> toRemove = Resources.Values
+            .Where(r => type != null && r.Definition.resourceType == type)
+            .Select(r => r.Modifiers)
+            .SelectMany(modList => modList)
+            .Where(m => modifierType != null && m.Type == modifierType)
+            .Where(m => modifierValue != null && m.Value == modifierValue)
+            .Where(m => source != null && m.Source == source)
+            .ToList();
+
+        
+        foreach (CharacterResource resource in Resources.Values)
+            foreach (ResourceModifier modifier in resource.Modifiers)
+                if (toRemove.Contains(modifier))
+                    resource.RemoveModifier(modifier);
     }
 }

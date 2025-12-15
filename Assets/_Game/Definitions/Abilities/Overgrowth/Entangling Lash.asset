@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Entangling Lash
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Entangling Lash
+  icon: {fileID: 21300000, guid: d1c3ede19a3fd314684220608200c74c, type: 3}
+  abilityType: 1
+  castAnimationTrigger: 1
+  ExpendedResource: 0
+  resourceCost: 10
+  cooldown: 1
+  activationConditions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444113
+    Hook: 0
+  - Action:
+      rid: 8378409798152224882
+    Hook: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444113
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224880
+        - rid: 8378409798152224881
+        prefab: {fileID: 6235790887478010368, guid: 4bad957f972119749a3f92f58afbd4b8, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 1, z: 1}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409798152224880
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: b9f5c9e7fa175df41836859add88ffa4, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409798152224881
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409798152224882
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409798152224883
+        - rid: 8378409798152224884
+        prefab: {fileID: 6235790887478010368, guid: 3bf126529cbd10b4587425f8c1062eb0, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 1, z: 1}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409798152224883
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: b9f5c9e7fa175df41836859add88ffa4, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409798152224884
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3

@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c362b612ac34243900d56c14a7ebff, type: 3}
+  m_Name: Overgrowth Set
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinitionSet
+  definitions:
+  - {fileID: 11400000, guid: 567bddf62f5134f4f9bedd16196a9afd, type: 2}
+  - {fileID: 11400000, guid: e7abafbc0d6a07a4196d8eb34bd1ce25, type: 2}
+  - {fileID: 11400000, guid: 08db9d336df1d5a48aedb8e2065b781f, type: 2}
+  - {fileID: 11400000, guid: e8db7ab2e9b624b46a9d672493215f31, type: 2}

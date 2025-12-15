@@ -31,7 +31,7 @@ public class CharacterAnimation : MonoBehaviour
     {
         input.OnJumpInput -= HandleJumped;
         abilities.OnAbilityActivated -= HandleAbilityActivated;
-        weapons.OnWeaponUsed += HandleWeaponUsed;
+        weapons.OnWeaponUsed -= HandleWeaponUsed;
     }
 
     void Update()

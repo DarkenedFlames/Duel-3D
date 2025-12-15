@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum EffectModifyMode { Apply, Remove }
 public enum EffectRemoveMode { RemoveStacks, RemoveAll }
@@ -8,6 +9,10 @@ public enum EffectRemoveTarget { SpecificEffect, SpecificEffectFromSource, AllEf
 [System.Serializable]
 public class AModifyEffect : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Target Configuration")]
     [SerializeField, Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character).")] 
     private ActionTargetMode targetMode = ActionTargetMode.Target;
@@ -38,6 +43,13 @@ public class AModifyEffect : IGameAction
         {
             Debug.LogWarning($"{nameof(AModifyEffect)}: {targetMode} is null. Action skipped.");
             return;
+        }
+
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
         }
 
         CharacterEffects effects = target.CharacterEffects;

@@ -37,6 +37,13 @@ public class AbilitySlotUI : MonoBehaviour
         isCoolingDown = true;
     }
 
+    public void RefreshCooldown()
+    {
+        if (cooldownOverlay == null) return;
+
+        cooldownRemaining = 0;
+    }
+
     void Update()
     {
         if (!isCoolingDown) return;

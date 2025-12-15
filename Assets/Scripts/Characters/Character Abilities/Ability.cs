@@ -22,9 +22,6 @@ public class Ability : IActionSource
 
     public bool TryActivate()
     {
-        foreach (ActivationCondition condition in Definition.activationConditions)
-            if (!condition.IsMet(this)) return false;
-
         if (!seconds.Expired) return false;
 
         CharacterResource resource = Owner.CharacterResources.GetResource(Definition.ExpendedResource, this);

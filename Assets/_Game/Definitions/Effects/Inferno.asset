@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edc98be2175dfa42b07e1d960fac3ce, type: 3}
+  m_Name: Inferno
+  m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
+  effectName: Inferno
+  icon: {fileID: 21300000, guid: 30785b805c0b56f46aa56e239f573281, type: 3}
+  EffectStackingType: 1
+  expiryType: 0
+  ScalesWithStacks: 1
+  maxStacks: 3
+  duration: 3
+  period: 0.5
+  Actions:
+  - Action:
+      rid: 8378409663798444142
+    Hook: 2
+  - Action:
+      rid: 8378409787788361823
+    Hook: 2
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444142
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 0
+        resetRegenerationIfChanged: 1
+        amount: 1
+        damageType: 0
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
+        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+    - rid: 8378409787788361823
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 56852242586695119, guid: d6ca77de5c9291647989f5015b40b169, type: 3}
+        reference: 0
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: -90, y: 0, z: 0}

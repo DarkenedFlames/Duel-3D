@@ -1,0 +1,64 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47cf0abe4e0ea6e41b563c7b80fbe339, type: 3}
+  m_Name: Fireball Plus
+  m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
+  RegionName: Fireball
+  AffectsSource: 0
+  Duration: 3
+  MaxHits: 1
+  Period: 0
+  LayerMask:
+    serializedVersion: 2
+    m_Bits: 192
+  Actions:
+  - Action:
+      rid: 8378409663798444164
+    Hook: 2
+  - Action:
+      rid: 8378409663798444165
+    Hook: 2
+  - Action:
+      rid: 8378409663798444166
+    Hook: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444164
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 1
+        resetRegenerationIfChanged: 1
+        amount: 5
+        damageType: 0
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
+        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+    - rid: 8378409663798444165
+      type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 1
+        mode: 0
+        effectToApply: {fileID: 11400000, guid: 66c53f2cb255b43408a35a59782e09d4, type: 2}
+        stacksToApply: 5
+        removeMode: 0
+        removeTarget: 0
+        effectToRemove: {fileID: 0}
+        stacksToRemove: 1
+    - rid: 8378409663798444166
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

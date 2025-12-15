@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public enum ModifyResourceMode { ChangeValue, AddModifier, RemoveModifier }
 public enum ModifyResourceTarget { Specific, All }
@@ -7,6 +8,10 @@ public enum ResourceModifierTarget { Specific, All, SpecificFromSource, AllFromS
 [System.Serializable]
 public class AModifyResource : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Target Configuration")]
     [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
@@ -46,6 +51,13 @@ public class AModifyResource : IGameAction
         {
             Debug.LogWarning($"{nameof(AModifyResource)}: {targetMode} is null. Action skipped.");
             return;
+        }
+
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
         }
         
         CharacterResources resources = target.CharacterResources;

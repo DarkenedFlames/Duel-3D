@@ -1,10 +1,22 @@
 using UnityEngine;
 using HBM.Scriptable;
 using System.Collections.Generic;
+using System.Linq;
+using System;
 
 [CreateAssetMenu(menuName = "Sets/Character")]
 public class CharacterSet : RuntimeSet<Character>
 {
+    public bool TryGetSinglePlayer(out Character singlePlayer)
+    {
+        singlePlayer = null;
+        foreach (Character character in this)
+            if (character.CompareTag("Player"))
+                singlePlayer = character;
+            
+        return singlePlayer != null;
+    }
+
     public Character GetClosest(Vector3 position, out float distance)
     {
         distance = float.PositiveInfinity;

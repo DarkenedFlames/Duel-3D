@@ -10,10 +10,11 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float sprintModifier = 0.1f;
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] float rotationSpeed = 300f;
-    [SerializeField] float gravity = 9.8f;
+    [SerializeField] float gravity = 15f;
 
     float verticalVelocity;
     Vector3 externalVelocity;
+    float externalVelocityDamping = 1f;
 
     CharacterController controller;
     IInputDriver input;
@@ -81,13 +82,15 @@ public class CharacterMovement : MonoBehaviour
         verticalVelocity = Mathf.Sqrt(jumpHeight * 2f * gravity);
     }
 
-    public void ApplyExternalVelocity(Vector3 velocity)
+    public void ApplyExternalVelocity(Vector3 velocity, float damping = 1f)
     {
         externalVelocity += velocity;
+        externalVelocityDamping = damping;
     }
 
     public void DampenExternalVelocity()
     {
-        externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, Time.deltaTime);
+        externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, externalVelocityDamping * Time.deltaTime);
     }
+
 }

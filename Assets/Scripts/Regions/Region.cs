@@ -15,21 +15,27 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
     public RegionDefinition Definition;
 
-    readonly HashSet<GameObject> _currentTargets = new();
+    readonly Dictionary<GameObject, int> _targetColliderCounts = new();
+
     Rigidbody rb;
 
     FloatCounter seconds;
     FloatCounter pulse;
     IntegerCounter hits;
 
+    bool spawned = false;
     public event Action OnDestroyed;
 
     void Awake()
     {
-        if (!TryGetComponent(out Collider collider))
-            Debug.LogError($"{name} has no Collider. It was likely forgotten on the Region prefab variant.");
+        Collider[] colliders = GetComponentsInChildren<Collider>();
+        if (colliders.Length == 0)
+            Debug.LogError($"{name} has no Colliders. They were likely forgotten on the Region prefab variant.");
         else
-            collider.isTrigger = true;
+        {
+            foreach (Collider col in colliders)
+                col.isTrigger = true;
+        }
         
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
@@ -37,41 +43,41 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
         if (Definition.Duration > 0)
             seconds = new(Definition.Duration, 0, Definition.Duration, true, true);
         if (Definition.MaxHits > 0)
-            hits = new(0, 0, Definition.MaxHits,  true, false);
+            hits = new(0, 0, Definition.MaxHits, true, false);
         if (Definition.Period > 0)
             pulse = new(Definition.Period, 0, Definition.Period, true, true);
     }
 
-    void Start()
-    {
-        ActionContext context = new() { Source = this, Target = null };
-        Definition.ExecuteActions(RegionHook.OnSpawn, context);
-        ExecuteAllTargeted(RegionHook.OnSpawnPerTarget);
-    }
-    
     void DestroyRegion()
     {
         ExecuteAllTargeted(RegionHook.OnDestroyPerTarget);
-        
-        ActionContext context = new() { Source = this, Target = null };
-        Definition.ExecuteActions(RegionHook.OnDestroy, context);
-
+        Execute(RegionHook.OnDestroy);
         OnDestroyed?.Invoke();
         Destroy(gameObject);
     }
 
     void Update()
     {
+        if (!spawned)
+        {
+            Execute(RegionHook.OnSpawn);
+            ExecuteAllTargeted(RegionHook.OnSpawnPerTarget);
+            spawned = true;
+            return;
+        }
+
         seconds?.Decrease(Time.deltaTime);
         pulse?.Decrease(Time.deltaTime);
 
         if (seconds != null && seconds.Expired)
+        {
             DestroyRegion();
+            return;
+        }
 
         if (pulse != null && pulse.Expired)
         {
-            ActionContext context = new() { Source = this, Target = null };
-            Definition.ExecuteActions(RegionHook.OnPulse, context);
+            Execute(RegionHook.OnPulse);
             ExecuteAllTargeted(RegionHook.OnPulsePerTarget);
             pulse.Reset();
         }
@@ -80,55 +86,63 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     void OnTriggerEnter(Collider other)
     {
         if (!FilterTarget(other, out GameObject target)) return;
-        if(!_currentTargets.Add(target)) return;
-        
-        if (target.TryGetComponent(out Character character))
-        {
-            ActionContext context = new() { Source = this, Target = character };
-            Definition.ExecuteActions(RegionHook.OnTargetEnter, context);
-        }
 
-        hits?.Increment();
-        if (hits != null && hits.Exceeded)
+        if (!_targetColliderCounts.ContainsKey(target))
+        {
+            _targetColliderCounts[target] = 1;
+            Execute(RegionHook.OnTargetEnter, target);
+
+            hits?.Increment();
+            if (hits == null || !hits.Exceeded) return;
+            
             DestroyRegion();
+            return;
+        }
+        else
+            _targetColliderCounts[target]++;
     }
 
     void OnTriggerExit(Collider other)
     {
-        if (!FilterTarget(other, out GameObject target) || !_currentTargets.Remove(target)) return;
-
-        if (target.TryGetComponent(out Character character))
-        {
-            ActionContext context = new() { Source = this, Target = character };
-            Definition.ExecuteActions(RegionHook.OnTargetExit, context);
-        }
+        if (!FilterTarget(other, out GameObject target)) return;
+        if (!_targetColliderCounts.ContainsKey(target)) return;
+        if (--_targetColliderCounts[target] > 0) return;
+        
+        _targetColliderCounts.Remove(target);
+        Execute(RegionHook.OnTargetExit, target);
+        
     }
 
     void ExecuteAllTargeted(RegionHook hook)
     {
-        List<GameObject> currentTargetList = _currentTargets.ToList();
+        List<GameObject> currentTargetList = _targetColliderCounts.Keys.ToList();
         for (int i = currentTargetList.Count - 1; i >= 0; i--)
         {
             GameObject target = currentTargetList[i];
-            if (target != null && target.TryGetComponent(out Character character))
-            {
-                ActionContext context = new() { Source = this, Target = character };
-                Definition.ExecuteActions(hook, context);
-            }
+            if (target != null)
+                Execute(hook, target);
         }
     }
+
+    void Execute(RegionHook hook, GameObject target)
+    {
+        if (target.TryGetComponent(out Character character))
+            Definition.ExecuteActions(hook, new() { Source = this, Target = character });
+    }
+
+    void Execute(RegionHook hook) => Definition.ExecuteActions(hook, new() { Source = this, Target = null });
+    
 
     bool FilterTarget(Collider other, out GameObject target)
     {
         target = null;
         GameObject potentialTarget = other.gameObject;
-        // Skip the owner if the region has one and if the Region is configured to skip it
 
+        // Skip the owner if the region has one and if the Region is configured to skip it
         if (Owner != null
             && !Definition.AffectsSource
             && potentialTarget.TryGetComponent(out Character character)
-            && character == Owner
-            )
+            && character == Owner)
             return false;
 
         if ((Definition.LayerMask.value & (1 << potentialTarget.layer)) == 0)

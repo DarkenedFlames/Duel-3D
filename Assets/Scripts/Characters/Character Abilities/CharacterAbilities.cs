@@ -6,7 +6,7 @@ using System.Linq;
 [RequireComponent(typeof(Character))]
 public class CharacterAbilities : MonoBehaviour
 {
-    [SerializeField] List<AbilityDefinition> initialAbilities;
+    [SerializeField] AbilityDefinitionSet startingAbilitySet;
     public readonly Dictionary<AbilityType, Ability> abilities = new();
 
     Character Owner => GetComponent<Character>();
@@ -14,8 +14,16 @@ public class CharacterAbilities : MonoBehaviour
     public event Action<Ability> OnAbilityActivated;
     public event Action<Ability> OnAbilityLearned;
 
-    void Start() { foreach (AbilityDefinition definition in initialAbilities) LearnAbility(definition); }
-    void Update() => abilities.Values.ToList().ForEach(a => a.TickCooldown(Time.deltaTime));
+    void Start() 
+    { 
+        foreach (AbilityDefinition definition in startingAbilitySet.definitions) 
+            LearnAbility(definition); 
+    }
+    void Update()
+    {
+        foreach (Ability ability in abilities.Values)
+            ability.TickCooldown(Time.deltaTime);
+    }
     void OnEnable() => Owner.CharacterInput.OnAbilityInput += TryActivateByType;
     void OnDisable() => Owner.CharacterInput.OnAbilityInput -= TryActivateByType;
 

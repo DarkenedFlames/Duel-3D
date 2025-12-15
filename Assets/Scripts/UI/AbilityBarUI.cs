@@ -46,7 +46,10 @@ public class AbilityBarUI : MonoBehaviour
     private void HandleAbilityLearned(Ability ability)
     {
         if (slotLookup.TryGetValue(ability.Definition.abilityType, out AbilitySlotUI slot))
+        {
+            slot.RefreshCooldown();
             slot.SetIcon(ability.Definition.icon);
+        }
     }
 
     private void OnDestroy()

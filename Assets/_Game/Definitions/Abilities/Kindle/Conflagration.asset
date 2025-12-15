@@ -1,0 +1,76 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Conflagration
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Conflagration
+  icon: {fileID: 21300000, guid: 1a9548f0ec45973478c62621ace90e25, type: 3}
+  abilityType: 3
+  castAnimationTrigger: 1
+  ExpendedResource: 1
+  resourceCost: 1
+  cooldown: 1
+  activationConditions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444112
+    Hook: 0
+  - Action:
+      rid: 8378409784229757104
+    Hook: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444112
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409784229757103
+        - rid: 8378409784229757097
+        prefab: {fileID: 8280656237160479, guid: ca4ece2896fc40340951bff198877af6, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 2, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409784229757097
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409784229757103
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: 25d8c1f705aafe24e85db8407fd1de93, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409784229757104
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409784229757105
+        - rid: 8378409784229757106
+        prefab: {fileID: 8280656237160479, guid: 30ad758a4f60afd44a1cb8779ca7a68a, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 2, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409784229757105
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: 25d8c1f705aafe24e85db8407fd1de93, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409784229757106
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3

@@ -1,4 +1,4 @@
-using UnityEditor.EditorTools;
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum DamageType { Physical, Magical, True }
@@ -6,6 +6,10 @@ public enum DamageType { Physical, Magical, True }
 [System.Serializable]
 public class ADealsDamage : IGameAction
 {
+    [Header("Conditions")]
+    [SerializeReference]
+    public List<IActionCondition> Conditions;
+
     [Header("Target Configuration")]
     [Tooltip("Who to damage: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
@@ -40,9 +44,18 @@ public class ADealsDamage : IGameAction
             return;
         }
 
+        if (Conditions != null)
+        {
+            foreach (IActionCondition condition in Conditions)
+                if (!condition.IsSatisfied(context))
+                    return;
+        }
+        
         if (Mathf.Approximately(0, amount)) return;
 
         float adjustedAmount = amount;
+
+        // Owner adjustment
 
         Character owner = context.Source.Owner;
         if (owner != null)
@@ -60,6 +73,8 @@ public class ADealsDamage : IGameAction
         
         }
 
+        // Target Adjustment
+
         CharacterResources targetResources = target.CharacterResources;
         CharacterStats targetStats = target.CharacterStats;
 
@@ -67,13 +82,13 @@ public class ADealsDamage : IGameAction
         Stat targetShield = targetStats.GetStat(StatType.Shield, this);
         Stat targetDefense = targetStats.GetStat(StatType.Defense, this);
 
-
-
         adjustedAmount -= targetDefense.Value;
         adjustedAmount = Mathf.Max(1f, adjustedAmount);
 
         float armorMultiplier = 100 / (targetArmor.Value + 100);
         float shieldMultiplier = 100 / (targetShield.Value + 100);
+
+        // Spawning damage particles and triggering animation
 
         Color color;
 

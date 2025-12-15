@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63c362b612ac34243900d56c14a7ebff, type: 3}
+  m_Name: Kindle Set
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinitionSet
+  definitions:
+  - {fileID: 11400000, guid: c56eda6116c594f45ae6abf5daa2ca53, type: 2}
+  - {fileID: 11400000, guid: b6d0ffba6f49bca40b593858d188fc4e, type: 2}
+  - {fileID: 11400000, guid: 4e033ba0b8e53144e9dfc44dd7d33dec, type: 2}
+  - {fileID: 11400000, guid: b93cdbe405c62d44f863b3a8d3495ec5, type: 2}

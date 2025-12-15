@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ec098415a0689a4780cd98e26137aca, type: 3}
+  m_Name: Flaming Blitz
+  m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
+  abilityName: Flaming Blitz
+  icon: {fileID: 21300000, guid: 367a0dc410f025b48b0c7a526a2bfc2e, type: 3}
+  abilityType: 2
+  castAnimationTrigger: 1
+  ExpendedResource: 1
+  resourceCost: 1
+  cooldown: 1
+  activationConditions: []
+  Actions:
+  - Action:
+      rid: 8378409663798444115
+    Hook: 0
+  - Action:
+      rid: 8378409784229757082
+    Hook: 0
+  - Action:
+      rid: 8378409684996194370
+    Hook: 0
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444115
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409784229757080
+        - rid: 8378409784229757081
+        prefab: {fileID: 9125873379177330229, guid: ebf17404369bd3c4a94a7b9904c39892, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409684996194370
+      type: {class: AMoveCharacter, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        characterToMove: 0
+        referenceType: 1
+        reference: 2
+        mode: 0
+        direction: {x: 0, y: 0, z: 120}
+        externalVelocityDamping: 22
+    - rid: 8378409784229757080
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: 25d8c1f705aafe24e85db8407fd1de93, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378409784229757081
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378409784229757082
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378409784229757083
+        - rid: 8378409784229757084
+        prefab: {fileID: 9125873379177330229, guid: 172dc18030cdd1d4d84b23e7d15cb6a7, type: 3}
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+    - rid: 8378409784229757083
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: 25d8c1f705aafe24e85db8407fd1de93, type: 2}
+        targetMode: 0
+        mode: 0
+    - rid: 8378409784229757084
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
