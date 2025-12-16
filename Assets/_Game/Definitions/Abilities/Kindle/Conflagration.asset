@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Conflagration
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Conflagration
-  icon: {fileID: 21300000, guid: 1a9548f0ec45973478c62621ace90e25, type: 3}
+  icon: {fileID: 21300000, guid: b1612d91957906541bc2ea44f95c8d13, type: 3}
   abilityType: 3
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444112

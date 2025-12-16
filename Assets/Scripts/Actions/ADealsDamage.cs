@@ -10,11 +10,10 @@ public class ADealsDamage : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("Who to damage: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
 
-    [Header("Damage Configuration")]
     [Tooltip("Whether to reset regeneration if damage is dealt."), SerializeField]
     bool resetRegenerationIfChanged = true;
 
@@ -24,10 +23,10 @@ public class ADealsDamage : IGameAction
     [Tooltip("The type of damage dealt."), SerializeField]
     DamageType damageType = DamageType.Physical;
 
-
-    [Header("Damage Effects")]
     [SerializeField] GameObject damageNumberPrefab;
-    [SerializeField] GameObject damageParticlesPrefab;
+
+    [SerializeField] GameObject normalHitParticlesPrefab;
+    [SerializeField] GameObject criticalHitParticlesPrefab;
 
     public void Execute(ActionContext context)
     {
@@ -56,21 +55,23 @@ public class ADealsDamage : IGameAction
         float adjustedAmount = amount;
 
         // Owner adjustment
-
+        bool didCrit = false;
         Character owner = context.Source.Owner;
         if (owner != null)
         {
             CharacterStats ownerStats = owner.CharacterStats;
-            Stat ownerAttack = ownerStats.GetStat(StatType.Attack, this);
-            Stat ownerCriticalChance = ownerStats.GetStat(StatType.CriticalChance, this);
-            Stat ownerCriticalDamage = ownerStats.GetStat(StatType.CriticalDamage, this);
+            Stat ownerAttack = ownerStats.GetStat(StatType.Attack);
+            Stat ownerCriticalChance = ownerStats.GetStat(StatType.CriticalChance);
+            Stat ownerCriticalDamage = ownerStats.GetStat(StatType.CriticalDamage);
 
             adjustedAmount *= ownerAttack.Value / 100f;
 
             float critRoll = Random.Range(0f, 100f);
             if (critRoll <= ownerCriticalChance.Value)
+            {
                 adjustedAmount *= 1 + ownerCriticalDamage.Value / 100f;
-        
+                didCrit = true;
+            }
         }
 
         // Target Adjustment
@@ -78,9 +79,9 @@ public class ADealsDamage : IGameAction
         CharacterResources targetResources = target.CharacterResources;
         CharacterStats targetStats = target.CharacterStats;
 
-        Stat targetArmor = targetStats.GetStat(StatType.Armor, this);
-        Stat targetShield = targetStats.GetStat(StatType.Shield, this);
-        Stat targetDefense = targetStats.GetStat(StatType.Defense, this);
+        Stat targetArmor = targetStats.GetStat(StatType.Armor);
+        Stat targetShield = targetStats.GetStat(StatType.Shield);
+        Stat targetDefense = targetStats.GetStat(StatType.Defense);
 
         adjustedAmount -= targetDefense.Value;
         adjustedAmount = Mathf.Max(1f, adjustedAmount);
@@ -130,10 +131,12 @@ public class ADealsDamage : IGameAction
                 number.GetComponentInChildren<DamageNumberUI>().Initialize(Mathf.Abs(changed), color);
             }
 
+            GameObject damageParticlesPrefab = didCrit ? criticalHitParticlesPrefab : normalHitParticlesPrefab;
+
             if (damageParticlesPrefab != null)
                 Object.Instantiate(
                     damageParticlesPrefab,
-                    target.transform.position,
+                    target.transform.position + Vector3.up,
                     target.transform.rotation
                 );
 

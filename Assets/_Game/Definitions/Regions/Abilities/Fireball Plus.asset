@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47cf0abe4e0ea6e41b563c7b80fbe339, type: 3}
   m_Name: Fireball Plus
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
-  RegionName: Fireball
+  RegionName: Fireball+
   AffectsSource: 0
   Duration: 3
   MaxHits: 1
@@ -42,7 +42,8 @@ MonoBehaviour:
         amount: 5
         damageType: 0
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+        normalHitParticlesPrefab: {fileID: 3042519775331041172, guid: 087e2013022da8b4595e2ea454b0c9e4, type: 3}
+        criticalHitParticlesPrefab: {fileID: 4306488877223958017, guid: ea9cd6237b8c4254d9001ef0cc81ab54, type: 3}
     - rid: 8378409663798444165
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
@@ -60,5 +61,6 @@ MonoBehaviour:
       data:
         Conditions: []
         prefab: {fileID: 80845387441377195, guid: fd10c4900ec51f6488abd2ebfb5cbaa8, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}

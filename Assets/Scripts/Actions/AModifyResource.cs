@@ -1,42 +1,51 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public enum ModifyResourceMode { ChangeValue, AddModifier, RemoveModifier }
-public enum ModifyResourceTarget { Specific, All }
-public enum ResourceModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
-
 [System.Serializable]
 public class AModifyResource : IGameAction
 {
+    public enum Mode {
+        ChangeSpecificResourceValue,
+        AddModifierToSpecificResource,
+        AddModifierToRandomResourceFromSet,
+        AddModifierToAllResourcesFromSet,
+        AddModifierToAllResources,
+        RemoveSpecificModifierFromSpecificResource,
+        RemoveSpecificModifierFromAllResources,
+        RemoveAllModifiersFromSpecificResource,
+        RemoveAllModifiersFromAllResources,
+    }
+
     [Header("Conditions")]
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
 
-    [Header("Resource Configuration")]
-    [Tooltip("The mode of resource modification."), SerializeField]
-    ModifyResourceMode mode = ModifyResourceMode.ChangeValue;
+    [Tooltip("Whether to add or remove the modifier."), SerializeField]
+    Mode mode = Mode.ChangeSpecificResourceValue;
 
-    [Tooltip("Targeting mode for which resources to modify."), SerializeField]
-    ModifyResourceTarget targetResource = ModifyResourceTarget.Specific;
+    [Tooltip("Whether to only remove modifiers that were added by this."), SerializeField]
+    bool removeOnlyFromSource = true;
+
 
     [Tooltip("The resource to modify."), SerializeField]
-    ResourceType resourceType;
+    ResourceDefinition resourceDefinition;
 
-    [Tooltip("Targeting mode for which modifiers to modify."), SerializeField]
-    ResourceModifierTarget targetModifier = ResourceModifierTarget.Specific;
+    [Tooltip("The set of resource definitions to choose from."), SerializeField]
+    ResourceDefinitionSet resourceDefinitions;
 
     [Tooltip("The type of modifier to modify."), SerializeField]
-    ResourceModifierType modifierType = ResourceModifierType.Increase;
+    ResourceModifierType targetModifierType = ResourceModifierType.Increase;
 
-    [Tooltip("If the value changes, reset the resource's regeneration?"), SerializeField]
+    [Tooltip("Whether to reset regeneration if changed."), SerializeField]
     bool resetRegeneration = false;
 
-    [Tooltip("The change or modifier value."), SerializeField]
+    [Tooltip("The value of the modifier or value delta."), SerializeField]
     float amount = 0f;
+
 
     public void Execute(ActionContext context)
     {
@@ -63,30 +72,42 @@ public class AModifyResource : IGameAction
         CharacterResources resources = target.CharacterResources;
         switch (mode)
         {
-            case ModifyResourceMode.ChangeValue: resources.ChangeResourceValue(resourceType, amount, out float _, resetRegeneration); break;
-            case ModifyResourceMode.AddModifier: resources.AddModifierToResource(resourceType, modifierType, amount, context.Source); break;
-            case ModifyResourceMode.RemoveModifier:
-                switch (targetResource)
-                {
-                    case ModifyResourceTarget.Specific:
-                        switch (targetModifier)
-                        {
-                            case ResourceModifierTarget.Specific:           resources.RemoveSpecificModifierFromResource(resourceType, modifierType, amount, source: null); break;
-                            case ResourceModifierTarget.SpecificFromSource: resources.RemoveSpecificModifierFromResource(resourceType, modifierType, amount, context.Source); break;
-                            case ResourceModifierTarget.All:                resources.RemoveAllModifiersFromResource(resourceType, source: null); break;
-                            case ResourceModifierTarget.AllFromSource:      resources.RemoveAllModifiersFromResource(resourceType, context.Source); break;
-                        }
-                        break;
-                    case ModifyResourceTarget.All:
-                        switch (targetModifier)
-                        {
-                            case ResourceModifierTarget.Specific:           resources.RemoveSpecificModifierFromAllResources(modifierType, amount, source: null); break;
-                            case ResourceModifierTarget.SpecificFromSource: resources.RemoveSpecificModifierFromAllResources(modifierType, amount, context.Source); break;
-                            case ResourceModifierTarget.All:                resources.RemoveAllModifiersFromAllResources(source: null); break;
-                            case ResourceModifierTarget.AllFromSource:      resources.RemoveAllModifiersFromAllResources(context.Source); break;
-                        }
-                        break;
-                }
+            case Mode.ChangeSpecificResourceValue:
+                resources.ChangeResourceValue(resourceDefinition.resourceType, amount, out _, resetRegeneration);
+                break;
+
+            case Mode.AddModifierToSpecificResource:
+                resources.AddModifiers(targetModifierType, amount, resourceDefinition.resourceType, context.Source);
+                break;
+
+            case Mode.AddModifierToRandomResourceFromSet:
+                if (resourceDefinitions.TryGetRandomResourceDefinition(out ResourceDefinition randomDefinition))
+                    resources.AddModifiers(targetModifierType, amount, randomDefinition.resourceType, context.Source);
+                break;
+
+            case Mode.AddModifierToAllResourcesFromSet:
+                foreach (ResourceDefinition definition in resourceDefinitions.Definitions)
+                    resources.AddModifiers(targetModifierType, amount, definition.resourceType, context.Source);
+                break;
+
+            case Mode.AddModifierToAllResources:
+                resources.AddModifiers(targetModifierType, amount, null, context.Source);
+                break;
+
+            case Mode.RemoveSpecificModifierFromSpecificResource:
+                resources.RemoveModifiers(resourceDefinition.resourceType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveSpecificModifierFromAllResources:
+                resources.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveAllModifiersFromSpecificResource:
+                resources.RemoveModifiers(resourceDefinition.resourceType, null, null, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveAllModifiersFromAllResources:
+                resources.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
         }
     }

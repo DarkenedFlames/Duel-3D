@@ -36,9 +36,9 @@ MonoBehaviour:
         Conditions: []
         targetMode: 0
         mode: 0
-        targetStat: 0
-        statType: 9
-        targetModifier: 0
+        removeOnlyFromSource: 1
+        statDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
+        statDefinitions: {fileID: 0}
         targetModifierType: 2
         amount: 1.5
     - rid: 8378409663798444148
@@ -46,9 +46,9 @@ MonoBehaviour:
       data:
         Conditions: []
         targetMode: 0
-        mode: 1
-        targetStat: 0
-        statType: 9
-        targetModifier: 2
+        mode: 4
+        removeOnlyFromSource: 1
+        statDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
+        statDefinitions: {fileID: 0}
         targetModifierType: 2
         amount: 1.5

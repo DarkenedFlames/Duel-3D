@@ -9,11 +9,13 @@ public abstract class SpawnPointSet<T, TSpawnPoint> : RuntimeSet<TSpawnPoint>
 {
     protected List<TSpawnPoint> FreePoints => this.Where(p => p != null && p.IsFree).ToList();
 
+    /* Nice but keeps printing warnings in edit mode
     protected virtual void Awake()
     {
         if (this.Count() == 0)
             Debug.LogWarning($"{name} has no spawn point elements registered.");
     }
+    */
 
     public void SpawnObject(GameObject prefab)
     {

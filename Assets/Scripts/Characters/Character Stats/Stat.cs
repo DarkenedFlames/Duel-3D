@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using UnityEngine;
+using System.Linq;
 
 public class Stat
 {
@@ -62,40 +63,16 @@ public class Stat
         RecalculateValue();
     }
 
-    public virtual bool RemoveModifier(StatModifier mod)
-    {
-        bool removed = modifiers.Remove(mod);
-        if (removed)
-            RecalculateValue();
-        return removed;
-    }
+    public void RemoveModifiers(StatModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    {  
+        List<StatModifier> toRemove = modifiers
+            .Where(m => modifierType != null && m.Type == modifierType)
+            .Where(m => modifierValue != null && Mathf.Approximately(m.Value, modifierValue.Value))
+            .Where(m => source != null && m.Source == source)
+            .ToList();
 
-    public void ApplyFlat(float amount, object source = null) =>
-        AddModifier(new StatModifier(StatModifierType.Flat, amount, source));
-
-    public void ApplyPercent(float percent, object source = null) =>
-        AddModifier(new StatModifier(StatModifierType.PercentAdd, percent, source));
-    
-    public void ApplyMultiplier(float multiplier, object source = null) =>
-        AddModifier(new StatModifier(StatModifierType.PercentMult, multiplier, source));
-
-    public virtual void RemoveAllModifiers(object source = null)
-    {
-        if (source == null)
-            modifiers.Clear();
-        else
-        {
-            for (int i = modifiers.Count - 1; i >= 0; i--)
-                if (modifiers[i].Source == source)
-                    RemoveModifier(modifiers[i]);
-        }
-        RecalculateValue();
-    }
-
-    public virtual void RemoveSpecificModifier(StatModifierType type, float value, object source = null)
-    {
         for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (modifiers[i].Type == type && Mathf.Approximately(modifiers[i].Value, value) && (source == null || modifiers[i].Source == source))
-                RemoveModifier(modifiers[i]);
+            if (toRemove.Contains(modifiers[i]) && modifiers.Remove(modifiers[i]))
+                    RecalculateValue();
     }
 }

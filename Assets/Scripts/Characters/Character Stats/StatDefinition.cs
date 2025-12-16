@@ -21,7 +21,7 @@ public enum StatType
     // Add more as needed
 }
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Stat Definition", menuName = "Definitions/Stat")]
 public class StatDefinition : ScriptableObject
 {
     public string statName;

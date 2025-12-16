@@ -1,11 +1,10 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
 public enum AbilityAnimationTrigger { None, Cast, Channel }
 public enum AbilityType { Primary, Secondary, Utility, Special }
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Ability Definition", menuName = "Definitions/Ability")]
 public class AbilityDefinition : ScriptableObject
 {
     [Header("Generic Information")]

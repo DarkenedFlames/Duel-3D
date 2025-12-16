@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Lightning Ball
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Lightning Ball
-  icon: {fileID: 21300000, guid: 014133609f1c67741beb5104608d4e62, type: 3}
+  icon: {fileID: 21300000, guid: c38d36d417153a749878d6b982dfe0ec, type: 3}
   abilityType: 2
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444120

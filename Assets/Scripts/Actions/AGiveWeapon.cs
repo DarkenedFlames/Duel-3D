@@ -8,11 +8,10 @@ public class AGiveWeapon : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("Who to give weapon to: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
 
-    [Header("Weapon Configuration")]
     [Tooltip("Weapon to give."), SerializeField]
     GameObject weaponPrefab;
 

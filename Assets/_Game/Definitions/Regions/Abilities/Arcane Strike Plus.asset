@@ -34,6 +34,7 @@ MonoBehaviour:
         targetMode: 1
         resetRegenerationIfChanged: 1
         amount: 1
-        damageType: 0
+        damageType: 1
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+        normalHitParticlesPrefab: {fileID: 2020661361868494885, guid: 95e449bec9c07e241bd03070917ca496, type: 3}
+        criticalHitParticlesPrefab: {fileID: 8176850701479282271, guid: 582996988c0db5344aadb4679beafe85, type: 3}

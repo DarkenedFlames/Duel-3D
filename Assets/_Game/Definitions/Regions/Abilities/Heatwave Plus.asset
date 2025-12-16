@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 47cf0abe4e0ea6e41b563c7b80fbe339, type: 3}
   m_Name: Heatwave Plus
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
-  RegionName: Heatwave
+  RegionName: Heatwave+
   AffectsSource: 0
   Duration: 3
   MaxHits: 0

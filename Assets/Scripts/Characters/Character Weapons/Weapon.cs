@@ -57,7 +57,7 @@ public class Weapon : MonoBehaviour, IActionSource
     public bool TryUse()
     {   
         CharacterResources resources = Owner.CharacterResources;
-        CharacterResource resource = resources.GetResource(Definition.ExpendedResource, this);
+        CharacterResource resource = resources.GetResource(Definition.ExpendedResource);
 
         if (Definition.ResourceCost <= resource.Value && seconds.Expired)
         {

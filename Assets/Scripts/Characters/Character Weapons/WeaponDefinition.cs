@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Weapon Definition", menuName = "Definitions/Weapon")]
 public class WeaponDefinition : ScriptableObject
 {
     [Header("Generic Information")]

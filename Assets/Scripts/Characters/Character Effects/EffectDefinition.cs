@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-
 
 public enum EffectStackingType { Ignore, AddStackAndRefresh, Refresh, ExtendDuration }
 
 public enum ExpiryType { LoseOneStackAndRefresh, LoseAllStacks }
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Effect Definition", menuName = "Definitions/Effect")]
 public class EffectDefinition : ScriptableObject
 {
     [Header("Generic Information")]

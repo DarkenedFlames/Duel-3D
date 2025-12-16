@@ -11,11 +11,10 @@ public class AGiveAbility : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("Who to give ability to: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
 
-    [Header("Ability Configuration")]
     [Tooltip("Mode of Ability giving."), SerializeField]
     GiveAbilityMode mode = GiveAbilityMode.Specific;
 

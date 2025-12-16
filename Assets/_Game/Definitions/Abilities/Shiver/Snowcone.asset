@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Snowcone
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Snowcone
-  icon: {fileID: 21300000, guid: b4bc952e16e35c54d80cbee66c627656, type: 3}
+  icon: {fileID: 21300000, guid: 83b6aefe4e1c0544683237a54be38586, type: 3}
   abilityType: 1
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409684996194404
@@ -42,6 +41,7 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757042
         prefab: {fileID: 5545798320394944415, guid: bd26379bd1e43034d8c3a627c07dbe23, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 0, z: 6}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757042
@@ -57,6 +57,7 @@ MonoBehaviour:
         - rid: 8378409784229757046
         - rid: 8378409784229757044
         prefab: {fileID: 5545798320394944415, guid: bd26379bd1e43034d8c3a627c07dbe23, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 0, z: -6}
         localEulerRotation: {x: 0, y: 180, z: 0}
     - rid: 8378409784229757044
@@ -78,6 +79,7 @@ MonoBehaviour:
         - rid: 8378409784229757048
         - rid: 8378409784229757049
         prefab: {fileID: 5545798320394944415, guid: bd26379bd1e43034d8c3a627c07dbe23, type: 3}
+        reference: 1
         spawnOffset: {x: 6, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 90, z: 0}
     - rid: 8378409784229757048
@@ -99,6 +101,7 @@ MonoBehaviour:
         - rid: 8378409784229757051
         - rid: 8378409784229757052
         prefab: {fileID: 5545798320394944415, guid: bd26379bd1e43034d8c3a627c07dbe23, type: 3}
+        reference: 1
         spawnOffset: {x: -6, y: 0, z: 0}
         localEulerRotation: {x: 0, y: -90, z: 0}
     - rid: 8378409784229757051

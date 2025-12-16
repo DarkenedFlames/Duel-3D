@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Unity.VisualScripting;
+using System.Linq;
 using UnityEngine;
 
 public class CharacterResource
@@ -62,7 +62,7 @@ public class CharacterResource
     }
 
     public virtual void AddModifier(ResourceModifier mod) => modifiers.Add(mod);
-    public virtual void RemoveModifier(ResourceModifier mod) => modifiers.Remove(mod);
+    void RemoveModifier(ResourceModifier mod) => modifiers.Remove(mod);
 
     public void GetModifierTotals(out float increase, out float decrease)
     {
@@ -70,32 +70,24 @@ public class CharacterResource
         decrease = 1f;
 
         foreach (ResourceModifier modifier in modifiers)
-        {
             switch (modifier.Type)
             {
                 case ResourceModifierType.Increase: increase *= modifier.Value; break;
                 case ResourceModifierType.Decrease: decrease *= modifier.Value; break;
                 default: break;
             }
-        }
     }
 
-    public virtual void RemoveAllModifiers(object source = null)
-    {
-        if (source == null)
-            modifiers.Clear();
-        else
-        {
-            for (int i = modifiers.Count - 1; i >= 0; i--)
-                if (modifiers[i].Source == source)
-                    RemoveModifier(modifiers[i]);
-        }
-    }
+    public void RemoveModifiers(ResourceModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    {  
+        List<ResourceModifier> toRemove = modifiers
+            .Where(m => modifierType != null && m.Type == modifierType)
+            .Where(m => modifierValue != null && Mathf.Approximately(m.Value, modifierValue.Value))
+            .Where(m => source != null && m.Source == source)
+            .ToList();
 
-    public virtual void RemoveSpecificModifier(ResourceModifierType type, float value, object source = null)
-    {
         for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (modifiers[i].Type == type && Mathf.Approximately(modifiers[i].Value, value) && (source == null || modifiers[i].Source == source))
+            if (toRemove.Contains(modifiers[i]))
                 RemoveModifier(modifiers[i]);
     }
 }

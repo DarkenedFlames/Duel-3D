@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Sets/Pickup Spawn Point")]
+[CreateAssetMenu(fileName = "New Pickup Spawn Point Set", menuName = "Runtime Sets/Pickup Spawn Point")]
 public class PickupSpawnPointSet : SpawnPointSet<Region, PickupSpawnPoint>
 {
     

@@ -23,40 +23,55 @@ public class AModifyStatDrawer : IActionTypeDrawer
 
         GetProperty("targetMode", out SerializedProperty targetModeProp);
         GetProperty("mode", out SerializedProperty modeProp);
-        GetProperty("targetStat", out SerializedProperty targetStatProp);
-        GetProperty("statType", out SerializedProperty statTypeProp);
-        GetProperty("targetModifier", out SerializedProperty targetModifierProp);
-        GetProperty("targetModifierType", out SerializedProperty modifierTypeProp);
+        GetProperty("removeOnlyFromSource", out SerializedProperty removeOnlyFromSourceProp);
+        GetProperty("statDefinition", out SerializedProperty statDefinitionProp);
+        GetProperty("statDefinitions", out SerializedProperty statDefinitionsProp);
+        GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("amount", out SerializedProperty amountProp);
 
-        ModifyStatMode enabledMode = (ModifyStatMode)modeProp.enumValueIndex;
-        ModifyStatTarget enabledTarget = (ModifyStatTarget)targetStatProp.enumValueIndex;
-        StatModifierTarget enabledModifierTarget = (StatModifierTarget)targetModifierProp.enumValueIndex;
+        AModifyStat.Mode mode = (AModifyStat.Mode)modeProp.enumValueIndex;
 
         AddHeight(targetModeProp);
         AddHeight(modeProp);
-        
-        if (enabledMode == ModifyStatMode.AddModifier)
-        {
-            AddHeight(statTypeProp);
-            AddHeight(modifierTypeProp);
-            AddHeight(amountProp);
-        }
-        else
-        {
-            AddHeight(targetStatProp);
-            
-            if (enabledTarget == ModifyStatTarget.Specific)
-                AddHeight(statTypeProp);
-            
-            AddHeight(targetModifierProp);
 
-            if (enabledModifierTarget == StatModifierTarget.Specific || enabledModifierTarget == StatModifierTarget.SpecificFromSource)
-            {
-                AddHeight(modifierTypeProp);
+        // Determine which fields to show based on mode
+        switch (mode)
+        {
+            case AModifyStat.Mode.AddModifierToSpecificStat:
+                AddHeight(statDefinitionProp);
+                AddHeight(targetModifierTypeProp);
                 AddHeight(amountProp);
-            }
+                break;
+            case AModifyStat.Mode.AddModifierToRandomStatFromSet:
+            case AModifyStat.Mode.AddModifierToAllStatsFromSet:
+                AddHeight(statDefinitionsProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyStat.Mode.AddModifierToAllStats:
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveSpecificModifierFromSpecificStat:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(statDefinitionProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveSpecificModifierFromAllStats:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveAllModifiersFromSpecificStat:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(statDefinitionProp);
+                break;
+            case AModifyStat.Mode.RemoveAllModifiersFromAllStats:
+                AddHeight(removeOnlyFromSourceProp);
+                break;
         }
+
         return height;
     }
 
@@ -85,39 +100,53 @@ public class AModifyStatDrawer : IActionTypeDrawer
 
         GetProperty("targetMode", out SerializedProperty targetModeProp);
         GetProperty("mode", out SerializedProperty modeProp);
-        GetProperty("targetStat", out SerializedProperty targetStatProp);
-        GetProperty("statType", out SerializedProperty statTypeProp);
-        GetProperty("targetModifier", out SerializedProperty targetModifierProp);
-        GetProperty("targetModifierType", out SerializedProperty modifierTypeProp);
+        GetProperty("removeOnlyFromSource", out SerializedProperty removeOnlyFromSourceProp);
+        GetProperty("statDefinition", out SerializedProperty statDefinitionProp);
+        GetProperty("statDefinitions", out SerializedProperty statDefinitionsProp);
+        GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("amount", out SerializedProperty amountProp);
 
-        ModifyStatMode enabledMode = (ModifyStatMode)modeProp.enumValueIndex;
-        ModifyStatTarget enabledTarget = (ModifyStatTarget)targetStatProp.enumValueIndex;
-        StatModifierTarget enabledModifierTarget = (StatModifierTarget)targetModifierProp.enumValueIndex;
+        AModifyStat.Mode mode = (AModifyStat.Mode)modeProp.enumValueIndex;
 
         DrawField(targetModeProp);
         DrawField(modeProp);
-       
-        if (enabledMode == ModifyStatMode.AddModifier)
+
+        // Draw only the relevant fields based on mode
+        switch (mode)
         {
-            DrawField(statTypeProp);
-            DrawField(modifierTypeProp);
-            DrawField(amountProp);
-        }
-        else
-        {
-            DrawField(targetStatProp);
-
-            if (enabledTarget == ModifyStatTarget.Specific)
-                DrawField(statTypeProp);
-
-            DrawField(targetModifierProp);
-
-            if (enabledModifierTarget == StatModifierTarget.Specific || enabledModifierTarget == StatModifierTarget.SpecificFromSource)
-            {
-                DrawField(modifierTypeProp);
+            case AModifyStat.Mode.AddModifierToSpecificStat:
+                DrawField(statDefinitionProp);
+                DrawField(targetModifierTypeProp);
                 DrawField(amountProp);
-            }
+                break;
+            case AModifyStat.Mode.AddModifierToRandomStatFromSet:
+            case AModifyStat.Mode.AddModifierToAllStatsFromSet:
+                DrawField(statDefinitionsProp);
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyStat.Mode.AddModifierToAllStats:
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveSpecificModifierFromSpecificStat:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(statDefinitionProp);
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveSpecificModifierFromAllStats:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyStat.Mode.RemoveAllModifiersFromSpecificStat:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(statDefinitionProp);
+                break;
+            case AModifyStat.Mode.RemoveAllModifiersFromAllStats:
+                DrawField(removeOnlyFromSourceProp);
+                break;
         }        
     }
 }

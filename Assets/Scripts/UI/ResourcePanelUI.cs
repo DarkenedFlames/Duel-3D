@@ -14,7 +14,7 @@ public class ResourcePanelUI : MonoBehaviour
 
         foreach (ResourceBarUI bar in bars)
         {
-            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType, this);
+            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType);
 
             trackedResource.MaxStat.OnValueChanged += HandleStatChanged;
             trackedResource.OnValueChanged += HandleResourceChanged;
@@ -30,21 +30,15 @@ public class ResourcePanelUI : MonoBehaviour
 
         foreach (ResourceBarUI bar in bars)
         {
-            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType, this);
+            CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType);
             trackedResource.OnValueChanged -= HandleResourceChanged;
             trackedResource.MaxStat.OnValueChanged -= HandleStatChanged;
         }
     }
 
-    void HandleStatChanged(Stat stat)
-    {
-        ResourceBarUI bar = bars.FirstOrDefault(b => b.LinkedResource.MaxStat == stat.Definition);
-        bar.SetSliderMaxValue(stat.Value);
-    }
+    void HandleStatChanged(Stat stat) =>
+        bars.FirstOrDefault(b => b.LinkedResource.MaxStat == stat.Definition).SetSliderMaxValue(stat.Value);
 
-    void HandleResourceChanged(CharacterResource resource)
-    {
-        ResourceBarUI bar = bars.FirstOrDefault(b => b.LinkedResource == resource.Definition);
-        bar.SetSliderValue(resource.Value);
-    }
+    void HandleResourceChanged(CharacterResource resource) =>
+        bars.FirstOrDefault(b => b.LinkedResource == resource.Definition).SetSliderValue(resource.Value);
 }

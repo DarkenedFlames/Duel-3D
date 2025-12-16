@@ -7,7 +7,7 @@ public enum ResourceType
     Stamina,
 }
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Resource Definition", menuName = "Definitions/Resource")]
 public class ResourceDefinition : ScriptableObject
 {
     public string ResourceName = "Untitled Resource";

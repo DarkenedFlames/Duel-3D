@@ -33,9 +33,9 @@ MonoBehaviour:
         Conditions: []
         targetMode: 1
         mode: 0
-        targetResource: 0
-        resourceType: 1
-        targetModifier: 0
-        modifierType: 0
+        removeOnlyFromSource: 1
+        resourceDefinition: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
+        resourceDefinitions: {fileID: 0}
+        targetModifierType: 0
         resetRegeneration: 1
         amount: -5

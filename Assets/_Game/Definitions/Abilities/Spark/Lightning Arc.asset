@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Lightning Arc
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Lightning Arc
-  icon: {fileID: 21300000, guid: 1004de33e24bfff4f8a7dccc2482ef87, type: 3}
+  icon: {fileID: 21300000, guid: b5b5842bd1e084548a439204f1a9afee, type: 3}
   abilityType: 0
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 15
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444119

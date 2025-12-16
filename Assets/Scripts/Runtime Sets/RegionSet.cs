@@ -1,7 +1,7 @@
 using UnityEngine;
 using HBM.Scriptable;
 
-[CreateAssetMenu(menuName = "Sets/Region")]
+[CreateAssetMenu(fileName = "New Region Set", menuName = "Runtime Sets/Region")]
 public class RegionSet : RuntimeSet<Region>
 {
     public Region GetClosest(Vector3 position, out float distance)

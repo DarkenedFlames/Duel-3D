@@ -40,19 +40,20 @@ MonoBehaviour:
         targetMode: 1
         resetRegenerationIfChanged: 1
         amount: 10
-        damageType: 1
+        damageType: 0
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-        damageParticlesPrefab: {fileID: 2965222256817593503, guid: d710eb1b7c43c20499a834fa8d96ef38, type: 3}
+        normalHitParticlesPrefab: {fileID: 3042519775331041172, guid: 087e2013022da8b4595e2ea454b0c9e4, type: 3}
+        criticalHitParticlesPrefab: {fileID: 4306488877223958017, guid: ea9cd6237b8c4254d9001ef0cc81ab54, type: 3}
     - rid: 8378409798152224901
       type: {class: AModifyResource, ns: , asm: Assembly-CSharp}
       data:
         Conditions: []
         targetMode: 0
         mode: 0
-        targetResource: 0
-        resourceType: 1
-        targetModifier: 0
-        modifierType: 0
+        removeOnlyFromSource: 1
+        resourceDefinition: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
+        resourceDefinitions: {fileID: 0}
+        targetModifierType: 0
         resetRegeneration: 0
         amount: 10
     - rid: 8378409798152224902
@@ -61,9 +62,9 @@ MonoBehaviour:
         Conditions: []
         targetMode: 1
         mode: 0
-        targetResource: 0
-        resourceType: 1
-        targetModifier: 0
-        modifierType: 0
+        removeOnlyFromSource: 1
+        resourceDefinition: {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
+        resourceDefinitions: {fileID: 0}
+        targetModifierType: 0
         resetRegeneration: 1
         amount: -10

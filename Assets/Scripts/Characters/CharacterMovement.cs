@@ -44,7 +44,7 @@ public class CharacterMovement : MonoBehaviour
         transform.Rotate(Vector3.up, yawDelta);
 
         // Convert stats into actual speeds
-        Stat speed = stats.GetStat(StatType.MovementSpeed, this);
+        Stat speed = stats.GetStat(StatType.MovementSpeed);
 
         float moveSpeed = speed.Value * speedModifier;
         float sprintSpeed = speed.Value * sprintModifier;

@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0c40a6412fc21204ea1902e802a81868, type: 3}
-  m_Name: Universal Spawn Point Set
+  m_Name: Random Ability Spawn Point Set
   m_EditorClassIdentifier: Assembly-CSharp::PickupSpawnPointSet

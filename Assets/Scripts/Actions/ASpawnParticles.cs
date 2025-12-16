@@ -6,7 +6,7 @@ public class ASpawnParticles : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Particle Settings")]
+    [Header("Action Configuration")]
     public GameObject prefab;
 
     [Tooltip("Local spawn offset."), SerializeField]

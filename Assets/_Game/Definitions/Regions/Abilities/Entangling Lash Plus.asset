@@ -49,10 +49,10 @@ MonoBehaviour:
         Conditions: []
         targetMode: 0
         mode: 0
-        targetResource: 0
-        resourceType: 0
-        targetModifier: 0
-        modifierType: 0
+        removeOnlyFromSource: 1
+        resourceDefinition: {fileID: 11400000, guid: 501e610550fe7ea47a7df5f9b8ec09d2, type: 2}
+        resourceDefinitions: {fileID: 0}
+        targetModifierType: 0
         resetRegeneration: 0
         amount: 3
     - rid: 8378409798152224886
@@ -64,4 +64,5 @@ MonoBehaviour:
         amount: 1
         damageType: 1
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+        normalHitParticlesPrefab: {fileID: 2020661361868494885, guid: 95e449bec9c07e241bd03070917ca496, type: 3}
+        criticalHitParticlesPrefab: {fileID: 4306488877223958017, guid: ea9cd6237b8c4254d9001ef0cc81ab54, type: 3}

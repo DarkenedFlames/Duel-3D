@@ -600,17 +600,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b38fb38f4c2f01e45a739586b2fd6b35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterStats
-  InitialStats:
-  - {fileID: 11400000, guid: 16290002e89a2a943ac0f450e8a7fa82, type: 2}
-  - {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
-  - {fileID: 11400000, guid: 562c35fa967cbc543b43a87d26f15abe, type: 2}
-  - {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
-  - {fileID: 11400000, guid: de333d77cfe682d4ba735d495fb58ff2, type: 2}
-  - {fileID: 11400000, guid: 3fb975e61149e284db5f45e1db16d559, type: 2}
-  - {fileID: 11400000, guid: b5ff9b976a3a6374fb586242115c5ee3, type: 2}
-  - {fileID: 11400000, guid: e62f79af03098c147afe6253503e3d98, type: 2}
-  - {fileID: 11400000, guid: b5061a278f25c744eb955d9cbdc4d390, type: 2}
-  - {fileID: 11400000, guid: 4702a38dbb6eaa84b9f94c446f1411d2, type: 2}
+  InitialStatSet: {fileID: 11400000, guid: 0e4f0a6e4d3e0b14a8c6db534b818a9e, type: 2}
 --- !u!114 &2146435258925756317
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -623,10 +613,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 390d5b4699080b243b95a454ef36780e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterResources
-  InitialResources:
-  - {fileID: 11400000, guid: 501e610550fe7ea47a7df5f9b8ec09d2, type: 2}
-  - {fileID: 11400000, guid: 6373e4fac3d4f50458c7bef9aed34cee, type: 2}
-  - {fileID: 11400000, guid: c6b83e8d8ee4d1849971f674a6c5922b, type: 2}
+  initialResources: {fileID: 11400000, guid: 4428d952f84b04f41b908fba5dc547de, type: 2}
 --- !u!114 &407782506930456008
 MonoBehaviour:
   m_ObjectHideFlags: 0

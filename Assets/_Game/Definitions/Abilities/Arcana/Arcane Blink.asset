@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Arcane Blink
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Arcane Blink
-  icon: {fileID: 21300000, guid: 677b9042cc42d50419d99157836902bd, type: 3}
+  icon: {fileID: 21300000, guid: 6540e2fbe605e454ea4876f3a72175ad, type: 3}
   abilityType: 2
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409715047596550
@@ -59,6 +58,7 @@ MonoBehaviour:
         - rid: 8378409715047596551
         - rid: 8378409784229757012
         prefab: {fileID: 380433721495895399, guid: 6d7f047089732a0409660f2c1b48dd82, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409715047596551

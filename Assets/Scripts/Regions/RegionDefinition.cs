@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Linq;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Region Definition", menuName = "Definitions/Region")]
 public class RegionDefinition : ScriptableObject
 {
     [Header("Generic Info")]

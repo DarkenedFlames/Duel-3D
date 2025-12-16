@@ -19,7 +19,6 @@ MonoBehaviour:
   ExpendedResource: 1
   resourceCost: 20
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444123
@@ -80,10 +79,10 @@ MonoBehaviour:
         Conditions: []
         targetMode: 0
         mode: 0
-        targetResource: 0
-        resourceType: 0
-        targetModifier: 0
-        modifierType: 0
+        removeOnlyFromSource: 1
+        resourceDefinition: {fileID: 11400000, guid: 501e610550fe7ea47a7df5f9b8ec09d2, type: 2}
+        resourceDefinitions: {fileID: 0}
+        targetModifierType: 0
         resetRegeneration: 0
         amount: 10
     - rid: 8378409798152224905

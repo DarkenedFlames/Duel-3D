@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-[CreateAssetMenu]
+[CreateAssetMenu(fileName = "New Ability Definition Set", menuName = "Scriptable Definition Sets/Ability")]
 public class AbilityDefinitionSet : ScriptableObject
 {
     public List<AbilityDefinition> definitions = new();

@@ -12,7 +12,7 @@ public class AMoveCharacter : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Movement Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("The character to be moved: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode characterToMove = ActionTargetMode.Target;
 

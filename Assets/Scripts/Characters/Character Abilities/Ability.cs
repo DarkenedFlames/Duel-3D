@@ -24,9 +24,12 @@ public class Ability : IActionSource
     {
         if (!seconds.Expired) return false;
 
-        CharacterResource resource = Owner.CharacterResources.GetResource(Definition.ExpendedResource, this);
+        CharacterResource resource = Owner.CharacterResources.GetResource(Definition.ExpendedResource);
         
         if (resource.Value < Definition.resourceCost) return false;
+        if (resource.Definition.resourceType == ResourceType.Health && resource.Value == Definition.resourceCost) return false;
+
+        Definition.ExecuteActions(AbilityHook.OnCast, new(){ Source = this, Target = Owner });
 
         Owner.CharacterResources.ChangeResourceValue(
             Definition.ExpendedResource,
@@ -36,10 +39,6 @@ public class Ability : IActionSource
         );
         
         seconds.Reset();
-        
-        ActionContext context = new(){ Source = this, Target = Owner };
-        Definition.ExecuteActions(AbilityHook.OnCast, context);
-        
         return true;
     }
 }

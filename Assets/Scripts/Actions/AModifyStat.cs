@@ -1,41 +1,47 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-public enum ModifyStatMode { AddModifier, RemoveModifier }
-public enum ModifyStatTarget { Specific, All }
-public enum StatModifierTarget { Specific, All, SpecificFromSource, AllFromSource }
-
-
-
 [System.Serializable]
 public class AModifyStat : IGameAction
 {
+    public enum Mode { 
+        AddModifierToSpecificStat,
+        AddModifierToRandomStatFromSet,
+        AddModifierToAllStatsFromSet,
+        AddModifierToAllStats,
+        RemoveSpecificModifierFromSpecificStat,
+        RemoveSpecificModifierFromAllStats,
+        RemoveAllModifiersFromSpecificStat,
+        RemoveAllModifiersFromAllStats,
+    }
+
     [Header("Conditions")]
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character)."), SerializeField]
     ActionTargetMode targetMode = ActionTargetMode.Target;
 
-    [Header("Stat Configuration")]
     [Tooltip("Whether to add or remove the modifier."), SerializeField]
-    ModifyStatMode mode = ModifyStatMode.AddModifier;
+    Mode mode = Mode.AddModifierToSpecificStat;
 
-    [Tooltip("Targeting mode for which stats to modify."), SerializeField]
-    ModifyStatTarget targetStat = ModifyStatTarget.Specific;
+    [Tooltip("Whether to only remove modifiers that were added by this."), SerializeField]
+    bool removeOnlyFromSource = true;
+
 
     [Tooltip("The stat to modify."), SerializeField]
-    StatType statType;
+    StatDefinition statDefinition;
 
-    [Tooltip("Targeting mode for which modifiers to modify."), SerializeField]
-    StatModifierTarget targetModifier = StatModifierTarget.Specific;
+    [Tooltip("The set of stat definitions to choose from."), SerializeField]
+    StatDefinitionSet statDefinitions;
 
     [Tooltip("The type of modifier to modify."), SerializeField]
     StatModifierType targetModifierType = StatModifierType.Flat;
 
     [Tooltip("The modifier value to modify."), SerializeField]
     float amount = 0f;
+
 
     public void Execute(ActionContext context)
     {
@@ -62,29 +68,38 @@ public class AModifyStat : IGameAction
         CharacterStats stats = target.CharacterStats;
         switch (mode)
         {
-            case ModifyStatMode.AddModifier: stats.AddModifierToStat(statType, targetModifierType, amount, context.Source); break;
-            case ModifyStatMode.RemoveModifier:
-                switch (targetStat)
-                {
-                    case ModifyStatTarget.Specific:
-                        switch (targetModifier)
-                        {
-                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromStat(statType, targetModifierType, amount, source: null); break;
-                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromStat(statType, targetModifierType, amount, context.Source); break;
-                            case StatModifierTarget.All:                stats.RemoveAllModifiersFromStat(statType, source: null); break;
-                            case StatModifierTarget.AllFromSource:      stats.RemoveAllModifiersFromStat(statType, context.Source); break;
-                        }
-                        break;
-                    case ModifyStatTarget.All:
-                        switch (targetModifier)
-                        {
-                            case StatModifierTarget.Specific:           stats.RemoveSpecificModifierFromAllStats(targetModifierType, amount, source: null); break;
-                            case StatModifierTarget.SpecificFromSource: stats.RemoveSpecificModifierFromAllStats(targetModifierType, amount, context.Source); break;
-                            case StatModifierTarget.All:                stats.RemoveAllModifiersFromAllStats(source: null); break;
-                            case StatModifierTarget.AllFromSource:      stats.RemoveAllModifiersFromAllStats(context.Source); break;
-                        }
-                        break;
-                }
+            case Mode.AddModifierToSpecificStat:
+                stats.AddModifiers(targetModifierType, amount, statDefinition.statType, context.Source);
+                break;
+
+            case Mode.AddModifierToRandomStatFromSet:
+                if (statDefinitions.TryGetRandomStatDefinition(out StatDefinition randomDefinition))
+                    stats.AddModifiers(targetModifierType, amount, randomDefinition.statType, context.Source);
+                break;
+
+            case Mode.AddModifierToAllStatsFromSet:
+                foreach (StatDefinition definition in statDefinitions.Definitions)
+                    stats.AddModifiers(targetModifierType, amount, definition.statType, context.Source);
+                break;
+
+            case Mode.AddModifierToAllStats:
+                stats.AddModifiers(targetModifierType, amount, null, context.Source);
+                break;
+
+            case Mode.RemoveSpecificModifierFromSpecificStat:
+                stats.RemoveModifiers(statDefinition.statType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveSpecificModifierFromAllStats:
+                stats.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveAllModifiersFromSpecificStat:
+                stats.RemoveModifiers(statDefinition.statType, null, null, removeOnlyFromSource ? context.Source : null);
+                break;
+
+            case Mode.RemoveAllModifiersFromAllStats:
+                stats.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
         }
     }

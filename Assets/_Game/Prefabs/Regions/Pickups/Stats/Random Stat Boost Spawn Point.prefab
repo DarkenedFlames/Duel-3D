@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 3130268106141409021}
   - component: {fileID: 4136085379081668476}
   m_Layer: 0
-  m_Name: Universal Pickup Spawn Point
+  m_Name: Random Stat Boost Spawn Point
   m_TagString: Untagged
-  m_Icon: {fileID: 4162164826716764455, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 8418204508859773708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -57,4 +57,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27ee73abf8c1a6548a705190f12d83ba, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PickupSpawnPointRegistar
-  _set: {fileID: 11400000, guid: 94061da10e224c94a943b33e83342bbd, type: 2}
+  _set: {fileID: 11400000, guid: 78792106618f1a04793c5fa9a59a4764, type: 2}

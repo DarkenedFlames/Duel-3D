@@ -16,7 +16,7 @@ public class ASpawnObject : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Spawn Configuration")]
+    [Header("Action Configuration")]
     [Tooltip("The object prefab to spawn."), SerializeField] 
     GameObject prefab;
 

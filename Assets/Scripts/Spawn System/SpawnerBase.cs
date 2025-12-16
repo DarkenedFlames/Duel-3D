@@ -5,12 +5,24 @@ public abstract class SpawnerBase<T, TSpawnPoint, TSpawnPointSet> : MonoBehaviou
     where TSpawnPoint : SpawnPoint<T>
     where TSpawnPointSet : SpawnPointSet<T, TSpawnPoint>
 {
+    public enum SpawnMode
+    {
+        Specific,
+        Random
+    }
+
     [Header("Spawner Settings")]
     [SerializeField, Tooltip("Time in seconds between spawn attempts")]
     protected float spawnInterval = 5f;
 
+    [SerializeField, Tooltip("The spawn mode to use.")]
+    protected SpawnMode mode;
+
     [SerializeField, Tooltip("The prefab to spawn")]
     protected GameObject prefabToSpawn;
+
+    [SerializeField, Tooltip("The list of prefabs to randomly choose from to spawn.")]
+    protected PrefabSet prefabSet;
 
     [SerializeField, Tooltip("The runtime set of spawn points to use")]
     protected TSpawnPointSet spawnPointSet;
@@ -19,9 +31,16 @@ public abstract class SpawnerBase<T, TSpawnPoint, TSpawnPointSet> : MonoBehaviou
 
     void Start()
     {
-        if (prefabToSpawn == null)
+        if (prefabToSpawn == null && mode == SpawnMode.Specific)
         {
             Debug.LogError($"{name}: No prefab assigned to spawn!");
+            enabled = false;
+            return;
+        }
+
+        if (prefabSet == null && mode == SpawnMode.Random)
+        {
+            Debug.LogError($"{name}: No prefab set assigned to spawn!");
             enabled = false;
             return;
         }
@@ -39,11 +58,18 @@ public abstract class SpawnerBase<T, TSpawnPoint, TSpawnPointSet> : MonoBehaviou
     void Update()
     {
         timer.Increase(Time.deltaTime);
+        if (!timer.Exceeded) return;
         
-        if (timer.Exceeded)
+        switch (mode)
         {
-            spawnPointSet.SpawnObject(prefabToSpawn);
-            timer.Reset();
+            case SpawnMode.Specific:
+                spawnPointSet.SpawnObject(prefabToSpawn);
+                break;
+            case SpawnMode.Random:
+                if (prefabSet != null && prefabSet.TryGetRandomPrefab(out GameObject prefab))
+                    spawnPointSet.SpawnObject(prefab);
+                break;
         }
+        timer.Reset();
     }
 }

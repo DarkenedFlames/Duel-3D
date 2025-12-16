@@ -1,10 +1,8 @@
 using UnityEngine;
 using HBM.Scriptable;
 using System.Collections.Generic;
-using System.Linq;
-using System;
 
-[CreateAssetMenu(menuName = "Sets/Character")]
+[CreateAssetMenu(fileName = "New Character Set", menuName = "Runtime Sets/Character")]
 public class CharacterSet : RuntimeSet<Character>
 {
     public bool TryGetSinglePlayer(out Character singlePlayer)

@@ -13,20 +13,14 @@ public class AModifyEffect : IGameAction
     [SerializeReference]
     public List<IActionCondition> Conditions;
 
-    [Header("Target Configuration")]
+    [Header("Action Configuration")]
     [SerializeField, Tooltip("Who to modify: Owner (caster/summoner) or Target (hit character).")] 
     private ActionTargetMode targetMode = ActionTargetMode.Target;
-
     [SerializeField] private EffectModifyMode mode;
-
-    [Header("Apply Settings")]
     [SerializeField] private EffectDefinition effectToApply;
     [SerializeField, Min(1)] private int stacksToApply = 1;
-
-    [Header("Remove Settings")]
     [SerializeField] private EffectRemoveMode removeMode;
     [SerializeField] private EffectRemoveTarget removeTarget;
-
     [SerializeField] private EffectDefinition effectToRemove;
     [SerializeField, Min(1)] private int stacksToRemove = 1;
     

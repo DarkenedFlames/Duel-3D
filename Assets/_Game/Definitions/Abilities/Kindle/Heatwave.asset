@@ -13,13 +13,12 @@ MonoBehaviour:
   m_Name: Heatwave
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Heatwave
-  icon: {fileID: 21300000, guid: b4bc952e16e35c54d80cbee66c627656, type: 3}
+  icon: {fileID: 21300000, guid: 50f62e802e8260c49833d36b35c8a0f7, type: 3}
   abilityType: 1
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409707664048514
@@ -37,6 +36,7 @@ MonoBehaviour:
         - rid: 8378409784229757071
         - rid: 8378409784229757073
         prefab: {fileID: 8179996880291628250, guid: c68950945979df7418adbab1c9b4176c, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757071
@@ -52,6 +52,7 @@ MonoBehaviour:
         - rid: 8378409784229757074
         - rid: 8378409784229757075
         prefab: {fileID: 8179996880291628250, guid: b3507573ae386234eb4b0494ba6f85d8, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757073

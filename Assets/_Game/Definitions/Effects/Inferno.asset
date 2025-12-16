@@ -39,7 +39,8 @@ MonoBehaviour:
         amount: 1
         damageType: 0
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
-        damageParticlesPrefab: {fileID: 8972719502317382351, guid: bc5fc6da5e716fb449d0b5860f323519, type: 3}
+        normalHitParticlesPrefab: {fileID: 3042519775331041172, guid: 087e2013022da8b4595e2ea454b0c9e4, type: 3}
+        criticalHitParticlesPrefab: {fileID: 4306488877223958017, guid: ea9cd6237b8c4254d9001ef0cc81ab54, type: 3}
     - rid: 8378409787788361823
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:

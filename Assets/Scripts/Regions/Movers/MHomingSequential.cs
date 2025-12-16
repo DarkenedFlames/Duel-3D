@@ -24,10 +24,17 @@ public class MHomingSequential : MonoBehaviour
     [Tooltip("The distance (meters) at which the region is considered to have 'hit' its target."), SerializeField, Min(0)]
     float HitDistance = 0.5f;
 
+    [Tooltip("Offset from the target's position to aim at (e.g., 0,1,0 for chest height)."), SerializeField]
+    Vector3 TargetOffset = new(0, 1, 0);
+
+    Character owner;
     Character currentTarget;
     readonly HashSet<Character> previousTargets = new();
 
-    Character owner;
+    float GetTargetDistance() => Vector3.Distance(transform.position, GetTargetPosition());
+    Vector3 GetTargetDirection() => (GetTargetPosition() - transform.position).normalized;
+    Vector3 GetTargetPosition() => currentTarget.transform.position + TargetOffset;
+
 
     void Start()
     {
@@ -36,12 +43,7 @@ public class MHomingSequential : MonoBehaviour
 
         if (!TryGetComponent(out IActionSource source))
         {
-            LogFormatter.LogMissingComponent(nameof(IActionSource), nameof(MHoming), gameObject);
-            return;
-        }
-        if (source.Owner == null)
-        {
-            Debug.LogError($"{nameof(MHoming)} was given to an object with no owner!");
+            LogFormatter.LogMissingComponent(nameof(IActionSource), nameof(MHomingSequential), gameObject);
             return;
         }
 
@@ -53,10 +55,14 @@ public class MHomingSequential : MonoBehaviour
         if (currentTarget == null) TryAcquire();
         else
         {
-            UpdateHoming();
-            float dist = Vector3.Distance(transform.position, currentTarget.transform.position);
+            transform.forward = Vector3.RotateTowards(
+                transform.forward,
+                GetTargetDirection(),
+                TurnRate * Mathf.Deg2Rad * Time.deltaTime,
+                0f
+            );
 
-            if (dist <= HitDistance)
+            if (GetTargetDistance() <= HitDistance)
             {
                 previousTargets.Add(currentTarget);
                 currentTarget = null;
@@ -65,7 +71,7 @@ public class MHomingSequential : MonoBehaviour
 
         transform.position += Speed * Time.deltaTime * transform.forward;
     }
-
+    
     void TryAcquire()
     {
         List<Character> excluded = previousTargets.ToList();
@@ -81,19 +87,5 @@ public class MHomingSequential : MonoBehaviour
 
         if (best != null && distance <= HomingDistance)
             currentTarget = best;
-    }
-
-    void UpdateHoming()
-    {
-        if (currentTarget == null) return;
-
-        Vector3 dir = (currentTarget.transform.position - transform.position).normalized;
-
-        transform.forward = Vector3.RotateTowards(
-            transform.forward,
-            dir,
-            TurnRate * Mathf.Deg2Rad * Time.deltaTime,
-            0f
-        );
     }
 }

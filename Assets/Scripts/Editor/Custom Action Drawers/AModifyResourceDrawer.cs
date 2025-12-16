@@ -23,47 +23,62 @@ public class AModifyResourceDrawer : IActionTypeDrawer
 
         GetProperty("targetMode", out SerializedProperty targetModeProp);
         GetProperty("mode", out SerializedProperty modeProp);
-        GetProperty("targetResource", out SerializedProperty targetResourceProp);
-        GetProperty("resourceType", out SerializedProperty resourceTypeProp);
-        GetProperty("targetModifier", out SerializedProperty targetModifierProp);
-        GetProperty("modifierType", out SerializedProperty modifierTypeProp);
-        GetProperty("resetRegeneration", out SerializedProperty resetRegenProp);
+        GetProperty("removeOnlyFromSource", out SerializedProperty removeOnlyFromSourceProp);
+        GetProperty("resourceDefinition", out SerializedProperty resourceDefinitionProp);
+        GetProperty("resourceDefinitions", out SerializedProperty resourceDefinitionsProp);
+        GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
+        GetProperty("resetRegeneration", out SerializedProperty resetRegenerationProp);
         GetProperty("amount", out SerializedProperty amountProp);
 
-        ModifyResourceMode enabledMode = (ModifyResourceMode)modeProp.enumValueIndex;
-        ModifyResourceTarget enabledTarget = (ModifyResourceTarget)targetResourceProp.enumValueIndex;
-        ResourceModifierTarget enabledModifierTarget = (ResourceModifierTarget)targetModifierProp.enumValueIndex;
+        AModifyResource.Mode mode = (AModifyResource.Mode)modeProp.enumValueIndex;
 
         AddHeight(targetModeProp);
         AddHeight(modeProp);
-        
-        switch(enabledMode)
-        {
-            case ModifyResourceMode.ChangeValue:
-                AddHeight(resourceTypeProp);
-                AddHeight(resetRegenProp);
-                AddHeight(amountProp);
-                break;
-            case ModifyResourceMode.AddModifier:
-                AddHeight(resourceTypeProp);
-                AddHeight(modifierTypeProp);
-                AddHeight(amountProp);
-                break;
-            case ModifyResourceMode.RemoveModifier:
-                AddHeight(targetResourceProp);
-                
-                if (enabledTarget == ModifyResourceTarget.Specific)
-                    AddHeight(resourceTypeProp);
-                
-                AddHeight(targetModifierProp);
 
-                if (enabledModifierTarget == ResourceModifierTarget.Specific || enabledModifierTarget == ResourceModifierTarget.SpecificFromSource)
-                {
-                    AddHeight(modifierTypeProp);
-                    AddHeight(amountProp);
-                }
+        // Determine which fields to show based on mode
+        switch (mode)
+        {
+            case AModifyResource.Mode.ChangeSpecificResourceValue:
+                AddHeight(resourceDefinitionProp);
+                AddHeight(amountProp);
+                AddHeight(resetRegenerationProp);
+                break;
+
+            case AModifyResource.Mode.AddModifierToSpecificResource:
+                AddHeight(resourceDefinitionProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyResource.Mode.AddModifierToRandomResourceFromSet:
+            case AModifyResource.Mode.AddModifierToAllResourcesFromSet:
+                AddHeight(resourceDefinitionsProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyResource.Mode.AddModifierToAllResources:
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyResource.Mode.RemoveSpecificModifierFromSpecificResource:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(resourceDefinitionProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyResource.Mode.RemoveSpecificModifierFromAllResources:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(targetModifierTypeProp);
+                AddHeight(amountProp);
+                break;
+            case AModifyResource.Mode.RemoveAllModifiersFromSpecificResource:
+                AddHeight(removeOnlyFromSourceProp);
+                AddHeight(resourceDefinitionProp);
+                break;
+            case AModifyResource.Mode.RemoveAllModifiersFromAllResources:
+                AddHeight(removeOnlyFromSourceProp);
                 break;
         }
+
         return height;
     }
 
@@ -78,7 +93,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         {
             float h = EditorGUI.GetPropertyHeight(prop);
             EditorGUI.PropertyField(new Rect(position.x, y, position.width, h), prop);
-            y += h + VSpace;
+            y += h + 2;
         }
 
         // Draw Conditions field
@@ -92,48 +107,60 @@ public class AModifyResourceDrawer : IActionTypeDrawer
 
         GetProperty("targetMode", out SerializedProperty targetModeProp);
         GetProperty("mode", out SerializedProperty modeProp);
-        GetProperty("targetResource", out SerializedProperty targetResourceProp);
-        GetProperty("resourceType", out SerializedProperty resourceTypeProp);
-        GetProperty("targetModifier", out SerializedProperty targetModifierProp);
-        GetProperty("modifierType", out SerializedProperty modifierTypeProp);
-        GetProperty("resetRegeneration", out SerializedProperty resetRegenProp);
+        GetProperty("removeOnlyFromSource", out SerializedProperty removeOnlyFromSourceProp);
+        GetProperty("resourceDefinition", out SerializedProperty resourceDefinitionProp);
+        GetProperty("resourceDefinitions", out SerializedProperty resourceDefinitionsProp);
+        GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
+        GetProperty("resetRegeneration", out SerializedProperty resetRegenerationProp);
         GetProperty("amount", out SerializedProperty amountProp);
 
-        ModifyResourceMode enabledMode = (ModifyResourceMode)modeProp.enumValueIndex;
-        ModifyResourceTarget enabledTarget = (ModifyResourceTarget)targetResourceProp.enumValueIndex;
-        ResourceModifierTarget enabledModifierTarget = (ResourceModifierTarget)targetModifierProp.enumValueIndex;
+        AModifyResource.Mode mode = (AModifyResource.Mode)modeProp.enumValueIndex;
 
         DrawField(targetModeProp);
         DrawField(modeProp);
-        
-        switch(enabledMode)
+
+        // Determine which fields to show based on mode
+        switch (mode)
         {
-            case ModifyResourceMode.ChangeValue:
-                DrawField(resourceTypeProp);
-                DrawField(resetRegenProp);
+            case AModifyResource.Mode.ChangeSpecificResourceValue:
+                DrawField(resourceDefinitionProp);
+                DrawField(amountProp);
+                DrawField(resetRegenerationProp);
+                break;
+
+            case AModifyResource.Mode.AddModifierToSpecificResource:
+                DrawField(resourceDefinitionProp);
+                DrawField(targetModifierTypeProp);
                 DrawField(amountProp);
                 break;
-
-            case ModifyResourceMode.AddModifier:
-                DrawField(resourceTypeProp);
-                DrawField(modifierTypeProp);
+            case AModifyResource.Mode.AddModifierToRandomResourceFromSet:
+            case AModifyResource.Mode.AddModifierToAllResourcesFromSet:
+                DrawField(resourceDefinitionsProp);
+                DrawField(targetModifierTypeProp);
                 DrawField(amountProp);
                 break;
-
-            case ModifyResourceMode.RemoveModifier:
-                DrawField(targetResourceProp);
-                
-                if (enabledTarget == ModifyResourceTarget.Specific)
-                    DrawField(resourceTypeProp);
-                
-                DrawField(targetModifierProp);
-
-                if (enabledModifierTarget == ResourceModifierTarget.Specific || enabledModifierTarget == ResourceModifierTarget.SpecificFromSource)
-                {
-                    DrawField(modifierTypeProp);
-                    DrawField(amountProp);
-                }
+            case AModifyResource.Mode.AddModifierToAllResources:
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
                 break;
-        }
+            case AModifyResource.Mode.RemoveSpecificModifierFromSpecificResource:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(resourceDefinitionProp);
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyResource.Mode.RemoveSpecificModifierFromAllResources:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(targetModifierTypeProp);
+                DrawField(amountProp);
+                break;
+            case AModifyResource.Mode.RemoveAllModifiersFromSpecificResource:
+                DrawField(removeOnlyFromSourceProp);
+                DrawField(resourceDefinitionProp);
+                break;
+            case AModifyResource.Mode.RemoveAllModifiersFromAllResources:
+                DrawField(removeOnlyFromSourceProp);
+                break;
+        }        
     }
 }
