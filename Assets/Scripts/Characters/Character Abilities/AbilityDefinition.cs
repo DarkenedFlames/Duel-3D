@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 public enum AbilityAnimationTrigger { None, Cast, Channel }
 public enum AbilityType { Primary, Secondary, Utility, Special }
+public enum AbilityFamily { Arcana, Kindle, Spark, Shiver, Overgrowth, Null }
 
 [CreateAssetMenu(fileName = "New Ability Definition", menuName = "Definitions/Ability")]
 public class AbilityDefinition : ScriptableObject
@@ -16,6 +17,9 @@ public class AbilityDefinition : ScriptableObject
 
     [Tooltip("The type of ability, defining its slot.")]
     public AbilityType abilityType;
+
+    [Tooltip("The family the ability belongs to.")]
+    public AbilityFamily Family = AbilityFamily.Arcana;
 
     [Tooltip("The character animation trigger to use for this ability.")]
     public AbilityAnimationTrigger castAnimationTrigger = AbilityAnimationTrigger.Cast;

@@ -15,11 +15,11 @@ MonoBehaviour:
   abilityName: Entangling Lash
   icon: {fileID: 21300000, guid: d1c3ede19a3fd314684220608200c74c, type: 3}
   abilityType: 1
+  Family: 4
   castAnimationTrigger: 1
   ExpendedResource: 0
   resourceCost: 10
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444113

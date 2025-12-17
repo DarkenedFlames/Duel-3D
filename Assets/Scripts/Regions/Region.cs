@@ -5,7 +5,7 @@ using System;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(RegionSetRegistrar))]
-public class Region : MonoBehaviour, IActionSource, ISpawnable
+public class Region : MonoBehaviour, IActionSource, ISpawnable, IDespawnable
 {
     public Character Owner { get; set; }
     public object Spawner { get; set; }
@@ -25,6 +25,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
 
     bool spawned = false;
     public event Action OnDestroyed;
+    public event Action<GameObject> OnDespawned;
 
     void Awake()
     {
@@ -52,6 +53,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable
     {
         ExecuteAllTargeted(RegionHook.OnDestroyPerTarget);
         Execute(RegionHook.OnDestroy);
+        OnDespawned?.Invoke(gameObject);
         OnDestroyed?.Invoke();
         Destroy(gameObject);
     }

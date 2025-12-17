@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Strangling Roots
   icon: {fileID: 21300000, guid: 425a68c4918a8464b88fefbee2d58bf6, type: 3}
   abilityType: 0
+  Family: 4
   castAnimationTrigger: 1
   ExpendedResource: 0
   resourceCost: 6

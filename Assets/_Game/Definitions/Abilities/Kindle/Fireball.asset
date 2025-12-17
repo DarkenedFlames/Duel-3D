@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Fireball
   icon: {fileID: 21300000, guid: 5236587864c7c0d48a1987d671424fd6, type: 3}
   abilityType: 0
+  Family: 1
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1

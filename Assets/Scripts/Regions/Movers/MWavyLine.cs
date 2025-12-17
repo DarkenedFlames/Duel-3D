@@ -18,18 +18,15 @@ public class MWavyLine : MonoBehaviour
     Vector3 WaveAxis = Vector3.right;
 
     Vector3 initialPos;
-    float time;
-    void Start()
-    {
-        initialPos = transform.position;
-    }
+    readonly FloatCounter seconds = new(0, 0, max: float.MaxValue, resetToMax: false);
 
+    void Start() => initialPos = transform.position;
     void Update()
     {
-        time += Time.deltaTime;
-        Vector3 forwardMovement = ForwardSpeed * time * transform.forward;
+        seconds.Increase(Time.deltaTime);
+        Vector3 forwardMovement = ForwardSpeed * seconds.Value * transform.forward;
 
-        float wave = Amplitude * Mathf.Cos((time * Frequency) + Phase);
+        float wave = Amplitude * Mathf.Cos((seconds.Value * Frequency) + Phase);
         Vector3 waveOffset = transform.TransformDirection(WaveAxis.normalized) * wave;
 
         transform.position = initialPos + forwardMovement + waveOffset;

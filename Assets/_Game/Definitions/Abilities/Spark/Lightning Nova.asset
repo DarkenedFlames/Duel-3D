@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Lightning Nova
   icon: {fileID: 21300000, guid: 059de9d9e2cfee648a5f94582c80bfdc, type: 3}
   abilityType: 3
+  Family: 2
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 30

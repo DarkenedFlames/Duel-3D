@@ -15,11 +15,11 @@ MonoBehaviour:
   abilityName: 'Summon: Lightning Elemental'
   icon: {fileID: 21300000, guid: cd61850df778a8f4da4aa98c084d0cfd, type: 3}
   abilityType: 1
+  Family: 2
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444122

@@ -57,22 +57,22 @@ public class Stat
         }
     }
 
-    public virtual void AddModifier(StatModifier mod)
+    public virtual void AddModifier(StatModifier modifier)
     {
-        modifiers.Add(mod);
+        modifiers.Add(modifier);
         RecalculateValue();
     }
 
     public void RemoveModifiers(StatModifierType? modifierType = null, float? modifierValue = null, object source = null)
     {  
         List<StatModifier> toRemove = modifiers
-            .Where(m => modifierType != null && m.Type == modifierType)
-            .Where(m => modifierValue != null && Mathf.Approximately(m.Value, modifierValue.Value))
-            .Where(m => source != null && m.Source == source)
+            .Where(m => modifierType == null || m.Type == modifierType)
+            .Where(m => modifierValue == null || Mathf.Approximately(m.Value, modifierValue.Value))
+            .Where(m => source == null || m.Source == source)
             .ToList();
 
         for (int i = modifiers.Count - 1; i >= 0; i--)
             if (toRemove.Contains(modifiers[i]) && modifiers.Remove(modifiers[i]))
-                    RecalculateValue();
+                RecalculateValue();
     }
 }

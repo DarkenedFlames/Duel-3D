@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Lightning Arc
   icon: {fileID: 21300000, guid: b5b5842bd1e084548a439204f1a9afee, type: 3}
   abilityType: 0
+  Family: 2
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 15

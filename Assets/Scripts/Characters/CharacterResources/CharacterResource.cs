@@ -81,9 +81,9 @@ public class CharacterResource
     public void RemoveModifiers(ResourceModifierType? modifierType = null, float? modifierValue = null, object source = null)
     {  
         List<ResourceModifier> toRemove = modifiers
-            .Where(m => modifierType != null && m.Type == modifierType)
-            .Where(m => modifierValue != null && Mathf.Approximately(m.Value, modifierValue.Value))
-            .Where(m => source != null && m.Source == source)
+            .Where(m => modifierType == null || m.Type == modifierType)
+            .Where(m => modifierValue == null || Mathf.Approximately(m.Value, modifierValue.Value))
+            .Where(m => source == null || m.Source == source)
             .ToList();
 
         for (int i = modifiers.Count - 1; i >= 0; i--)

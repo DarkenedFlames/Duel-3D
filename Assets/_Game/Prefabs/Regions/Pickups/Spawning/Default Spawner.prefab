@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1569517122992632107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2214508962650684323}
+  - component: {fileID: 8320374986160969883}
+  m_Layer: 0
+  m_Name: Default Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2214508962650684323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569517122992632107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8320374986160969883
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1569517122992632107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e2dbe0ea9bdb07438ee8886068e6020, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ObjectSpawner
+  data:
+  - mode: 0
+    prefab: {fileID: 3273270760640790347, guid: 41b38ee00e4b39d4dbd23196bf7ca95b, type: 3}
+    set: {fileID: 0}
+    interval: 5
+    spawnPositions:
+    - {x: 0, y: 1, z: -20}
+  - mode: 0
+    prefab: {fileID: 8328105314974622307, guid: 700032cc5277d154c9283d189696d684, type: 3}
+    set: {fileID: 0}
+    interval: 5
+    spawnPositions:
+    - {x: -2, y: 1, z: -20}
+  - mode: 0
+    prefab: {fileID: 3043533673366285581, guid: 89179db96c3d7aa47bc35ba35bfb9d1c, type: 3}
+    set: {fileID: 0}
+    interval: 5
+    spawnPositions:
+    - {x: -4, y: 1, z: -20}
+  - mode: 0
+    prefab: {fileID: 6154608981798607742, guid: f7dba266aa496e34dbfea4041368a9a9, type: 3}
+    set: {fileID: 0}
+    interval: 5
+    spawnPositions:
+    - {x: -6, y: 1, z: -20}
+  - mode: 0
+    prefab: {fileID: 5304197474323430073, guid: 6278ffc149452cb4fa36d670873ef056, type: 3}
+    set: {fileID: 0}
+    interval: 5
+    spawnPositions:
+    - {x: -8, y: 1, z: -20}
+  - mode: 1
+    prefab: {fileID: 5304197474323430073, guid: 6278ffc149452cb4fa36d670873ef056, type: 3}
+    set: {fileID: 11400000, guid: 784da349b2e19ca4192de5c8efc5c251, type: 2}
+    interval: 5
+    spawnPositions:
+    - {x: 0, y: 1, z: -15}
+    - {x: -2, y: 1, z: -15}
+    - {x: -4, y: 1, z: -15}
+    - {x: -6, y: 1, z: -15}
+    - {x: -8, y: 1, z: -15}

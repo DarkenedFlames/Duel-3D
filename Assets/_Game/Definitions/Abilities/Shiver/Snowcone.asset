@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Snowcone
   icon: {fileID: 21300000, guid: 83b6aefe4e1c0544683237a54be38586, type: 3}
   abilityType: 1
+  Family: 3
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1

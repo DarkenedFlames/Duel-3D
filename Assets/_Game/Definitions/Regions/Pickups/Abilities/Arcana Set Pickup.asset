@@ -32,6 +32,7 @@ MonoBehaviour:
       data:
         Conditions: []
         targetMode: 1
-        mode: 1
+        mode: 2
         abilityDefinition: {fileID: 0}
-        set: {fileID: 11400000, guid: 3b2da510cd3271240b11beac3cdc12c0, type: 2}
+        set: {fileID: 11400000, guid: 11a04771294654041bb1ea7081e1eb9c, type: 2}
+        family: 0

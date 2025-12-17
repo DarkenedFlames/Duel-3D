@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Conflagration
   icon: {fileID: 21300000, guid: b1612d91957906541bc2ea44f95c8d13, type: 3}
   abilityType: 3
+  Family: 1
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1

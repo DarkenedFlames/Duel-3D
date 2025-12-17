@@ -15,11 +15,11 @@ MonoBehaviour:
   abilityName: Frost Shards
   icon: {fileID: 21300000, guid: 707a064039c5818438a7ce614c7e9492, type: 3}
   abilityType: 0
+  Family: 3
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444133
@@ -45,6 +45,7 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757034
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        reference: 1
         spawnOffset: {x: -1, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409663798444134
@@ -53,6 +54,7 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757035
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409663798444135
@@ -61,6 +63,7 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757036
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        reference: 1
         spawnOffset: {x: 1, y: 0, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409715047596123
@@ -70,6 +73,7 @@ MonoBehaviour:
         - rid: 8378409784229757040
         - rid: 8378409784229757037
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        reference: 1
         spawnOffset: {x: 0.707, y: 0.707, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409715047596124
@@ -79,6 +83,7 @@ MonoBehaviour:
         - rid: 8378409784229757041
         - rid: 8378409784229757038
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
+        reference: 1
         spawnOffset: {x: -0.707, y: 0.707, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757034

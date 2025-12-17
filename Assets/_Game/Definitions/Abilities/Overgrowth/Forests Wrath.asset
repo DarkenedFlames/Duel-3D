@@ -15,11 +15,11 @@ MonoBehaviour:
   abilityName: Forest's Wrath
   icon: {fileID: 21300000, guid: 50a706cdfa19e214f8ea2345c915b357, type: 3}
   abilityType: 3
+  Family: 4
   castAnimationTrigger: 1
   ExpendedResource: 0
   resourceCost: 15
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444116

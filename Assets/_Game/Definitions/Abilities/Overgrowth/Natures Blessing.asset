@@ -15,6 +15,7 @@ MonoBehaviour:
   abilityName: Nature's Blessing
   icon: {fileID: 21300000, guid: a6d6c99af792d274f8fa9a3052f1f7c5, type: 3}
   abilityType: 2
+  Family: 4
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 20

@@ -15,11 +15,11 @@ MonoBehaviour:
   abilityName: Ice Wall
   icon: {fileID: 21300000, guid: ff18920ca1f236e4397dc3330ec5832f, type: 3}
   abilityType: 2
+  Family: 3
   castAnimationTrigger: 1
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
-  activationConditions: []
   Actions:
   - Action:
       rid: 8378409663798444118
@@ -39,6 +39,7 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757053
         prefab: {fileID: 5207675595643598130, guid: 83136da6ddcb6954a88cd798c6fb258e, type: 3}
+        reference: 1
         spawnOffset: {x: 0, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757053
@@ -54,6 +55,7 @@ MonoBehaviour:
         - rid: 8378409784229757056
         - rid: 8378409784229757055
         prefab: {fileID: 5207675595643598130, guid: 83136da6ddcb6954a88cd798c6fb258e, type: 3}
+        reference: 1
         spawnOffset: {x: -5, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757055
@@ -75,6 +77,7 @@ MonoBehaviour:
         - rid: 8378409784229757058
         - rid: 8378409784229757059
         prefab: {fileID: 5207675595643598130, guid: 83136da6ddcb6954a88cd798c6fb258e, type: 3}
+        reference: 1
         spawnOffset: {x: 5, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
     - rid: 8378409784229757058
