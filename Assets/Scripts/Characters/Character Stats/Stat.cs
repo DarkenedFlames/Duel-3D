@@ -63,7 +63,11 @@ public class Stat
         RecalculateValue();
     }
 
-    public void RemoveModifiers(StatModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    public List<StatModifier> RemoveModifiers(
+        StatModifierType? modifierType = null, 
+        float? modifierValue = null, 
+        object source = null
+    )
     {  
         List<StatModifier> toRemove = modifiers
             .Where(m => modifierType == null || m.Type == modifierType)
@@ -71,8 +75,8 @@ public class Stat
             .Where(m => source == null || m.Source == source)
             .ToList();
 
-        for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (toRemove.Contains(modifiers[i]) && modifiers.Remove(modifiers[i]))
-                RecalculateValue();
+        modifiers.RemoveAll(m => toRemove.Contains(m));
+        RecalculateValue();
+        return toRemove;
     }
 }

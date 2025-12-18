@@ -1,32 +1,54 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using UnityEngine;
-using System.Linq;
 
 public class CharacterStats : MonoBehaviour
 {
     [SerializeField] StatDefinitionSet InitialStatSet;
 
-    readonly List<Stat> Stats = new();
+    readonly List<Stat> stats = new();
+    public ReadOnlyCollection<Stat> Stats => stats.AsReadOnly();
 
     void Awake()
     {
         foreach (StatDefinition definition in InitialStatSet.Definitions)
-            Stats.Add(new(definition));
+            stats.Add(new(definition));
     }
 
-    public Stat GetStat(StatType type) => Stats.Find(s => s.Definition.statType == type);
+    public Stat GetStat(StatType type) => stats.Find(s => s.Definition.statType == type);
 
-    public void AddModifiers(StatModifierType modifierType, float modifierValue, StatType? statType = null,  object source = null)
+    public Dictionary<StatDefinition, List<StatModifier>> AddModifiers(
+        StatModifierType modifierType,
+        float modifierValue,
+        StatType? statType = null,
+        object source = null
+    )
     {
-        foreach (Stat stat in Stats)
+        Dictionary<StatDefinition, List<StatModifier>> added = new();
+        foreach (Stat stat in stats)
             if (statType == null || GetStat(statType.Value) == stat)
-                stat.AddModifier(new StatModifier(modifierType, modifierValue, source));
+            {
+                StatModifier newModifier = new(modifierType, modifierValue, source);
+                added[stat.Definition] = new(){ newModifier };
+                stat.AddModifier(newModifier);
+            }
+        return added;
     }
 
-    public void RemoveModifiers(StatType? statType = null, StatModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    public Dictionary<StatDefinition, List<StatModifier>> RemoveModifiers(
+        StatType? statType = null,
+        StatModifierType? modifierType = null,
+        float? modifierValue = null,
+        object source = null
+    )
     {
-        foreach (Stat stat in Stats)
+        Dictionary<StatDefinition, List<StatModifier>> removed = new();
+        foreach (Stat stat in stats)
             if (statType == null || GetStat(statType.Value) == stat)
-                stat.RemoveModifiers(modifierType, modifierValue, source);
+                removed.Add(
+                    stat.Definition,
+                    stat.RemoveModifiers(modifierType, modifierValue, source)
+                 );
+        return removed;
     }
 }

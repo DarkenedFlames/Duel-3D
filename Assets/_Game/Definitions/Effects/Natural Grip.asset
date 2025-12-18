@@ -41,6 +41,7 @@ MonoBehaviour:
         statDefinitions: {fileID: 0}
         targetModifierType: 2
         amount: 0
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}
     - rid: 8378409663798444146
       type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
       data:
@@ -52,3 +53,4 @@ MonoBehaviour:
         statDefinitions: {fileID: 0}
         targetModifierType: 0
         amount: 0
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}

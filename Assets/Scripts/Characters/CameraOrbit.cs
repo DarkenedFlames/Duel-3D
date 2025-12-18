@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class CameraOrbit : MonoBehaviour
@@ -26,20 +27,19 @@ public class CameraOrbit : MonoBehaviour
     IInputDriver input;
     Character target;
 
-    void Awake()
+    void Start()
     {
         if (allCharacters == null || !allCharacters.TryGetSinglePlayer(out Character localPlayer))
         {
             Debug.LogError("No player found for Camera initialization.");
+            Debug.Log($"Character Count: {allCharacters.ToList().Count}");
             return;
         }
         
         target = localPlayer;
         input = target.CharacterInput;
-    }
 
-    void Start()
-    {
+
         Vector3 angles = transform.eulerAngles;
         _pitch = angles.x;
         if (_pitch > 180f) _pitch -= 360f;

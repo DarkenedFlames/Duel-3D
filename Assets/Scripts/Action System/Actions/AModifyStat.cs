@@ -42,6 +42,8 @@ public class AModifyStat : IGameAction
     [Tooltip("The modifier value to modify."), SerializeField]
     float amount = 0f;
 
+    [Tooltip("The number + icon prefab to use (NumberIconUI)"), SerializeField]
+    GameObject numberIconUI;
 
     public void Execute(ActionContext context)
     {
@@ -64,43 +66,76 @@ public class AModifyStat : IGameAction
                 if (!condition.IsSatisfied(context))
                     return;
         }
+
+        Dictionary<StatDefinition, List<StatModifier>> added = new();
+        Dictionary<StatDefinition, List<StatModifier>> removed = new();
         
         CharacterStats stats = target.CharacterStats;
         switch (mode)
         {
             case Mode.AddModifierToSpecificStat:
-                stats.AddModifiers(targetModifierType, amount, statDefinition.statType, context.Source);
+                added = stats.AddModifiers(targetModifierType, amount, statDefinition.statType, context.Source);
                 break;
 
             case Mode.AddModifierToRandomStatFromSet:
                 if (statDefinitions.TryGetRandomStatDefinition(out StatDefinition randomDefinition))
-                    stats.AddModifiers(targetModifierType, amount, randomDefinition.statType, context.Source);
+                    added = stats.AddModifiers(targetModifierType, amount, randomDefinition.statType, context.Source);
                 break;
 
             case Mode.AddModifierToAllStatsFromSet:
                 foreach (StatDefinition definition in statDefinitions.Definitions)
-                    stats.AddModifiers(targetModifierType, amount, definition.statType, context.Source);
+                {
+                    added[definition] = stats.AddModifiers(
+                        targetModifierType, 
+                        amount,
+                        definition.statType,
+                        context.Source
+                    )[definition];
+                }
                 break;
 
             case Mode.AddModifierToAllStats:
-                stats.AddModifiers(targetModifierType, amount, null, context.Source);
+                added = stats.AddModifiers(targetModifierType, amount, null, context.Source);
                 break;
 
             case Mode.RemoveSpecificModifierFromSpecificStat:
-                stats.RemoveModifiers(statDefinition.statType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                removed = stats.RemoveModifiers(statDefinition.statType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveSpecificModifierFromAllStats:
-                stats.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                removed = stats.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveAllModifiersFromSpecificStat:
-                stats.RemoveModifiers(statDefinition.statType, null, null, removeOnlyFromSource ? context.Source : null);
+                removed = stats.RemoveModifiers(statDefinition.statType, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveAllModifiersFromAllStats:
-                stats.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
+                removed = stats.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
         }
+        
+        foreach (KeyValuePair<StatDefinition, List<StatModifier>> kvp in added)
+            foreach (StatModifier modifier in kvp.Value)
+                SpawnModifierUI(kvp.Key, modifier, Color.blue, target.transform);
+           
+        foreach (KeyValuePair<StatDefinition, List<StatModifier>> kvp in removed)
+            foreach (StatModifier modifier in kvp.Value)
+                SpawnModifierUI(kvp.Key, modifier, Color.orange, target.transform);
+    }    
+    
+    void SpawnModifierUI(StatDefinition definition, StatModifier modifier, Color color, Transform targetTransform)
+    {
+        if (numberIconUI == null)
+            return;
+    
+        GameObject spawnedUI = Object.Instantiate(numberIconUI, targetTransform.position, targetTransform.rotation);
+        if (!spawnedUI.TryGetComponent(out NumberIconUI uiComponent))
+        {
+            Debug.LogError($"{spawnedUI.name} is missing {nameof(NumberIconUI)}");
+            return;
+        }
+        
+        uiComponent.Initialize(modifier.Value, color, definition.Icon, (NumberIconUI.FormatMode)(int)modifier.Type);
     }
 }

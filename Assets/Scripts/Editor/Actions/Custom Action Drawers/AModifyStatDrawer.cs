@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -28,6 +29,7 @@ public class AModifyStatDrawer : IActionTypeDrawer
         GetProperty("statDefinitions", out SerializedProperty statDefinitionsProp);
         GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("amount", out SerializedProperty amountProp);
+        GetProperty("numberIconUI", out SerializedProperty numberIconUIProp);
 
         AModifyStat.Mode mode = (AModifyStat.Mode)modeProp.enumValueIndex;
 
@@ -71,6 +73,7 @@ public class AModifyStatDrawer : IActionTypeDrawer
                 AddHeight(removeOnlyFromSourceProp);
                 break;
         }
+        AddHeight(numberIconUIProp);
 
         return height;
     }
@@ -105,6 +108,7 @@ public class AModifyStatDrawer : IActionTypeDrawer
         GetProperty("statDefinitions", out SerializedProperty statDefinitionsProp);
         GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("amount", out SerializedProperty amountProp);
+        GetProperty("numberIconUI", out SerializedProperty numberIconUIProp);
 
         AModifyStat.Mode mode = (AModifyStat.Mode)modeProp.enumValueIndex;
 
@@ -147,6 +151,7 @@ public class AModifyStatDrawer : IActionTypeDrawer
             case AModifyStat.Mode.RemoveAllModifiersFromAllStats:
                 DrawField(removeOnlyFromSourceProp);
                 break;
-        }        
+        }
+        DrawField(numberIconUIProp); 
     }
 }

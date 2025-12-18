@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Movement Speed
   statType: 9
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: 9c0d0d3d3c486274891737436f649ea4, type: 3}

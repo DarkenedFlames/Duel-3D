@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Attack
   statType: 3
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: 25113aa4316d7554d98b1f0983b9e514, type: 3}

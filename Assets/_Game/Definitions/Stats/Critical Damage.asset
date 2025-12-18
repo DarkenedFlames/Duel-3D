@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Critical Damage
   statType: 8
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: be21080d1ed9db5449934fe002977c45, type: 3}

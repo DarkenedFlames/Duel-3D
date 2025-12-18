@@ -47,6 +47,9 @@ public class AModifyResource : IGameAction
     float amount = 0f;
 
 
+    [Tooltip("The number + icon prefab to use (NumberIconUI)"), SerializeField]
+    GameObject numberIconUI;
+
     public void Execute(ActionContext context)
     {
         Character target = targetMode switch
@@ -69,46 +72,102 @@ public class AModifyResource : IGameAction
                     return;
         }
         
+        Dictionary<ResourceDefinition, List<ResourceModifier>> added = new();
+        Dictionary<ResourceDefinition, List<ResourceModifier>> removed = new();
+        
         CharacterResources resources = target.CharacterResources;
         switch (mode)
         {
             case Mode.ChangeSpecificResourceValue:
-                resources.ChangeResourceValue(resourceDefinition.resourceType, amount, out _, resetRegeneration);
+                if (resources.ChangeResourceValue(resourceDefinition.resourceType, amount, out float delta, resetRegeneration))
+                    SpawnValueChangeUI(resourceDefinition, delta, target.transform);
                 break;
 
             case Mode.AddModifierToSpecificResource:
-                resources.AddModifiers(targetModifierType, amount, resourceDefinition.resourceType, context.Source);
+                added = resources.AddModifiers(targetModifierType, amount, resourceDefinition.resourceType, context.Source);
                 break;
 
             case Mode.AddModifierToRandomResourceFromSet:
                 if (resourceDefinitions.TryGetRandomResourceDefinition(out ResourceDefinition randomDefinition))
-                    resources.AddModifiers(targetModifierType, amount, randomDefinition.resourceType, context.Source);
+                    added = resources.AddModifiers(targetModifierType, amount, randomDefinition.resourceType, context.Source);
                 break;
 
             case Mode.AddModifierToAllResourcesFromSet:
                 foreach (ResourceDefinition definition in resourceDefinitions.Definitions)
-                    resources.AddModifiers(targetModifierType, amount, definition.resourceType, context.Source);
+                {
+                    added[definition] = resources.AddModifiers(
+                        targetModifierType, 
+                        amount,
+                        definition.resourceType,
+                        context.Source
+                    )[definition];
+                }
                 break;
 
             case Mode.AddModifierToAllResources:
-                resources.AddModifiers(targetModifierType, amount, null, context.Source);
+                added = resources.AddModifiers(targetModifierType, amount, null, context.Source);
                 break;
 
             case Mode.RemoveSpecificModifierFromSpecificResource:
-                resources.RemoveModifiers(resourceDefinition.resourceType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                removed = resources.RemoveModifiers(resourceDefinition.resourceType, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveSpecificModifierFromAllResources:
-                resources.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
+                removed = resources.RemoveModifiers(null, targetModifierType, amount, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveAllModifiersFromSpecificResource:
-                resources.RemoveModifiers(resourceDefinition.resourceType, null, null, removeOnlyFromSource ? context.Source : null);
+                removed = resources.RemoveModifiers(resourceDefinition.resourceType, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
 
             case Mode.RemoveAllModifiersFromAllResources:
-                resources.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
+                removed = resources.RemoveModifiers(null, null, null, removeOnlyFromSource ? context.Source : null);
                 break;
         }
+        
+        foreach (KeyValuePair<ResourceDefinition, List<ResourceModifier>> kvp in added)
+            foreach (ResourceModifier modifier in kvp.Value)
+                SpawnModifierUI(kvp.Key, modifier, Color.blue, target.transform);
+           
+        foreach (KeyValuePair<ResourceDefinition, List<ResourceModifier>> kvp in removed)
+            foreach (ResourceModifier modifier in kvp.Value)
+                SpawnModifierUI(kvp.Key, modifier, Color.orange, target.transform);
+    }
+    
+    void SpawnValueChangeUI(ResourceDefinition definition, float delta, Transform targetTransform)
+    {
+        if (numberIconUI == null)
+            return;
+    
+        GameObject spawnedUI = Object.Instantiate(numberIconUI, targetTransform.position, targetTransform.rotation);
+        if (!spawnedUI.TryGetComponent(out NumberIconUI uiComponent))
+        {
+            Debug.LogError($"{spawnedUI.name} is missing {nameof(NumberIconUI)}");
+            return;
+        }
+        
+        uiComponent.Initialize(delta, delta > 0 ? Color.green : Color.red, definition.Icon, NumberIconUI.FormatMode.Flat);
+    }
+    
+    
+    void SpawnModifierUI(ResourceDefinition definition, ResourceModifier modifier, Color color, Transform targetTransform)
+    {
+        if (numberIconUI == null)
+            return;
+    
+        GameObject spawnedUI = Object.Instantiate(numberIconUI, targetTransform.position, targetTransform.rotation);
+        if (!spawnedUI.TryGetComponent(out NumberIconUI uiComponent))
+        {
+            Debug.LogError($"{spawnedUI.name} is missing {nameof(NumberIconUI)}");
+            return;
+        }
+
+        Sprite icon = modifier.Type == ResourceModifierType.Increase
+                ? definition.IncreaseIcon 
+                : definition.DecreaseIcon;
+        
+        uiComponent.Initialize(modifier.Value, color, icon, NumberIconUI.FormatMode.PercentMult);
+        // For stats
+        // uiComponent.Initialize(modifier.Value, color, definition.Icon, (NumberIconUI.FormatMode)(int)modifier.Type);
     }
 }

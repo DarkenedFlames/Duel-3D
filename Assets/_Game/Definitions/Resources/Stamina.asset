@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Stamina
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDefinition
   ResourceName: Stamina
+  Icon: {fileID: 21300000, guid: 31276530070a6d345873bc8e2b72a2d2, type: 3}
+  IncreaseIcon: {fileID: 21300000, guid: f69b209a637153746b34617b889ac63a, type: 3}
+  DecreaseIcon: {fileID: 21300000, guid: 18cfd4a023f1cb746b70b021e1c36445, type: 3}
   resourceType: 2
   MaxStat: {fileID: 11400000, guid: 562c35fa967cbc543b43a87d26f15abe, type: 2}
   RegenerationCooldown: 7

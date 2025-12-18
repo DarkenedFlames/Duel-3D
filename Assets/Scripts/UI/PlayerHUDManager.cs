@@ -5,11 +5,13 @@ public class PlayerHUDManager : MonoBehaviour
     [SerializeField] CharacterSet allCharacters;
     AbilityBarUI abilityBar;
     WeaponSlotUI weaponSlot;
+    StatPanelUI statPanel;
 
     void Start()
     {
         abilityBar = GetComponentInChildren<AbilityBarUI>(true);
         weaponSlot = GetComponentInChildren<WeaponSlotUI>(true);
+        statPanel = GetComponentInChildren<StatPanelUI>(true);
 
         if (allCharacters == null || !allCharacters.TryGetSinglePlayer(out Character localPlayer))
         {
@@ -19,5 +21,6 @@ public class PlayerHUDManager : MonoBehaviour
 
         abilityBar.SubscribeToHandler(localPlayer.CharacterAbilities);
         weaponSlot.SubscribeToHandler(localPlayer.CharacterWeapons);
+        statPanel.SubscribeToHandler(localPlayer);
     }
 }

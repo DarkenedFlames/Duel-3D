@@ -29,6 +29,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("resetRegeneration", out SerializedProperty resetRegenerationProp);
         GetProperty("amount", out SerializedProperty amountProp);
+        GetProperty("numberIconUI", out SerializedProperty numberIconUIProp);
 
         AModifyResource.Mode mode = (AModifyResource.Mode)modeProp.enumValueIndex;
 
@@ -78,6 +79,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
                 AddHeight(removeOnlyFromSourceProp);
                 break;
         }
+        AddHeight(numberIconUIProp);
 
         return height;
     }
@@ -113,6 +115,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
         GetProperty("targetModifierType", out SerializedProperty targetModifierTypeProp);
         GetProperty("resetRegeneration", out SerializedProperty resetRegenerationProp);
         GetProperty("amount", out SerializedProperty amountProp);
+        GetProperty("numberIconUI", out SerializedProperty numberIconUIProp);
 
         AModifyResource.Mode mode = (AModifyResource.Mode)modeProp.enumValueIndex;
 
@@ -161,6 +164,7 @@ public class AModifyResourceDrawer : IActionTypeDrawer
             case AModifyResource.Mode.RemoveAllModifiersFromAllResources:
                 DrawField(removeOnlyFromSourceProp);
                 break;
-        }        
+        }
+        DrawField(numberIconUIProp);
     }
 }

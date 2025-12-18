@@ -11,6 +11,9 @@ public enum ResourceType
 public class ResourceDefinition : ScriptableObject
 {
     public string ResourceName = "Untitled Resource";
+    public Sprite Icon;
+    public Sprite IncreaseIcon;
+    public Sprite DecreaseIcon;
     public ResourceType resourceType;
     public StatDefinition MaxStat;
     public float RegenerationCooldown = 7f;

@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Mana
   m_EditorClassIdentifier: Assembly-CSharp::ResourceDefinition
   ResourceName: Mana
+  Icon: {fileID: 21300000, guid: 2702b4119d7d87543a9528e73b2f1de3, type: 3}
+  IncreaseIcon: {fileID: 21300000, guid: a2b2c0e35991fc1429cb6ec2318fbd5b, type: 3}
+  DecreaseIcon: {fileID: 21300000, guid: 316db4e217ce8ab44a76674e25ee4d27, type: 3}
   resourceType: 1
   MaxStat: {fileID: 11400000, guid: aada505f8136a9d4090fdba990355432, type: 2}
   RegenerationCooldown: 7

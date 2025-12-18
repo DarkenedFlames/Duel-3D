@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Mono.Cecil;
+using System.Collections.ObjectModel;
 using UnityEngine;
 
 [RequireComponent(typeof(Character))]
@@ -9,6 +8,7 @@ public class CharacterResources : MonoBehaviour
 {
     [SerializeField] ResourceDefinitionSet initialResources;
     readonly List<CharacterResource> resources = new();
+    public ReadOnlyCollection<CharacterResource> Resources => resources.AsReadOnly();
 
     bool initialized = false;
 
@@ -62,17 +62,38 @@ public class CharacterResources : MonoBehaviour
         return didChange;
     }
 
-    public void AddModifiers(ResourceModifierType modifierType, float modifierValue, ResourceType? resourceType = null,  object source = null)
+    public Dictionary<ResourceDefinition, List<ResourceModifier>> AddModifiers(
+        ResourceModifierType modifierType,
+        float modifierValue,
+        ResourceType? resourceType = null,
+        object source = null
+    )
     {
+        Dictionary<ResourceDefinition, List<ResourceModifier>> added = new();
         foreach (CharacterResource resource in resources)
             if (resourceType == null || GetResource(resourceType.Value) == resource)
-                resource.AddModifier(new ResourceModifier(modifierType, modifierValue, source));
+            {
+                ResourceModifier newModifier = new(modifierType, modifierValue, source);
+                added[resource.Definition] = new(){ newModifier };
+                resource.AddModifier(newModifier);
+            }
+        return added;
     }
 
-    public void RemoveModifiers(ResourceType? resourceType = null, ResourceModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    public Dictionary<ResourceDefinition, List<ResourceModifier>> RemoveModifiers(
+        ResourceType? resourceType = null,
+        ResourceModifierType? modifierType = null,
+        float? modifierValue = null,
+        object source = null
+    )
     {
+        Dictionary<ResourceDefinition, List<ResourceModifier>> removed = new();
         foreach (CharacterResource resource in resources)
             if (resourceType == null || GetResource(resourceType.Value) == resource)
-                resource.RemoveModifiers(modifierType, modifierValue, source);
+                removed.Add(
+                    resource.Definition,
+                    resource.RemoveModifiers(modifierType, modifierValue, source)
+                 );
+        return removed;
     }
 }

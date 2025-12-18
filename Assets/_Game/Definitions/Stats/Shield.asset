@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Shield
   statType: 6
   defaultValue: 0
+  Icon: {fileID: 21300000, guid: 0933768acd171ae45aa3b58e65714a6f, type: 3}

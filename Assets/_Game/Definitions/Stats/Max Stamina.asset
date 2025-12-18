@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Max Stamina
   statType: 2
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: 40c9a6def03593b40996dbee15d46e5b, type: 3}

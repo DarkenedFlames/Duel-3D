@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Defense
   statType: 4
   defaultValue: 0
+  Icon: {fileID: 21300000, guid: 5f82d082e45c472428d332f043d7e74a, type: 3}

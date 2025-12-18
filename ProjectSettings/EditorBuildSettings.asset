@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Game/Scenes/SampleScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/_Game/Scenes/Duel 3D.unity
+    guid: 1afccc1580aee354086f9bfd68afe30e
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d649463e1b79d86419c76482de80750a, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: b6e84b926d3eb3046a79126171353ab8, type: 3}

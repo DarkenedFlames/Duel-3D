@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Max Mana
   statType: 1
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: 26d557382d5588c4eb4d75a52431290f, type: 3}

@@ -27,4 +27,5 @@ public class StatDefinition : ScriptableObject
     public string statName;
     public StatType statType;
     public float defaultValue;
+    public Sprite Icon;
 }

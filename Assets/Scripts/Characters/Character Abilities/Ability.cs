@@ -41,4 +41,7 @@ public class Ability : IActionSource
         seconds.Reset();
         return true;
     }
+
+    // Implement cooldown with this
+    float CurrentCooldown() => Definition.cooldown * 100f / (100f + Owner.CharacterStats.GetStat(StatType.CooldownReduction).Value);
 }

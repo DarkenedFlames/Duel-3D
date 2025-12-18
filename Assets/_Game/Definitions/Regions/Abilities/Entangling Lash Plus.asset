@@ -55,6 +55,7 @@ MonoBehaviour:
         targetModifierType: 0
         resetRegeneration: 0
         amount: 3
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}
     - rid: 8378409798152224886
       type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
       data:

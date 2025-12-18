@@ -66,3 +66,4 @@ MonoBehaviour:
         targetModifierType: 0
         resetRegeneration: 1
         amount: -5
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}

@@ -38,3 +38,4 @@ MonoBehaviour:
         statDefinitions: {fileID: 11400000, guid: 0e4f0a6e4d3e0b14a8c6db534b818a9e, type: 2}
         targetModifierType: 0
         amount: 10
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}

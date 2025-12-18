@@ -61,9 +61,6 @@ public class CharacterResource
         return ChangeValue(regenAmount, out changed);
     }
 
-    public virtual void AddModifier(ResourceModifier mod) => modifiers.Add(mod);
-    void RemoveModifier(ResourceModifier mod) => modifiers.Remove(mod);
-
     public void GetModifierTotals(out float increase, out float decrease)
     {
         increase = 1f;
@@ -78,7 +75,13 @@ public class CharacterResource
             }
     }
 
-    public void RemoveModifiers(ResourceModifierType? modifierType = null, float? modifierValue = null, object source = null)
+    public void AddModifier(ResourceModifier mod) => modifiers.Add(mod);
+
+    public List<ResourceModifier> RemoveModifiers(
+        ResourceModifierType? modifierType = null, 
+        float? modifierValue = null, 
+        object source = null
+    )
     {  
         List<ResourceModifier> toRemove = modifiers
             .Where(m => modifierType == null || m.Type == modifierType)
@@ -86,8 +89,7 @@ public class CharacterResource
             .Where(m => source == null || m.Source == source)
             .ToList();
 
-        for (int i = modifiers.Count - 1; i >= 0; i--)
-            if (toRemove.Contains(modifiers[i]))
-                RemoveModifier(modifiers[i]);
+        modifiers.RemoveAll(m => toRemove.Contains(m));
+        return toRemove;
     }
 }

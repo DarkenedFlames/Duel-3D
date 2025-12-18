@@ -15,3 +15,4 @@ MonoBehaviour:
   statName: Max Health
   statType: 0
   defaultValue: 100
+  Icon: {fileID: 21300000, guid: 208a8cc7662d512459e2b7c26b23109f, type: 3}
