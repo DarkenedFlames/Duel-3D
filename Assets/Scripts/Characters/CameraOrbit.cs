@@ -29,22 +29,12 @@ public class CameraOrbit : MonoBehaviour
 
     void Start()
     {
-        if (allCharacters == null || !allCharacters.TryGetSinglePlayer(out Character localPlayer))
-        {
-            Debug.LogError("No player found for Camera initialization.");
-            Debug.Log($"Character Count: {allCharacters.ToList().Count}");
+        if (allCharacters == null || !allCharacters.TryGetSinglePlayer(out target))
             return;
-        }
-        
-        target = localPlayer;
+
         input = target.CharacterInput;
 
-
-        Vector3 angles = transform.eulerAngles;
-        _pitch = angles.x;
-        if (_pitch > 180f) _pitch -= 360f;
-        _pitch = Mathf.Clamp(_pitch, minY, maxY);
-
+        _pitch = Mathf.Clamp(transform.eulerAngles.x, minY, maxY);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -57,13 +47,12 @@ public class CameraOrbit : MonoBehaviour
         _pitch = Mathf.Clamp(_pitch, minY, maxY);
 
         Quaternion rotation = Quaternion.Euler(_pitch, targetTransform.eulerAngles.y, 0f);
-        Vector3 desiredPosition = targetTransform.position - rotation * Vector3.forward * distance;
-        Vector3 direction = (desiredPosition - targetTransform.position).normalized;
+        Vector3 direction = rotation * Vector3.back * distance;
 
-        if (Physics.Raycast(targetTransform.position, direction, out RaycastHit hit, distance, ~layerMask))
-            desiredPosition = targetTransform.position - rotation * Vector3.forward * hit.distance * 0.9f;
-        
-        transform.position = desiredPosition;
+        transform.position = Physics.Raycast(targetTransform.position, direction.normalized, out RaycastHit hit, distance, ~layerMask)
+            ? targetTransform.position + rotation * Vector3.back * hit.distance * 0.9f
+            : targetTransform.position + direction;
+
         transform.LookAt(targetTransform.position + Vector3.up);
     }
 }

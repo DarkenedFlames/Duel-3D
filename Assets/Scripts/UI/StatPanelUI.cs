@@ -12,14 +12,7 @@ public class StatPanelUI : MonoBehaviour
     Character owner;
 
     readonly Dictionary<Stat, CharacterResource> maxStatToResource = new();
-
     readonly List<Stat> nonResourceStats = new();
-
-    private void Awake()
-    {
-        if (layoutGroup == null)
-            layoutGroup = GetComponent<VerticalLayoutGroup>();
-    }
 
     public void SubscribeToHandler(Character character)
     {

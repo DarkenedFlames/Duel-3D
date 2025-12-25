@@ -268,6 +268,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 795da2cb51688c64ca50e8e0c57b80e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NameBarUI
+  nameText: {fileID: 0}
 --- !u!1 &1365937370595382357
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,6 +1180,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8dcf6cb634616e04aa8254b85ec46ffe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterWorldUI
+  resourcePanel: {fileID: 6250897635941971515}
+  effectBar: {fileID: 7692252089455617023}
+  nameBar: {fileID: 4403493290045028240}
 --- !u!1 &7144862089291220899
 GameObject:
   m_ObjectHideFlags: 0

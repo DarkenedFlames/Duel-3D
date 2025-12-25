@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9edc98be2175dfa42b07e1d960fac3ce, type: 3}
+  m_Name: Lightning Speed Plus
+  m_EditorClassIdentifier: Assembly-CSharp::EffectDefinition
+  effectName: Lightning Speed+
+  icon: {fileID: 21300000, guid: 1004de33e24bfff4f8a7dccc2482ef87, type: 3}
+  EffectStackingType: 2
+  expiryType: 1
+  ScalesWithStacks: 1
+  maxStacks: 1
+  duration: 5
+  period: 1
+  Actions:
+  - Action:
+      rid: 8378409663798444143
+    Hook: 0
+  - Action:
+      rid: 8378409663798444144
+    Hook: 1
+  references:
+    version: 2
+    RefIds:
+    - rid: 8378409663798444143
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 0
+        mode: 0
+        removeOnlyFromSource: 1
+        statDefinition: {fileID: 11400000, guid: 7223e4604790b624ebdae2f6d97a15cf, type: 2}
+        statDefinitions: {fileID: 0}
+        targetModifierType: 2
+        amount: 3.5
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}
+    - rid: 8378409663798444144
+      type: {class: AModifyStat, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 0
+        mode: 7
+        removeOnlyFromSource: 1
+        statDefinition: {fileID: 0}
+        statDefinitions: {fileID: 0}
+        targetModifierType: 0
+        amount: 0
+        numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}

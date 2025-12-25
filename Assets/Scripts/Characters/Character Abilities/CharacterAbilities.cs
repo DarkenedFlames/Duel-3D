@@ -14,10 +14,10 @@ public class CharacterAbilities : MonoBehaviour
     public event Action<Ability> OnAbilityActivated;
     public event Action<Ability> OnAbilityLearned;
 
-    void Start() 
+    void Awake() 
     { 
         foreach (AbilityDefinition definition in startingAbilitySet.definitions) 
-            LearnAbility(definition); 
+            LearnAbility(definition);
     }
     void Update()
     {
@@ -33,9 +33,7 @@ public class CharacterAbilities : MonoBehaviour
         abilities[def.abilityType] = newAbility;
         OnAbilityLearned?.Invoke(newAbility);
     }
-
-    public bool HasAbility(AbilityDefinition definition) => abilities.Values.Any(a => a.Definition == definition);
-            
+                
     void TryActivateByType(AbilityType type)
     {
         if(abilities.TryGetValue(type, out Ability ability) && ability.TryActivate())

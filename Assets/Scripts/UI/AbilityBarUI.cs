@@ -1,61 +1,37 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 public class AbilityBarUI : MonoBehaviour
 {
-    private AbilitySlotUI[] slots;
-    private Dictionary<AbilityType, AbilitySlotUI> slotLookup;
-    private CharacterAbilities abilityHandler;
+    AbilitySlotUI[] slots;
+    CharacterAbilities abilities;
 
-    void Awake()
+    void Awake() => slots = GetComponentsInChildren<AbilitySlotUI>();
+    
+    bool TryGetSlotByAbility(Ability ability, out AbilitySlotUI slot)
     {
-        slots = GetComponentsInChildren<AbilitySlotUI>();
-        BuildLookup();
+        slot = System.Array.Find(slots, s => s.abilityType == ability.Definition.abilityType);
+        if (slot == null)
+            Debug.LogError("No slot found for ability: " + ability.Definition.name);
+
+        return slot != null;
     }
 
-    public void SubscribeToHandler(CharacterAbilities handler)
+    public void Initialize(Character owner)
     {
-        abilityHandler = handler;
-        abilityHandler.OnAbilityLearned += HandleAbilityLearned;
-        abilityHandler.OnAbilityActivated += HandleAbilityUsed;
+        abilities = owner.CharacterAbilities;
+        abilities.OnAbilityLearned += OnAbilityLearned;
 
-        foreach (Ability ability in abilityHandler.abilities.Values)
-        {
-            HandleAbilityLearned(ability);
-        }
+        foreach (AbilitySlotUI slot in slots)
+            if (abilities.abilities.TryGetValue(slot.abilityType, out Ability ability))
+                slot.SetAbility(ability);
     }
 
-    private void BuildLookup()
+    void OnAbilityLearned(Ability ability)
     {
-        slotLookup = new Dictionary<AbilityType, AbilitySlotUI>();
-        foreach (var slot in slots)
-        {
-            if (!slotLookup.ContainsKey(slot.abilityType))
-                slotLookup.Add(slot.abilityType, slot);
-            else
-                Debug.LogWarning($"Duplicate ability slot for type {slot.abilityType}");
-        }
+        if (TryGetSlotByAbility(ability, out AbilitySlotUI slot))
+            slot.SetAbility(ability);
     }
 
-    private void HandleAbilityUsed(Ability ability)
-    {
-        if (slotLookup.TryGetValue(ability.Definition.abilityType, out AbilitySlotUI slot))
-            slot.StartCooldown(ability.Definition.cooldown);
-    }
-
-    private void HandleAbilityLearned(Ability ability)
-    {
-        if (slotLookup.TryGetValue(ability.Definition.abilityType, out AbilitySlotUI slot))
-        {
-            slot.RefreshCooldown();
-            slot.SetIcon(ability.Definition.icon);
-        }
-    }
-
-    private void OnDestroy()
-    {
-        if (abilityHandler == null) return;
-        abilityHandler.OnAbilityActivated -= HandleAbilityUsed;
-        abilityHandler.OnAbilityLearned -= HandleAbilityLearned;
-    }
+    void OnDestroy() => abilities.OnAbilityLearned -= OnAbilityLearned;
+    
 }

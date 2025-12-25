@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Forest's Wrath+
   AffectsSource: 0
-  Duration: 3
+  Duration: 1.5
   MaxHits: 0
   Period: 0.25
   LayerMask:

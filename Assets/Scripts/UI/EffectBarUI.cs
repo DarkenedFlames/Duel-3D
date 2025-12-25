@@ -6,97 +6,54 @@ using UnityEngine.UI;
 public class EffectBarUI : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] private EffectSlotUI effectSlotPrefab;
-    [SerializeField] private HorizontalLayoutGroup layoutGroup;
+    [SerializeField] EffectSlotUI effectSlotPrefab;
+    [SerializeField] HorizontalLayoutGroup layoutGroup;
 
-    private CharacterEffects _effects;
+    CharacterEffects effects;
+    readonly List<EffectSlotUI> slotPool = new();
 
-    private readonly Dictionary<CharacterEffect, EffectSlotUI> activeSlots = new();
-
-    private void Awake()
+    bool TryGetSlotByEffect(CharacterEffect effect, out EffectSlotUI slot)
     {
-        if (layoutGroup == null)
-            layoutGroup = GetComponent<HorizontalLayoutGroup>();
+        slot = slotPool.Find(s => s.Effect == effect);
+        return slot != null;
     }
 
     public void SubscribeToHandler(CharacterEffects effects)
     {
-        _effects = effects;
+        this.effects = effects;
 
-        _effects.OnEffectGained += HandleEffectGained;
-        _effects.OnEffectLost += HandleEffectLost;
-
-        _effects.OnEffectStackChanged += HandleEffectStackChanged;
-        _effects.OnEffectRefreshed += HandleEffectRefreshed;
-        _effects.OnEffectExtended += HandleEffectExtended;
-
-        _effects.OnEffectMaxStacksReached += HandleMaxStacksReached;
-        _effects.OnEffectPulsed += HandleEffectPulsed;
-
-        foreach (var effect in _effects.Effects)
-            HandleEffectGained(effect);
+        effects.OnEffectGained += HandleEffectGained;
+        effects.OnEffectLost += HandleEffectLost;
+        effects.OnEffectStackChanged += HandleEffectStackChanged;
     }
 
-    private void OnDestroy()
+    void OnDestroy()
     {
-        if (_effects == null) return;
-
-        _effects.OnEffectGained -= HandleEffectGained;
-        _effects.OnEffectLost -= HandleEffectLost;
-
-        _effects.OnEffectStackChanged -= HandleEffectStackChanged;
-        _effects.OnEffectRefreshed -= HandleEffectRefreshed;
-        _effects.OnEffectExtended -= HandleEffectExtended;
-
-        _effects.OnEffectMaxStacksReached -= HandleMaxStacksReached;
-        _effects.OnEffectPulsed -= HandleEffectPulsed;
+        effects.OnEffectGained -= HandleEffectGained;
+        effects.OnEffectLost -= HandleEffectLost;
+        effects.OnEffectStackChanged -= HandleEffectStackChanged;
     }
 
-    private void HandleEffectGained(CharacterEffect effect)
+    void HandleEffectGained(CharacterEffect effect)
     {
-        if (activeSlots.ContainsKey(effect)) return;
+        if (TryGetSlotByEffect(effect, out _)) return;
 
-        var slot = Instantiate(effectSlotPrefab, layoutGroup.transform);
+        EffectSlotUI slot = Instantiate(effectSlotPrefab, layoutGroup.transform);
         slot.Initialize(effect);
-        activeSlots.Add(effect, slot);
+        slotPool.Add(slot);
     }
 
-    private void HandleEffectLost(CharacterEffect effect)
+    void HandleEffectLost(CharacterEffect effect)
     {
-        if (activeSlots.TryGetValue(effect, out var slot))
-        {
-            Destroy(slot.gameObject);
-            activeSlots.Remove(effect);
-        }
+        if (!TryGetSlotByEffect(effect, out EffectSlotUI slot)) return;
+        
+        slotPool.Remove(slot);
+        Destroy(slot.gameObject);
     }
 
-    private void HandleEffectStackChanged(CharacterEffect effect)
+    void HandleEffectStackChanged(CharacterEffect effect)
     {
-        if (activeSlots.TryGetValue(effect, out var slot))
-            slot.UpdateStackCount();
-    }
-
-    private void HandleEffectRefreshed(CharacterEffect effect)
-    {
-        if (activeSlots.TryGetValue(effect, out var slot))
-            slot.UpdateDuration();
-    }
-
-    private void HandleEffectExtended(CharacterEffect effect)
-    {
-        if (activeSlots.TryGetValue(effect, out var slot))
-            slot.UpdateDuration();
-    }
-
-    private void HandleMaxStacksReached(CharacterEffect effect)
-    {
-        if (activeSlots.TryGetValue(effect, out var slot))
-            slot.PlayMaxStackEffect();   // Placeholder
-    }
-
-    private void HandleEffectPulsed(CharacterEffect effect)
-    {
-        if (activeSlots.TryGetValue(effect, out var slot))
-            slot.PlayPulseEffect();       // Placeholder
+        if (!TryGetSlotByEffect(effect, out EffectSlotUI slot)) return;
+        slot.UpdateStackCount();
     }
 }

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Arcane Missile
   AffectsSource: 0
-  Duration: 10
+  Duration: 3
   MaxHits: 1
   Period: 0
   LayerMask:

@@ -588,6 +588,9 @@ MonoBehaviour:
   jumpHeight: 3
   rotationSpeed: 300
   gravity: 15
+  fallDamageThreshold: 15
+  fallDamageMultiplier: 2
+  fallParticlePrefab: {fileID: 5610010966355794069, guid: fcd31e462fab8cf4f8864130f80d1928, type: 3}
 --- !u!114 &6885568718926975611
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1636,13 +1639,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4552752453568156716}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.2588191, w: 0.9659258}
+  m_LocalRotation: {x: 0.54167527, y: -0.45451948, z: 0.45451948, w: 0.54167527}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5160083986349709434}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 30}
+  m_LocalEulerAnglesHint: {x: 90, y: 10, z: 90}
 --- !u!1 &4583332703920915411
 GameObject:
   m_ObjectHideFlags: 0

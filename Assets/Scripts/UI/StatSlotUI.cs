@@ -28,10 +28,9 @@ public class StatSlotUI : MonoBehaviour
 
     void UpdateText()
     {
-        if (trackedResource != null)
-            statValueText.text = $"{trackedResource.Value:F0} / {trackedStat.Value:F0}";
-        else
-            statValueText.text = $"{trackedStat.Value:F0}";
+        statValueText.text = trackedResource != null
+            ? $"{trackedResource.Value:F0} / {trackedStat.Value:F0}"
+            : $"{trackedStat.Value:F0}";
     }
 
     void OnValueChanged(Stat _) => UpdateText();

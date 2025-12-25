@@ -377,6 +377,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5483a92c1568934a99a7243519f8ead, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EffectSlotUI
-  iconImage: {fileID: 494262916311632869}
-  cooldownOverlay: {fileID: 5423748735484423209}
+  icon: {fileID: 494262916311632869}
+  overlay: {fileID: 5423748735484423209}
   stackText: {fileID: 9041900483243484323}

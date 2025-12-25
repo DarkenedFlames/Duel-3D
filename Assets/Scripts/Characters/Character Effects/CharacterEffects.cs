@@ -12,7 +12,6 @@ public class CharacterEffects : MonoBehaviour
 
     Character owner;
 
-    public event Action OnInitialized;
     public event Action<CharacterEffect> OnEffectGained;
     public event Action<CharacterEffect> OnEffectLost;
     public event Action<CharacterEffect> OnEffectStackChanged;
@@ -21,13 +20,7 @@ public class CharacterEffects : MonoBehaviour
     public event Action<CharacterEffect> OnEffectPulsed;
     public event Action<CharacterEffect> OnEffectMaxStacksReached;
 
-    void Awake()
-    {
-        owner = GetComponent<Character>();
-        foreach (EffectDefinition definition in initialEffects)
-            AddEffect(definition, 1, null);
-        OnInitialized?.Invoke();
-    }
+    void Awake() => owner = GetComponent<Character>();
 
     void Update()
     {

@@ -10,23 +10,19 @@ public class CharacterResources : MonoBehaviour
     readonly List<CharacterResource> resources = new();
     public ReadOnlyCollection<CharacterResource> Resources => resources.AsReadOnly();
 
-    bool initialized = false;
-
     public event Action<CharacterResource> OnResourceValueChanged;
     public event Action<GameObject> OnDeath;
 
-    Character Owner;
+    Character owner;
 
-    void Awake() => Owner = GetComponent<Character>();
-    void Start() => EnsureInitialized();
-    public void EnsureInitialized()
+    void Awake()
     {
-        if (initialized) return;
+        owner = GetComponent<Character>();
+        CharacterStats stats = owner.CharacterStats;
 
+        stats.Initialize();
         foreach (ResourceDefinition definition in initialResources.Definitions)
-            resources.Add(new(definition, Owner.CharacterStats.GetStat(definition.MaxStat.statType)));
-
-        initialized = true;
+            resources.Add(new(definition, stats.GetStat(definition.MaxStat.statType)));
     }
 
     public CharacterResource GetResource(ResourceType type) => resources.Find(r => r.Definition.resourceType == type);
@@ -43,6 +39,13 @@ public class CharacterResources : MonoBehaviour
     {
         if (GetResource(ResourceType.Health).Value > 0) return;
         
+        Debug.Log($"{gameObject.name} died!");
+        OnDeath?.Invoke(gameObject);
+        Destroy(gameObject);
+    }
+
+    public void Kill()
+    {
         Debug.Log($"{gameObject.name} died!");
         OnDeath?.Invoke(gameObject);
         Destroy(gameObject);

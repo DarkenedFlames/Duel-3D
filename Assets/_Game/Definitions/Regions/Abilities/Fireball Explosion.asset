@@ -27,6 +27,9 @@ MonoBehaviour:
   - Action:
       rid: 8378409663798444163
     Hook: 2
+  - Action:
+      rid: 8378409980015149150
+    Hook: 0
   references:
     version: 2
     RefIds:
@@ -53,3 +56,11 @@ MonoBehaviour:
         removeTarget: 0
         effectToRemove: {fileID: 0}
         stacksToRemove: 1
+    - rid: 8378409980015149150
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 2543109025529699757, guid: 2b40d204b07c6e94eb5e270fcbcb3d80, type: 3}
+        reference: 1
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}

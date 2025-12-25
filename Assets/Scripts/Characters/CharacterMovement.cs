@@ -12,23 +12,30 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float rotationSpeed = 300f;
     [SerializeField] float gravity = 15f;
 
+    [Header("Fall Damage Settings")]
+    [SerializeField] float fallDamageThreshold = 15f;
+    [SerializeField] float fallDamageMultiplier = 2f;
+    [SerializeField] GameObject fallParticlePrefab;
+
     float verticalVelocity;
     Vector3 externalVelocity;
     float externalVelocityDamping = 1f;
 
+    bool wasGrounded;
+
+    Character owner;
     CharacterController controller;
     IInputDriver input;
-    CharacterStats stats;
 
     void Awake()
     {
+        owner = GetComponent<Character>();
+
         if (!TryGetComponent(out IInputDriver inputDriver))
             Debug.LogError($"{name}'s {nameof(CharacterMovement)} expected a component but it was missing: {nameof(IInputDriver)} missing!");
         else input = inputDriver;
 
         controller = GetComponent<CharacterController>();
-        stats = GetComponent<CharacterStats>();
-
         input.OnJumpInput += OnJumpInput;
     }
 
@@ -44,7 +51,7 @@ public class CharacterMovement : MonoBehaviour
         transform.Rotate(Vector3.up, yawDelta);
 
         // Convert stats into actual speeds
-        Stat speed = stats.GetStat(StatType.MovementSpeed);
+        Stat speed = owner.CharacterStats.GetStat(StatType.MovementSpeed);
 
         float moveSpeed = speed.Value * speedModifier;
         float sprintSpeed = speed.Value * sprintModifier;
@@ -60,11 +67,24 @@ public class CharacterMovement : MonoBehaviour
         // Apply gravity
         if (controller.isGrounded)
         {
+            if (!wasGrounded && verticalVelocity < -fallDamageThreshold)
+            {
+                owner.CharacterResources.ChangeResourceValue(
+                    ResourceType.Health,
+                    -1f * (Mathf.Abs(verticalVelocity) - fallDamageThreshold) * fallDamageMultiplier,
+                    out _,
+                    true
+                );
+                SpawnFallParticles();
+            }
+
             if (verticalVelocity < 0f)
                 verticalVelocity = -1f;
         }
         else
-            verticalVelocity -= gravity * Time.deltaTime; 
+            verticalVelocity -= gravity * Time.deltaTime;
+
+        wasGrounded = controller.isGrounded; 
         
         Vector3 finalVelocity = moveDir.normalized * currentSpeed;
         finalVelocity.y = verticalVelocity;
@@ -93,4 +113,9 @@ public class CharacterMovement : MonoBehaviour
         externalVelocity = Vector3.Lerp(externalVelocity, Vector3.zero, externalVelocityDamping * Time.deltaTime);
     }
 
+    public void SpawnFallParticles()
+    {
+        if (fallParticlePrefab != null)
+            Instantiate(fallParticlePrefab, transform.position, Quaternion.identity);
+    }
 }

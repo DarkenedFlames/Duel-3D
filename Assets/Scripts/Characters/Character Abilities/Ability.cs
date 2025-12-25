@@ -7,7 +7,7 @@ public class Ability : IActionSource
     public GameObject GameObject { get; set; }
 
     public AbilityDefinition Definition { get; private set; }
-    readonly FloatCounter seconds;
+    public readonly FloatCounter seconds;
 
     public Ability(Character owner, AbilityDefinition definition)
     {
@@ -37,11 +37,11 @@ public class Ability : IActionSource
             out float _,
             true
         );
-        
+    
+        seconds.SetMax(CurrentCooldown());
         seconds.Reset();
         return true;
     }
 
-    // Implement cooldown with this
-    float CurrentCooldown() => Definition.cooldown * 100f / (100f + Owner.CharacterStats.GetStat(StatType.CooldownReduction).Value);
+    public float CurrentCooldown() => Definition.cooldown * 100f / (100f + Owner.CharacterStats.GetStat(StatType.CooldownReduction).Value);
 }

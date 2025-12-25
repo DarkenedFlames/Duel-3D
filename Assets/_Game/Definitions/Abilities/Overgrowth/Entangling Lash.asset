@@ -37,9 +37,11 @@ MonoBehaviour:
         - rid: 8378409798152224880
         - rid: 8378409798152224881
         prefab: {fileID: 6235790887478010368, guid: 4bad957f972119749a3f92f58afbd4b8, type: 3}
-        reference: 1
+        reference: 0
         spawnOffset: {x: 0, y: 1, z: 1}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 1
+        cameraModeRadius: 1
     - rid: 8378409798152224880
       type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -59,9 +61,11 @@ MonoBehaviour:
         - rid: 8378409798152224883
         - rid: 8378409798152224884
         prefab: {fileID: 6235790887478010368, guid: 3bf126529cbd10b4587425f8c1062eb0, type: 3}
-        reference: 1
+        reference: 0
         spawnOffset: {x: 0, y: 1, z: 1}
-        localEulerRotation: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: -20, y: 0, z: 0}
+        followOwnerCamera: 1
+        cameraModeRadius: 1
     - rid: 8378409798152224883
       type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
       data:

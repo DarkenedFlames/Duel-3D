@@ -4,57 +4,29 @@ using UnityEngine.UI;
 public class AbilitySlotUI : MonoBehaviour
 {
     public AbilityType abilityType;
-    private Image icon;
-    private Image cooldownOverlay;
+    public Ability Ability;
 
-    private float cooldownDuration;
-    private float cooldownRemaining;
-    private bool isCoolingDown = false;
+    [SerializeField] Image icon;
+    [SerializeField] Image overlay;
 
-    void Awake()
+    public void SetAbility(Ability ability)
     {
-        foreach (Image img in GetComponentsInChildren<Image>())
-        {
-            if (img.gameObject.name == "Icon")
-                icon = img;
-            if (img.gameObject.name == "CooldownOverlay")
-                cooldownOverlay = img;
-        }
+        if (ability == null) return;
 
-        cooldownOverlay.fillAmount = 0f;
-    }
-
-    public void SetIcon(Sprite abilityIcon) => icon.sprite = abilityIcon;
-
-    public void SetCooldownOverlay(Image cdOverlay) => cooldownOverlay = cdOverlay;
-
-    public void StartCooldown(float duration)
-    {
-        if (cooldownOverlay == null) return;
-
-        cooldownDuration = duration;
-        cooldownRemaining = duration;
-        isCoolingDown = true;
-    }
-
-    public void RefreshCooldown()
-    {
-        if (cooldownOverlay == null) return;
-
-        cooldownRemaining = 0;
+        Ability = ability;
+        icon.sprite = ability.Definition.icon;
     }
 
     void Update()
     {
-        if (!isCoolingDown) return;
+        if (Ability == null) return;
 
-        cooldownRemaining -= Time.deltaTime;
-        cooldownOverlay.fillAmount = Mathf.Clamp01(cooldownRemaining / cooldownDuration);
-
-        if (cooldownRemaining <= 0f)
+        if (Ability.seconds.Expired)
         {
-            cooldownOverlay.fillAmount = 0f;
-            isCoolingDown = false;
+            overlay.fillAmount = 0f;
+            return;
         }
+
+        overlay.fillAmount = Ability.seconds.Progress;
     }
 }

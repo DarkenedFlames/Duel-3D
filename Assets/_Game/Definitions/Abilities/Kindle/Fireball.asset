@@ -43,9 +43,11 @@ MonoBehaviour:
         - rid: 8378409784229757070
         - rid: 8378409784229757066
         prefab: {fileID: 401596454654199087, guid: 6fe3d21229745d4479589b285b12abe9, type: 3}
-        reference: 1
-        spawnOffset: {x: 0, y: 1, z: 0}
-        localEulerRotation: {x: -15, y: 0, z: 0}
+        reference: 0
+        spawnOffset: {x: 0, y: 2, z: 0}
+        localEulerRotation: {x: -20, y: 0, z: 0}
+        followOwnerCamera: 1
+        cameraModeRadius: 2
     - rid: 8378409784229757066
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -62,6 +64,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: 0, y: 7, z: 0}
         localEulerRotation: {x: 20, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409784229757068
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -90,6 +94,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: -10, y: 7, z: 20}
         localEulerRotation: {x: 20, y: 120, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409787788361831
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -112,6 +118,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: 10, y: 7, z: 20}
         localEulerRotation: {x: 20, y: -120, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409787788361836
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:

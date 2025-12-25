@@ -37,6 +37,11 @@ public class AbilityDefinitionSet : ScriptableObject
         return abilityMap[type][r2];
     }
 
-    public AbilityDefinition GetAbilityOfFamily(AbilityFamily family) => GetAbilityWeightedByType(definitions.FindAll(d => d.Family != family));
+    public AbilityDefinition GetAbilityOfFamily(AbilityFamily family, List<AbilityDefinition> exclusions)
+    {
+        List<AbilityDefinition> allExclusions = definitions.FindAll(d => d.Family != family);
+        allExclusions.AddRange(exclusions.Where(e => !allExclusions.Contains(e)));
+        return GetAbilityWeightedByType(allExclusions);
+    }
 
 }

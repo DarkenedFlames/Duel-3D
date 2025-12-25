@@ -16,7 +16,7 @@ MonoBehaviour:
   AffectsSource: 0
   Duration: 3
   MaxHits: 0
-  Period: 1
+  Period: 0.25
   LayerMask:
     serializedVersion: 2
     m_Bits: 64
@@ -38,5 +38,5 @@ MonoBehaviour:
         resourceDefinitions: {fileID: 0}
         targetModifierType: 0
         resetRegeneration: 1
-        amount: -5
+        amount: -1
         numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}

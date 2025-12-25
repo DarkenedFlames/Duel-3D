@@ -27,7 +27,7 @@ public class PlayerInputDriver : MonoBehaviour, IInputDriver
 
         if (Input.GetKeyDown(KeyCode.Space)) OnJumpInput?.Invoke();
 
-        if (Input.GetKeyDown(KeyCode.Alpha1)) OnAbilityInput?.Invoke(AbilityType.Primary);
+        if (Input.GetKeyDown(KeyCode.Alpha1) || Input.GetKeyDown(KeyCode.Keypad1)) OnAbilityInput?.Invoke(AbilityType.Primary);
         if (Input.GetKeyDown(KeyCode.Alpha2)) OnAbilityInput?.Invoke(AbilityType.Secondary);
         if (Input.GetKeyDown(KeyCode.Alpha3)) OnAbilityInput?.Invoke(AbilityType.Utility);
         if (Input.GetKeyDown(KeyCode.Alpha4)) OnAbilityInput?.Invoke(AbilityType.Special);

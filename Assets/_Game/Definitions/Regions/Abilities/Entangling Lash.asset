@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Entangling Lash
   AffectsSource: 0
-  Duration: 2
+  Duration: 0.5
   MaxHits: 1
   Period: 0
   LayerMask:
@@ -24,6 +24,12 @@ MonoBehaviour:
   - Action:
       rid: 8378409663798444157
     Hook: 2
+  - Action:
+      rid: 8378409964539740248
+    Hook: 2
+  - Action:
+      rid: 8378409980015149146
+    Hook: 0
   references:
     version: 2
     RefIds:
@@ -37,3 +43,17 @@ MonoBehaviour:
         mode: 0
         direction: {x: 0, y: 0, z: 100}
         externalVelocityDamping: 15
+    - rid: 8378409964539740248
+      type: {class: ADrawLine, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 7122922835396595040, guid: 7902473a40b6d2b48995e6152aef7344, type: 3}
+        start: 0
+        end: 2
+    - rid: 8378409980015149146
+      type: {class: ADrawLine, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 7122922835396595040, guid: bb5c96ccf8e62dc439b4d5c344be1446, type: 3}
+        start: 0
+        end: 1

@@ -19,7 +19,7 @@ public class PlayerHUDManager : MonoBehaviour
             return;
         }
 
-        abilityBar.SubscribeToHandler(localPlayer.CharacterAbilities);
+        abilityBar.Initialize(localPlayer);
         weaponSlot.SubscribeToHandler(localPlayer.CharacterWeapons);
         statPanel.SubscribeToHandler(localPlayer);
     }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Net.Mime;
 
 [System.Serializable]
 public class ASpawnObject : IGameAction
@@ -28,6 +29,12 @@ public class ASpawnObject : IGameAction
 
     [Tooltip("Local rotation offset."), SerializeField]
     Vector3 localEulerRotation = Vector3.zero;
+
+    [Tooltip("If the selected reference is a character (Owner or Target) and this is true, the spawned object will use the character's look rotation."), SerializeField]
+    bool followOwnerCamera = false;
+
+    [Tooltip("The radius around the reference at which the object will be spawned. Only enabled if Follow Owner Camera is true."), SerializeField, Min(0)]
+    float cameraModeRadius = 1f;
 
     public void Execute(ActionContext context)
     {
@@ -58,8 +65,20 @@ public class ASpawnObject : IGameAction
                     return;
         }
 
-        Vector3 spawnPosition = referenceTransform.TransformPoint(spawnOffset);
-        Quaternion spawnRotation = referenceTransform.rotation * Quaternion.Euler(localEulerRotation);
+        // SINGLEPLAYER ONLY: 
+        // Placeholder. Once multiplayer, we need to somehow get the camera that belongs to the specific character.
+        bool cameraMode = reference == ReferenceTransform.Owner && followOwnerCamera;
+        Vector3 spawnPosition = cameraMode
+            ? referenceTransform.position + (referenceTransform.position - Camera.main.transform.position).normalized * cameraModeRadius
+            : referenceTransform.position;
+
+        spawnPosition += referenceTransform.TransformDirection(spawnOffset);
+
+        Quaternion spawnRotation = cameraMode
+            ? Camera.main.transform.rotation
+            : referenceTransform.rotation;
+
+        spawnRotation *= Quaternion.Euler(localEulerRotation);
 
         GameObject instance = Object.Instantiate(prefab, spawnPosition, spawnRotation);
 

@@ -71,7 +71,7 @@ PrefabInstance:
     - target: {fileID: 4379653435674526346, guid: 80b7d0a3c94369248b5ae928b3dd0d11, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 6ddd528564deefa4a84206c4010ccd83, type: 2}
+      objectReference: {fileID: 2100000, guid: 956baf6ffd06cfa46819750e892bf9bb, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -266,6 +266,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4086884788614781970, guid: f73f7b7fdaf87864bbc452bb6940f55b, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 9aa6398bddcf18440a52813e017951f0, type: 2}
     - target: {fileID: 7332467797839223119, guid: f73f7b7fdaf87864bbc452bb6940f55b, type: 3}
       propertyPath: m_Name
       value: Ice Wall Particles

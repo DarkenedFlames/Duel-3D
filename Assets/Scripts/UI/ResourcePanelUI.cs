@@ -7,6 +7,7 @@ public class ResourcePanelUI : MonoBehaviour
     private CharacterResources trackedResources;
 
     void Awake() => bars = GetComponentsInChildren<ResourceBarUI>();
+
     public void SubscribeToHandler(CharacterResources resources)
     {
         trackedResources = resources;
@@ -26,8 +27,6 @@ public class ResourcePanelUI : MonoBehaviour
 
     void OnDestroy()
     {
-        if (trackedResources == null) return;
-
         foreach (ResourceBarUI bar in bars)
         {
             CharacterResource trackedResource = trackedResources.GetResource(bar.LinkedResource.resourceType);

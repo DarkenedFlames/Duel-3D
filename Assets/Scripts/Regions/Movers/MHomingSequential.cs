@@ -27,9 +27,13 @@ public class MHomingSequential : MonoBehaviour
     [Tooltip("Offset from the target's position to aim at (e.g., 0,1,0 for chest height)."), SerializeField]
     Vector3 TargetOffset = new(0, 1, 0);
 
+    [Tooltip("Optional line to draw between each successful hit."), SerializeField]
+    GameObject linePrefab;
+
     Character owner;
     Character currentTarget;
     readonly HashSet<Character> previousTargets = new();
+    LineConnector lineConnector;
 
     float GetTargetDistance() => Vector3.Distance(transform.position, GetTargetPosition());
     Vector3 GetTargetDirection() => (GetTargetPosition() - transform.position).normalized;
@@ -48,6 +52,18 @@ public class MHomingSequential : MonoBehaviour
         }
 
         owner = source.Owner;
+
+        if (linePrefab == null) return;
+
+        GameObject line = Instantiate(linePrefab);
+        if (!line.TryGetComponent(out lineConnector))
+        {
+            LogFormatter.LogMissingComponent(nameof(LineConnector), nameof(MHomingSequential), gameObject);
+            enabled = false;
+            return;
+        }
+        
+        lineConnector.AddTarget(source.Owner.transform);
     }
 
     void Update()
@@ -65,6 +81,8 @@ public class MHomingSequential : MonoBehaviour
             if (GetTargetDistance() <= HitDistance)
             {
                 previousTargets.Add(currentTarget);
+                if (lineConnector != null)
+                    lineConnector.AddTarget(currentTarget.transform);
                 currentTarget = null;
             }
         }
@@ -87,5 +105,11 @@ public class MHomingSequential : MonoBehaviour
 
         if (best != null && distance <= HomingDistance)
             currentTarget = best;
+    }
+
+    void OnDestroy()
+    {
+        if (lineConnector != null)
+            Destroy(lineConnector.gameObject);
     }
 }

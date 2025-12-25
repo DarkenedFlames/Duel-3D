@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Arcane Strike+
   AffectsSource: 0
-  Duration: 1
+  Duration: 3
   MaxHits: 0
   Period: 0
   LayerMask:

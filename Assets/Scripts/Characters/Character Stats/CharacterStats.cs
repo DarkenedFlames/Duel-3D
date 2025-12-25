@@ -9,10 +9,17 @@ public class CharacterStats : MonoBehaviour
     readonly List<Stat> stats = new();
     public ReadOnlyCollection<Stat> Stats => stats.AsReadOnly();
 
-    void Awake()
+    bool initialized = false;
+
+    void Awake() => Initialize();
+    public void Initialize()
     {
+        if (initialized) return;
+
         foreach (StatDefinition definition in InitialStatSet.Definitions)
             stats.Add(new(definition));
+        
+        initialized = true;
     }
 
     public Stat GetStat(StatType type) => stats.Find(s => s.Definition.statType == type);

@@ -91,6 +91,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilitySlotUI
   abilityType: 0
+  icon: {fileID: 5709441799623620456}
+  overlay: {fileID: 8987824274360978855}
 --- !u!1 &911226681191153606
 GameObject:
   m_ObjectHideFlags: 0
@@ -524,6 +526,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilitySlotUI
   abilityType: 2
+  icon: {fileID: 7920739840461466083}
+  overlay: {fileID: 4497099385124458474}
 --- !u!1 &3085163757990881437
 GameObject:
   m_ObjectHideFlags: 0
@@ -765,6 +769,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilitySlotUI
   abilityType: 1
+  icon: {fileID: 462160801382113495}
+  overlay: {fileID: 3174044379716649771}
 --- !u!1 &4012582938656744772
 GameObject:
   m_ObjectHideFlags: 0
@@ -1425,6 +1431,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AbilitySlotUI
   abilityType: 3
+  icon: {fileID: 7035955941659182650}
+  overlay: {fileID: 4778711218252198918}
 --- !u!1 &7915609763403191641
 GameObject:
   m_ObjectHideFlags: 0

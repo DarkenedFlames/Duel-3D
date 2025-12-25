@@ -27,6 +27,9 @@ MonoBehaviour:
   - Action:
       rid: 8378409820660433029
     Hook: 7
+  - Action:
+      rid: 8378409891922444410
+    Hook: 7
   references:
     version: 2
     RefIds:
@@ -53,3 +56,14 @@ MonoBehaviour:
         removeTarget: 0
         effectToRemove: {fileID: 0}
         stacksToRemove: 1
+    - rid: 8378409891922444410
+      type: {class: ADealsDamage, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        targetMode: 1
+        resetRegenerationIfChanged: 1
+        amount: 10
+        damageType: 2
+        damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
+        normalHitParticlesPrefab: {fileID: 1226031520979461127, guid: 94bc95392cf84074fb94b497e2c59e6e, type: 3}
+        criticalHitParticlesPrefab: {fileID: 1226031520979461127, guid: c879e7fb6155e0c4b91e26d89be87304, type: 3}

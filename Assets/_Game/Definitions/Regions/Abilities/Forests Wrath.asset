@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RegionDefinition
   RegionName: Forest's Wrath
   AffectsSource: 0
-  Duration: 0.55
+  Duration: 1.5
   MaxHits: 0
   Period: 0
   LayerMask:
@@ -30,6 +30,7 @@ MonoBehaviour:
     - rid: 8378409663798444170
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
+        Conditions: []
         targetMode: 1
         mode: 0
         effectToApply: {fileID: 11400000, guid: 5a38d5b7bc171464ebd60560a218ff04, type: 2}

@@ -66,7 +66,7 @@ public class AGiveAbility : IGameAction
         {
             GiveAbilityMode.Specific => ownedAbilities.Contains(abilityDefinition) ? null : abilityDefinition,
             GiveAbilityMode.RandomBySlotFromSet => set.GetAbilityWeightedByType(ownedAbilities),
-            GiveAbilityMode.RandomByFamilyFromSet => set.GetAbilityOfFamily(family),
+            GiveAbilityMode.RandomByFamilyFromSet => set.GetAbilityOfFamily(family, ownedAbilities),
             _ => null,
         };
 

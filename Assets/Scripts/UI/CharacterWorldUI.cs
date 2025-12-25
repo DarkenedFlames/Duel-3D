@@ -2,19 +2,12 @@ using UnityEngine;
 
 public class CharacterWorldUI : MonoBehaviour
 {
-    ResourcePanelUI resourcePanel;
-    EffectBarUI effectBar;
-    NameBarUI nameBar;
+    [SerializeField] ResourcePanelUI resourcePanel;
+    [SerializeField] EffectBarUI effectBar;
+    [SerializeField] NameBarUI nameBar;
 
     Vector3 offset = Vector3.zero;
     Character owner;
-
-    void Awake()
-    {
-        resourcePanel = GetComponentInChildren<ResourcePanelUI>();
-        effectBar = GetComponentInChildren<EffectBarUI>();
-        nameBar = GetComponentInChildren<NameBarUI>();
-    }
 
     void LateUpdate()
     {
@@ -30,16 +23,9 @@ public class CharacterWorldUI : MonoBehaviour
     {
         this.offset = offset;
         owner = character;
-
-        owner.CharacterResources.EnsureInitialized();
         
-        if (resourcePanel != null)
-            resourcePanel.SubscribeToHandler(owner.CharacterResources);
-        
-        if (effectBar != null)
-            effectBar.SubscribeToHandler(owner.CharacterEffects);
-
-        if (nameBar != null)
-            nameBar.Initialize(owner);
+        resourcePanel.SubscribeToHandler(owner.CharacterResources);
+        effectBar.SubscribeToHandler(owner.CharacterEffects);
+        nameBar.Initialize(owner);
     }
 }

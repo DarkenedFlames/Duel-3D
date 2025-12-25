@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Lightning Ball
   m_EditorClassIdentifier: Assembly-CSharp::AbilityDefinition
   abilityName: Lightning Ball
-  icon: {fileID: 21300000, guid: c38d36d417153a749878d6b982dfe0ec, type: 3}
+  icon: {fileID: 21300000, guid: a26796c6e79483842834aa04a26b9cb7, type: 3}
   abilityType: 2
   Family: 2
   castAnimationTrigger: 1
@@ -30,6 +30,9 @@ MonoBehaviour:
   - Action:
       rid: 8378409663798444121
     Hook: 0
+  - Action:
+      rid: 8378410003087229013
+    Hook: 0
   references:
     version: 2
     RefIds:
@@ -43,11 +46,14 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409663798444121
       type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
       data:
         Conditions:
         - rid: 8378409798152224915
+        - rid: 8378410003087229009
         targetMode: 0
         mode: 0
         effectToApply: {fileID: 11400000, guid: 41dedd6faf90a144fbf29e73117c3ea7, type: 2}
@@ -84,6 +90,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: 0, y: 1, z: 0}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409798152224917
       type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -96,3 +104,35 @@ MonoBehaviour:
         EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
         targetMode: 0
         mode: 3
+    - rid: 8378410003087229009
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 1
+    - rid: 8378410003087229013
+      type: {class: AModifyEffect, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions:
+        - rid: 8378410003087229015
+        - rid: 8378410003087229016
+        targetMode: 0
+        mode: 0
+        effectToApply: {fileID: 11400000, guid: b14016432c22eb7428a395c3ed17a411, type: 2}
+        stacksToApply: 1
+        removeMode: 0
+        removeTarget: 0
+        effectToRemove: {fileID: 0}
+        stacksToRemove: 1
+    - rid: 8378410003087229015
+      type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        EffectSet: {fileID: 11400000, guid: c25227ce1f68fad4d8a111002378eae6, type: 2}
+        targetMode: 0
+        mode: 3
+    - rid: 8378410003087229016
+      type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
+      data:
+        abilitySet: {fileID: 11400000, guid: c1cfbcd8d67099d46a885f783852ea99, type: 2}
+        targetMode: 0
+        mode: 0

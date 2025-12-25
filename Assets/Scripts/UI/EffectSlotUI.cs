@@ -5,46 +5,33 @@ using TMPro;
 public class EffectSlotUI : MonoBehaviour
 {
     [Header("UI Elements")]
-    [SerializeField] Image iconImage;
-    [SerializeField] Image cooldownOverlay;
+    [SerializeField] Image icon;
+    [SerializeField] Image overlay;
     [SerializeField] TextMeshProUGUI stackText;
 
-    private CharacterEffect effect;
+    public CharacterEffect Effect;
 
     public void Initialize(CharacterEffect effect)
     {
-        this.effect = effect;
-        iconImage.sprite = effect.Definition.icon;
+        Effect = effect;
+        icon.sprite = effect.Definition.icon;
 
         UpdateStackCount();
-        UpdateDuration();
     }
 
-    void Update() => UpdateDuration();
+    void Update()
+    {
+        if (Effect == null) return;
+
+        overlay.fillAmount = Effect.seconds == null ? 0f : Effect.seconds.Progress;
+    }
     
     public void UpdateStackCount()
     {
-        if (effect == null) return;
+        if (Effect == null) return;
 
-        stackText.text = effect.currentStacks.Value > 1 
-            ? effect.currentStacks.Value.ToString()
+        stackText.text = Effect.currentStacks.Value > 1 
+            ? Effect.currentStacks.Value.ToString()
             : string.Empty;
-    }
-
-    public void UpdateDuration()
-    {
-        if (effect == null) return;
-
-        cooldownOverlay.fillAmount = effect.seconds == null
-            ? 0f
-            : Mathf.Clamp01(effect.seconds.Value / effect.CurrentDuration);
-    }
-
-    public void PlayMaxStackEffect()
-    {
-    }
-
-    public void PlayPulseEffect()
-    {
     }
 }
