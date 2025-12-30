@@ -9,13 +9,15 @@ public class CharacterAbilities : MonoBehaviour
     [SerializeField] AbilityDefinitionSet startingAbilitySet;
     public readonly Dictionary<AbilityType, Ability> abilities = new();
 
-    Character Owner => GetComponent<Character>();
+    Character Owner { get; set; }
 
     public event Action<Ability> OnAbilityActivated;
     public event Action<Ability> OnAbilityLearned;
+    public event Action<Ability> OnAbilityRankChanged;
 
     void Awake() 
-    { 
+    {
+        Owner = GetComponent<Character>();
         foreach (AbilityDefinition definition in startingAbilitySet.definitions) 
             LearnAbility(definition);
     }
@@ -27,11 +29,25 @@ public class CharacterAbilities : MonoBehaviour
     void OnEnable() => Owner.CharacterInput.OnAbilityInput += TryActivateByType;
     void OnDisable() => Owner.CharacterInput.OnAbilityInput -= TryActivateByType;
 
-    public void LearnAbility(AbilityDefinition def)
+    public bool TryGetAbility(AbilityDefinition definition, out Ability ability)
     {
-        Ability newAbility = new(Owner, def);
-        abilities[def.abilityType] = newAbility;
-        OnAbilityLearned?.Invoke(newAbility);
+        ability = abilities.Values.ToList().Find(a => a.Definition == definition);
+        return ability != null;
+    }
+
+    public void LearnAbility(AbilityDefinition definition)
+    {
+        if (TryGetAbility(definition, out Ability existing))
+        {
+            if (existing.TryRankUp())
+                OnAbilityRankChanged?.Invoke(existing);
+        }
+        else
+        {
+            Ability ability = new(Owner, definition);
+            abilities[definition.abilityType] = ability;
+            OnAbilityLearned?.Invoke(ability);
+        }
     }
                 
     void TryActivateByType(AbilityType type)

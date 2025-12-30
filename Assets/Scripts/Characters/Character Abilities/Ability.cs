@@ -9,6 +9,8 @@ public class Ability : IActionSource
     public AbilityDefinition Definition { get; private set; }
     public readonly FloatCounter seconds;
 
+    public int Rank = 1;
+
     public Ability(Character owner, AbilityDefinition definition)
     {
         Owner = owner;
@@ -18,6 +20,13 @@ public class Ability : IActionSource
         seconds = new(0, 0, Definition.cooldown, true, true);
     }
 
+    public bool TryRankUp()
+    {
+        if (Rank >= Definition.maxRank) return false;
+        Rank++;
+        return true;
+    }
+    
     public void TickCooldown(float dt) => seconds.Decrease(dt);
 
     public bool TryActivate()

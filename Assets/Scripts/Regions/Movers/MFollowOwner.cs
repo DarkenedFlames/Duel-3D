@@ -11,7 +11,7 @@ public class MFollowOwner : MonoBehaviour
         Character owner = GetComponent<IActionSource>().Owner;
         if (owner == null)
         {
-            Debug.LogError($"{nameof(MFollowOwner)} found a null {nameof(IActionSource.Owner)}", GetComponent<IActionSource>().GameObject);
+            enabled = false;
             return;
         }
 

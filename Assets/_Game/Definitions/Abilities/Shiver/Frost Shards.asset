@@ -20,6 +20,7 @@ MonoBehaviour:
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
+  maxRank: 5
   Actions:
   - Action:
       rid: 8378409663798444133
@@ -47,7 +48,7 @@ MonoBehaviour:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         reference: 0
         spawnOffset: {x: -1, y: 2, z: 0}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409663798444134
@@ -58,7 +59,7 @@ MonoBehaviour:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         reference: 0
         spawnOffset: {x: 0, y: 3, z: 0}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409663798444135
@@ -69,7 +70,7 @@ MonoBehaviour:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         reference: 0
         spawnOffset: {x: 1, y: 2, z: 0}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409715047596123
@@ -81,7 +82,7 @@ MonoBehaviour:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         reference: 0
         spawnOffset: {x: 0.707, y: 2.707, z: 0}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409715047596124
@@ -93,7 +94,7 @@ MonoBehaviour:
         prefab: {fileID: 7912821330744289418, guid: 3a721c6b6a714a64590cc77e92f1a754, type: 3}
         reference: 0
         spawnOffset: {x: -0.707, y: 2.707, z: 0}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409784229757034

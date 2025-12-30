@@ -20,6 +20,7 @@ MonoBehaviour:
   ExpendedResource: 1
   resourceCost: 1
   cooldown: 1
+  maxRank: 5
   Actions:
   - Action:
       rid: 8378409663798444118
@@ -39,9 +40,11 @@ MonoBehaviour:
         Conditions:
         - rid: 8378409784229757053
         prefab: {fileID: 5207675595643598130, guid: 83136da6ddcb6954a88cd798c6fb258e, type: 3}
-        reference: 1
+        reference: 0
         spawnOffset: {x: 0, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409784229757053
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -58,6 +61,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: -5, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409784229757055
       type: {class: EffectSetCondition, ns: , asm: Assembly-CSharp}
       data:
@@ -80,6 +85,8 @@ MonoBehaviour:
         reference: 1
         spawnOffset: {x: 5, y: 0, z: 5}
         localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1
     - rid: 8378409784229757058
       type: {class: AbilitySetCondition, ns: , asm: Assembly-CSharp}
       data:

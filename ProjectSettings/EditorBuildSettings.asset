@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/_Game/Scenes/Enchanted Forest.unity
+    path: Assets/Scenes/MainMenu.unity
+    guid: 5413791880666634c95b4b77f5473c69
+  - enabled: 1
+    path: Assets/Scenes/Entropy.unity
     guid: 959fd32b1a9bbbf4b80afc0b8e1ebbf3
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: d649463e1b79d86419c76482de80750a, type: 2}

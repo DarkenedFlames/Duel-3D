@@ -588,8 +588,8 @@ MonoBehaviour:
   jumpHeight: 3
   rotationSpeed: 300
   gravity: 15
-  fallDamageThreshold: 15
-  fallDamageMultiplier: 2
+  fallDamageThreshold: 10
+  fallDamagePercentMaxHealthPerMeter: 0.03
   fallParticlePrefab: {fileID: 5610010966355794069, guid: fcd31e462fab8cf4f8864130f80d1928, type: 3}
 --- !u!114 &6885568718926975611
 MonoBehaviour:
@@ -670,7 +670,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterInterface
   worldUIPrefab: {fileID: 5897501695909145094, guid: fc9a6f87768093340bd97d24e2354fff, type: 3}
-  uiOffset: {x: 0, y: 2, z: 0}
+  uiOffset: {x: 0, y: 2.5, z: 0}
 --- !u!114 &-830900240938980272
 MonoBehaviour:
   m_ObjectHideFlags: 0

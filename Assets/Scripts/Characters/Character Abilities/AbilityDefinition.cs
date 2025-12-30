@@ -33,6 +33,9 @@ public class AbilityDefinition : ScriptableObject
     [Tooltip("The cooldown per cast in seconds."), Min(0)]
     public float cooldown = 0f;
 
+    [Tooltip("The maximum rank of this ability."), Range(1,5)]
+    public int maxRank = 5;
+
     [Header("Actions")]
     [Tooltip("Configure actions to execute when ability is cast.")]
     public List<AbilityActionEntry> Actions = new();

@@ -20,6 +20,7 @@ MonoBehaviour:
   ExpendedResource: 0
   resourceCost: 10
   cooldown: 1
+  maxRank: 5
   Actions:
   - Action:
       rid: 8378409663798444113
@@ -39,7 +40,7 @@ MonoBehaviour:
         prefab: {fileID: 6235790887478010368, guid: 4bad957f972119749a3f92f58afbd4b8, type: 3}
         reference: 0
         spawnOffset: {x: 0, y: 1, z: 1}
-        localEulerRotation: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: -7.5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409798152224880
@@ -63,7 +64,7 @@ MonoBehaviour:
         prefab: {fileID: 6235790887478010368, guid: 3bf126529cbd10b4587425f8c1062eb0, type: 3}
         reference: 0
         spawnOffset: {x: 0, y: 1, z: 1}
-        localEulerRotation: {x: -20, y: 0, z: 0}
+        localEulerRotation: {x: -7.5, y: 0, z: 0}
         followOwnerCamera: 1
         cameraModeRadius: 1
     - rid: 8378409798152224883

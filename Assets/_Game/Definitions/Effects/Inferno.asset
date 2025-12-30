@@ -26,7 +26,7 @@ MonoBehaviour:
     Hook: 2
   - Action:
       rid: 8378409787788361823
-    Hook: 2
+    Hook: 0
   references:
     version: 2
     RefIds:
@@ -45,7 +45,9 @@ MonoBehaviour:
       type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
       data:
         Conditions: []
-        prefab: {fileID: 56852242586695119, guid: d6ca77de5c9291647989f5015b40b169, type: 3}
+        prefab: {fileID: 7306471067845757213, guid: a60aac5b71acfba489e73f21fa685ce2, type: 3}
         reference: 0
-        spawnOffset: {x: 0, y: 0, z: 0}
-        localEulerRotation: {x: -90, y: 0, z: 0}
+        spawnOffset: {x: 0, y: 1, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1

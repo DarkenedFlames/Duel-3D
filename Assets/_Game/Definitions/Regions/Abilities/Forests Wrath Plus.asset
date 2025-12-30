@@ -27,6 +27,9 @@ MonoBehaviour:
   - Action:
       rid: 8378409798152224887
     Hook: 7
+  - Action:
+      rid: 8378410140084731992
+    Hook: 2
   references:
     version: 2
     RefIds:
@@ -55,3 +58,13 @@ MonoBehaviour:
         resetRegeneration: 0
         amount: 1
         numberIconUI: {fileID: 656134272473681790, guid: d1107243066e2174a910902f3978eb07, type: 3}
+    - rid: 8378410140084731992
+      type: {class: ASpawnObject, ns: , asm: Assembly-CSharp}
+      data:
+        Conditions: []
+        prefab: {fileID: 4571066006600746453, guid: 8efd0666bf852ec48928bed67dc5b69b, type: 3}
+        reference: 0
+        spawnOffset: {x: 0, y: 0, z: 0}
+        localEulerRotation: {x: 0, y: 0, z: 0}
+        followOwnerCamera: 0
+        cameraModeRadius: 1

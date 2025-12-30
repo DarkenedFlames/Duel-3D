@@ -13,8 +13,8 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float gravity = 15f;
 
     [Header("Fall Damage Settings")]
-    [SerializeField] float fallDamageThreshold = 15f;
-    [SerializeField] float fallDamageMultiplier = 2f;
+    [SerializeField] float fallDamageThreshold = 7.5f;
+    [SerializeField, Range(0,1)] float fallDamagePercentMaxHealthPerMeter = .01f;
     [SerializeField] GameObject fallParticlePrefab;
 
     float verticalVelocity;
@@ -69,9 +69,11 @@ public class CharacterMovement : MonoBehaviour
         {
             if (!wasGrounded && verticalVelocity < -fallDamageThreshold)
             {
+                CharacterStats stats = owner.CharacterStats;
+                float maxHealthValue = stats.GetStat(StatType.MaxHealth).Value;
                 owner.CharacterResources.ChangeResourceValue(
                     ResourceType.Health,
-                    -1f * (Mathf.Abs(verticalVelocity) - fallDamageThreshold) * fallDamageMultiplier,
+                    -1f * (Mathf.Abs(verticalVelocity) - fallDamageThreshold) * maxHealthValue * fallDamagePercentMaxHealthPerMeter,
                     out _,
                     true
                 );
