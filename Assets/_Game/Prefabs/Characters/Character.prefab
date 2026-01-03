@@ -557,6 +557,7 @@ MonoBehaviour:
   CharacterMovement: {fileID: 8189405104246574740}
   CharacterResources: {fileID: 2146435258925756317}
   CharacterAnimation: {fileID: 1410149350425854575}
+  CharacterMenus: {fileID: 0}
 --- !u!114 &5652081674111331085
 MonoBehaviour:
   m_ObjectHideFlags: 0

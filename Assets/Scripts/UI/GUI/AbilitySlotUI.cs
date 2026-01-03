@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class AbilitySlotUI : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class AbilitySlotUI : MonoBehaviour
 
     [SerializeField] Image icon;
     [SerializeField] Image overlay;
+    [SerializeField] TextMeshProUGUI rankText;
 
     public void SetAbility(Ability ability)
     {
@@ -15,6 +17,13 @@ public class AbilitySlotUI : MonoBehaviour
 
         Ability = ability;
         icon.sprite = ability.Definition.icon;
+    }
+
+    public void UpdateRank()
+    {
+        if (Ability == null) return;
+
+        rankText.text = GetNumeralForRank(Ability.Rank);
     }
 
     void Update()
@@ -28,5 +37,18 @@ public class AbilitySlotUI : MonoBehaviour
         }
 
         overlay.fillAmount = Ability.seconds.Progress;
+    }
+
+    static string GetNumeralForRank(int rank)
+    {
+        return rank switch
+        {
+            1 => "I",
+            2 => "II",
+            3 => "III",
+            4 => "IV",
+            5 => "V",
+            _ => rank.ToString(),
+        };
     }
 }

@@ -9,6 +9,7 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable, IDespawnable
 {
     public Character Owner { get; set; }
     public object Spawner { get; set; }
+    public float Magnitude { get; set; } = 1f;
 
     public Transform Transform => transform;
     public GameObject GameObject => gameObject;
@@ -129,10 +130,10 @@ public class Region : MonoBehaviour, IActionSource, ISpawnable, IDespawnable
     void Execute(RegionHook hook, GameObject target)
     {
         if (target.TryGetComponent(out Character character))
-            Definition.ExecuteActions(hook, new() { Source = this, Target = character });
+            Definition.ExecuteActions(hook, new() { Source = this, Target = character, Magnitude = Magnitude });
     }
 
-    void Execute(RegionHook hook) => Definition.ExecuteActions(hook, new() { Source = this, Target = null });
+    void Execute(RegionHook hook) => Definition.ExecuteActions(hook, new() { Source = this, Target = null, Magnitude = Magnitude });
     
 
     bool FilterTarget(Collider other, out GameObject target)

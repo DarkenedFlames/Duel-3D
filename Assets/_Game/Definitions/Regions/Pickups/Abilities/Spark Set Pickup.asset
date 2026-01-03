@@ -36,3 +36,4 @@ MonoBehaviour:
         abilityDefinition: {fileID: 0}
         set: {fileID: 11400000, guid: 11a04771294654041bb1ea7081e1eb9c, type: 2}
         family: 2
+        excludeOwned: 0

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum DamageType { Physical, Magical, True }
@@ -23,6 +24,9 @@ public class ADealsDamage : IGameAction
     [Tooltip("The type of damage dealt."), SerializeField]
     DamageType damageType = DamageType.Physical;
 
+    [Tooltip("Whether the damage scales linearly with ability rank / effect stacks."), SerializeField]
+    bool scalesWithMagnitude = true;
+
     [SerializeField] GameObject damageNumberPrefab;
 
     [SerializeField] GameObject normalHitParticlesPrefab;
@@ -42,13 +46,8 @@ public class ADealsDamage : IGameAction
             Debug.LogWarning($"{nameof(ADealsDamage)}: {targetMode} is null. Action skipped.");
             return;
         }
-
-        if (Conditions != null)
-        {
-            foreach (IActionCondition condition in Conditions)
-                if (!condition.IsSatisfied(context))
-                    return;
-        }
+        
+        if (Conditions?.Any(c => !c.IsSatisfied(context)) == true) return;
         
         if (Mathf.Approximately(0, amount)) return;
 
@@ -113,10 +112,12 @@ public class ADealsDamage : IGameAction
 
         if (adjustedAmount <= 0f)
             return;
+
+        float trueMagnitude = scalesWithMagnitude ? context.Source.Magnitude : 1f;
  
         if (targetResources.ChangeResourceValue(
                 ResourceType.Health,
-                -1f * adjustedAmount * context.Magnitude,
+                -1f * adjustedAmount * trueMagnitude,
                 out float changed,
                 resetRegenerationIfChanged)
         )

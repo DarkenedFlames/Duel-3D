@@ -16,10 +16,9 @@ MonoBehaviour:
   icon: {fileID: 21300000, guid: 30785b805c0b56f46aa56e239f573281, type: 3}
   EffectStackingType: 1
   expiryType: 0
-  ScalesWithStacks: 1
   maxStacks: 3
   duration: 3
-  period: 0.5
+  period: 1
   Actions:
   - Action:
       rid: 8378409663798444142
@@ -38,6 +37,7 @@ MonoBehaviour:
         resetRegenerationIfChanged: 1
         amount: 1
         damageType: 0
+        scalesWithMagnitude: 1
         damageNumberPrefab: {fileID: 8374838528012550532, guid: 03b017a14771311478645e6baece3fe9, type: 3}
         normalHitParticlesPrefab: {fileID: 3042519775331041172, guid: 087e2013022da8b4595e2ea454b0c9e4, type: 3}
         criticalHitParticlesPrefab: {fileID: 4306488877223958017, guid: ea9cd6237b8c4254d9001ef0cc81ab54, type: 3}

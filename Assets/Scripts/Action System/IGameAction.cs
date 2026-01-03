@@ -52,6 +52,8 @@ public interface IActionSource
     /// The underlying GameObject (when applicable).
     /// </summary>
     GameObject GameObject { get; }
+
+    float Magnitude { get; set; }
 }
 
 // ============================================================================

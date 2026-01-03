@@ -10,6 +10,7 @@ public class NPCInputDriver : MonoBehaviour, IInputDriver
     public event Action OnJumpInput;
     public event Action<AbilityType> OnAbilityInput;
     public event Action OnWeaponInput;
+    public event Action OnMenuInput;
 
     void Update()
     {
@@ -29,5 +30,9 @@ public class NPCInputDriver : MonoBehaviour, IInputDriver
         bool weapon = false;
         if (weapon)
             OnWeaponInput?.Invoke();
+
+        bool menu = false;
+        if (menu)
+            OnMenuInput?.Invoke();
     }
 }

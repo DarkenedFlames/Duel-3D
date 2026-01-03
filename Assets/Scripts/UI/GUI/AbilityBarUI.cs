@@ -20,18 +20,35 @@ public class AbilityBarUI : MonoBehaviour
     {
         abilities = owner.CharacterAbilities;
         abilities.OnAbilityLearned += OnAbilityLearned;
+        abilities.OnAbilityRankChanged += OnAbilityRankChanged;
 
         foreach (AbilitySlotUI slot in slots)
             if (abilities.abilities.TryGetValue(slot.abilityType, out Ability ability))
+            {
                 slot.SetAbility(ability);
+                slot.UpdateRank();
+            }
     }
 
     void OnAbilityLearned(Ability ability)
     {
         if (TryGetSlotByAbility(ability, out AbilitySlotUI slot))
+        {
             slot.SetAbility(ability);
+            slot.UpdateRank();
+        }
     }
 
-    void OnDestroy() => abilities.OnAbilityLearned -= OnAbilityLearned;
+    void OnAbilityRankChanged(Ability ability)
+    {
+        if (TryGetSlotByAbility(ability, out AbilitySlotUI slot))
+            slot.UpdateRank();
+    }
+
+    void OnDestroy() 
+    {
+        abilities.OnAbilityLearned -= OnAbilityLearned;
+        abilities.OnAbilityRankChanged -= OnAbilityRankChanged;
+    }
     
 }

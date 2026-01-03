@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 226b2b372e5f99a47b02255e00b8ec64, type: 3}
   m_Name: GameSessionSettings
   m_EditorClassIdentifier: Assembly-CSharp::GameSessionSettings
-  Duration: 300
+  Duration: 1200

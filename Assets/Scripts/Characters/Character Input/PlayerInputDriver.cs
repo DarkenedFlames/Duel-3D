@@ -10,6 +10,7 @@ public class PlayerInputDriver : MonoBehaviour, IInputDriver
     public event Action OnJumpInput;
     public event Action<AbilityType> OnAbilityInput;
     public event Action OnWeaponInput;
+    public event Action OnMenuInput;
 
     void Update()
     {
@@ -33,5 +34,7 @@ public class PlayerInputDriver : MonoBehaviour, IInputDriver
         if (Input.GetKeyDown(KeyCode.Alpha4)) OnAbilityInput?.Invoke(AbilityType.Special);
 
         if (Input.GetMouseButtonDown(0)) OnWeaponInput?.Invoke();
+
+        if (Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.KeypadPeriod)) OnMenuInput?.Invoke();
     }
 }

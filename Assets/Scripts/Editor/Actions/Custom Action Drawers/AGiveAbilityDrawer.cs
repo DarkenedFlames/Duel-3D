@@ -26,6 +26,7 @@ public class AGiveAbilityDrawer : IActionTypeDrawer
         GetProperty("abilityDefinition", out SerializedProperty abilityDefinitionProp);
         GetProperty("set", out SerializedProperty setProp);
         GetProperty("family", out SerializedProperty familyProp);
+        GetProperty("excludeOwned", out SerializedProperty excludeOwnedProp);
 
         AddHeight(targetModeProp);
         AddHeight(modeProp);
@@ -39,6 +40,8 @@ public class AGiveAbilityDrawer : IActionTypeDrawer
                 AddHeight(familyProp);
                 break;
         }
+
+        AddHeight(excludeOwnedProp);
         
         return height;
     }
@@ -72,6 +75,7 @@ public class AGiveAbilityDrawer : IActionTypeDrawer
         GetProperty("abilityDefinition", out SerializedProperty abilityDefinitionProp);
         GetProperty("set", out SerializedProperty setProp);
         GetProperty("family", out SerializedProperty familyProp);
+        GetProperty("excludeOwned", out SerializedProperty excludeOwnedProp);
 
         DrawField(targetModeProp);
         DrawField(modeProp);
@@ -85,5 +89,6 @@ public class AGiveAbilityDrawer : IActionTypeDrawer
                 DrawField(familyProp);
                 break;
         }
+        DrawField(excludeOwnedProp);
     }
 }

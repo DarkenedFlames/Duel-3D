@@ -6,6 +6,7 @@ public class CharacterEffect : IActionSource
     public Transform Transform => Owner.transform;
     public GameObject GameObject => Owner.gameObject;
     public object Source;
+    public float Magnitude { get; set; }
 
     public EffectDefinition Definition;
     public IntegerCounter currentStacks;
@@ -22,6 +23,8 @@ public class CharacterEffect : IActionSource
 
         currentStacks = new(initialStacks, 0, def.maxStacks, resetToMax: false);
         maxStacksReached = currentStacks.Exceeded;
+
+        Magnitude = currentStacks.Value;
         
         if (maxStacksReached)
             Execute(EffectHook.OnMaxStackReached);
@@ -42,6 +45,7 @@ public class CharacterEffect : IActionSource
 
     public bool OnUpdate()
     {
+        Magnitude = currentStacks.Value;
         float dt = Time.deltaTime;
         seconds?.Decrease(dt);
         pulse?.Decrease(dt);
@@ -151,11 +155,7 @@ public class CharacterEffect : IActionSource
 
     void Execute(EffectHook hook, bool scalesWithStacks = true)
     {
-        float magnitude = 1f;
-        if (Definition.ScalesWithStacks && scalesWithStacks)
-            magnitude = currentStacks.Value;
-
-        ActionContext context = new() { Source = this, Target = Owner, Magnitude = magnitude };
+        ActionContext context = new() { Source = this, Target = Owner, Magnitude = scalesWithStacks ? Magnitude : 1f };
         Definition.ExecuteActions(hook, context);
     }
 }

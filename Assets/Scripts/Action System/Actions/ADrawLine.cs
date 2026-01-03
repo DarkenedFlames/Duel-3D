@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 [System.Serializable]
 public class ADrawLine : IGameAction
@@ -27,47 +28,28 @@ public class ADrawLine : IGameAction
 
     public void Execute(ActionContext context)
     {
-        if (prefab == null)
+        static Transform GetTransformPoint(ActionContext ctx, TransformPoint point)
         {
-            LogFormatter.LogNullField(nameof(prefab), nameof(ASpawnObject), context.Source.GameObject);
+            return point switch
+            {
+                TransformPoint.Owner  => ctx.Source.Owner.transform,
+                TransformPoint.Target => ctx.Target.transform,
+                TransformPoint.Source => ctx.Source.Transform,
+                _ => null
+            };
+        }
+
+        Transform startTransform = GetTransformPoint(context, start);
+        Transform endTransform = GetTransformPoint(context, end);
+
+        if (prefab == null || startTransform == null || endTransform == null)
+        {
+            Debug.LogError("ADrawLine: Missing required references.");
             return;
         }
-
-        Transform startTransform = start switch
-        {
-            TransformPoint.Owner  => context.Source.Owner.transform,
-            TransformPoint.Target => context.Target.transform,
-            TransformPoint.Source => context.Source.Transform,
-            _ => null
-        };
-
-        Transform endTransform = end switch
-        {
-            TransformPoint.Owner  => context.Source.Owner.transform,
-            TransformPoint.Target => context.Target.transform,
-            TransformPoint.Source => context.Source.Transform,
-            _ => null
-        }; 
-
-        if (startTransform == null)
-        {
-            LogFormatter.LogNullArgument(nameof(startTransform), nameof(Execute), nameof(ADrawLine), context.Source.GameObject);
+        
+        if (Conditions?.Any(c => !c.IsSatisfied(context)) == true)
             return;
-        }
-
-        if (endTransform == null)
-        {
-            LogFormatter.LogNullArgument(nameof(endTransform), nameof(Execute), nameof(ADrawLine), context.Source.GameObject);
-            return;
-        }
-
-        if (Conditions != null)
-        {
-            foreach (IActionCondition condition in Conditions)
-                if (!condition.IsSatisfied(context))
-                    return;
-        }
-
 
         GameObject lineObject = Object.Instantiate(prefab, startTransform.position, Quaternion.identity);
         if (!lineObject.TryGetComponent(out LineConnector lineConnector))

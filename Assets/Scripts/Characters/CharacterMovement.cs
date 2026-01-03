@@ -11,11 +11,15 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] float jumpHeight = 3f;
     [SerializeField] float rotationSpeed = 300f;
     [SerializeField] float gravity = 15f;
+    [SerializeField] float slideGravity = 5f; // Force applied when sliding down slopes
 
     [Header("Fall Damage Settings")]
     [SerializeField] float fallDamageThreshold = 7.5f;
     [SerializeField, Range(0,1)] float fallDamagePercentMaxHealthPerMeter = .01f;
     [SerializeField] GameObject fallParticlePrefab;
+
+    [Header("Debug")]
+    [SerializeField] bool showSlopeDebug = false;
 
     float verticalVelocity;
     Vector3 externalVelocity;
@@ -92,8 +96,52 @@ public class CharacterMovement : MonoBehaviour
         finalVelocity.y = verticalVelocity;
         finalVelocity += externalVelocity;
 
+        // Apply slope sliding if on too-steep slope
+        finalVelocity += GetSlopeSlideVelocity();
+
         controller.Move(finalVelocity * Time.deltaTime);
         DampenExternalVelocity();
+
+        // Debug slope info
+        if (showSlopeDebug)
+            DebugSlopeInfo();
+    }
+
+    Vector3 GetSlopeSlideVelocity()
+    {
+        // Check if we're standing on a surface that's too steep
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, controller.height / 2f + 0.5f))
+        {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            
+            // If slope is steeper than the slope limit, apply sliding
+            if (slopeAngle > controller.slopeLimit)
+            {
+                // Project down the slope
+                Vector3 slideDirection = Vector3.ProjectOnPlane(Vector3.down, hit.normal);
+                return slideDirection * slideGravity;
+            }
+        }
+        
+        return Vector3.zero;
+    }
+
+    void DebugSlopeInfo()
+    {
+        // Raycast down to detect slope angle
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, Vector3.down, out hit, controller.height / 2f + 0.5f))
+        {
+            float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+            Debug.Log($"Slope Angle: {slopeAngle:F1}° | Slope Limit: {controller.slopeLimit}° | " +
+                      $"Step Offset: {controller.stepOffset} | Skin Width: {controller.skinWidth} | " +
+                      $"IsGrounded: {controller.isGrounded}");
+            
+            // Visualize the slope normal
+            Debug.DrawRay(hit.point, hit.normal * 2f, Color.green);
+            Debug.DrawRay(hit.point, Vector3.up * 2f, Color.blue);
+        }
     }
 
     void OnJumpInput()

@@ -606,7 +606,7 @@ MonoBehaviour:
   durationText: {fileID: 4985515433568344822}
   durationSlider: {fileID: 1131833735290078830}
   mapIcon: {fileID: 7546819625075045382}
-  durationSliderMaxValue: 600
+  durationSliderMaxValue: 1200
   maps:
   - {fileID: 11400000, guid: 0a6011e10ef15ac4ab61819324b871b2, type: 2}
 --- !u!1 &2296607540915021200

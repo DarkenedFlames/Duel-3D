@@ -46,7 +46,7 @@ ParticleSystem:
   lengthInSec: 0.5
   simulationSpeed: 1
   stopAction: 0
-  cullingMode: 3
+  cullingMode: 0
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 0
@@ -9706,7 +9706,7 @@ Light:
   serializedVersion: 11
   m_Type: 2
   m_Color: {r: 1, g: 0.40819836, b: 0, a: 1}
-  m_Intensity: 1
+  m_Intensity: 20
   m_Range: 30
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

@@ -9,6 +9,7 @@ public class Weapon : MonoBehaviour, IActionSource
     public Character Owner { get; set; }
     public Transform Transform => transform;
     public GameObject GameObject => gameObject;
+    public float Magnitude { get; set; }
 
     public WeaponDefinition Definition;
     public FloatCounter seconds;
@@ -26,6 +27,7 @@ public class Weapon : MonoBehaviour, IActionSource
         col = GetComponent<Collider>();
         col.enabled = false;
         seconds = new(Definition.CooldownTime, 0, Definition.CooldownTime, true, true);
+        Magnitude = 1f;
     }
 
     void Update() => seconds.Decrease(Time.deltaTime);
@@ -87,7 +89,7 @@ public class Weapon : MonoBehaviour, IActionSource
     {
         if (!target.TryGetComponent(out Character character)) return;
         
-        ActionContext context = new(){ Source = this, Target = character };
+        ActionContext context = new(){ Source = this, Target = character, Magnitude = Magnitude };
         Definition.ExecuteActions(WeaponHook.OnHit, context);
     }
 }

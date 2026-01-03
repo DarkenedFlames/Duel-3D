@@ -83,7 +83,10 @@ public class ASpawnObject : IGameAction
 
         // If what we spawn is an action source, set its owner to the Spawner's owner.
         if (instance.TryGetComponent(out IActionSource newSource))
+        {
             newSource.Owner = context.Source.Owner;
+            newSource.Magnitude = context.Source.Magnitude;
+        }
         
         // If Spawned object is ISpawnable, then set the spawned object's Spawner.
         if (instance.TryGetComponent(out ISpawnable spawned))

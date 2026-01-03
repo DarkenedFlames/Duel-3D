@@ -10,4 +10,5 @@ public interface IInputDriver
     event Action OnJumpInput;
     event Action<AbilityType> OnAbilityInput;
     event Action OnWeaponInput;
+    event Action OnMenuInput;
 }

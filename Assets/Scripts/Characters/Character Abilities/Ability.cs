@@ -5,6 +5,7 @@ public class Ability : IActionSource
     public Character Owner { get; set; }
     public Transform Transform => GameObject.transform;
     public GameObject GameObject { get; set; }
+    public float Magnitude { get; set; }
 
     public AbilityDefinition Definition { get; private set; }
     public readonly FloatCounter seconds;
@@ -15,6 +16,7 @@ public class Ability : IActionSource
     {
         Owner = owner;
         GameObject = owner.gameObject;
+        Magnitude = Rank;
 
         Definition = definition;
         seconds = new(0, 0, Definition.cooldown, true, true);
@@ -24,6 +26,7 @@ public class Ability : IActionSource
     {
         if (Rank >= Definition.maxRank) return false;
         Rank++;
+        Magnitude = Rank;
         return true;
     }
     
@@ -38,7 +41,7 @@ public class Ability : IActionSource
         if (resource.Value < Definition.resourceCost) return false;
         if (resource.Definition.resourceType == ResourceType.Health && resource.Value == Definition.resourceCost) return false;
 
-        Definition.ExecuteActions(AbilityHook.OnCast, new(){ Source = this, Target = Owner });
+        Definition.ExecuteActions(AbilityHook.OnCast, new(){ Source = this, Target = Owner, Magnitude = Rank });
 
         Owner.CharacterResources.ChangeResourceValue(
             Definition.ExpendedResource,

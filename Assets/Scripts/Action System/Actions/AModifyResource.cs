@@ -127,11 +127,13 @@ public class AModifyResource : IGameAction
         
         foreach (KeyValuePair<ResourceDefinition, List<ResourceModifier>> kvp in added)
             foreach (ResourceModifier modifier in kvp.Value)
-                SpawnModifierUI(kvp.Key, modifier, Color.blue, target.transform);
-           
+                SpawnModifierUI(kvp.Key, modifier, target.transform);
+        
+        /* For now, this just clutters the UI too much
         foreach (KeyValuePair<ResourceDefinition, List<ResourceModifier>> kvp in removed)
             foreach (ResourceModifier modifier in kvp.Value)
                 SpawnModifierUI(kvp.Key, modifier, Color.orange, target.transform);
+        */
     }
     
     void SpawnValueChangeUI(ResourceDefinition definition, float delta, Transform targetTransform)
@@ -145,12 +147,17 @@ public class AModifyResource : IGameAction
             Debug.LogError($"{spawnedUI.name} is missing {nameof(NumberIconUI)}");
             return;
         }
+
+        int displayDelta = Mathf.CeilToInt(Mathf.Abs(delta));
+
+        string text = delta > 0 ? $"+{displayDelta}" : $"-{displayDelta}";
+        Color textColor = delta > 0 ? Color.green : Color.red;
         
-        uiComponent.Initialize(delta, delta > 0 ? Color.green : Color.red, definition.Icon, NumberIconUI.FormatMode.Flat);
+        uiComponent.Initialize(definition.Icon, text, textColor);
     }
     
     
-    void SpawnModifierUI(ResourceDefinition definition, ResourceModifier modifier, Color color, Transform targetTransform)
+    void SpawnModifierUI(ResourceDefinition definition, ResourceModifier modifier, Transform targetTransform)
     {
         if (numberIconUI == null)
             return;
@@ -162,12 +169,13 @@ public class AModifyResource : IGameAction
             return;
         }
 
-        Sprite icon = modifier.Type == ResourceModifierType.Increase
-                ? definition.IncreaseIcon 
-                : definition.DecreaseIcon;
+        Sprite icon = modifier.Type switch
+        {
+            ResourceModifierType.Increase => modifier.Value >= 1 ? definition.IncreaseIcon : definition.DecreaseIcon,
+            ResourceModifierType.Decrease => modifier.Value <  1 ? definition.IncreaseIcon : definition.DecreaseIcon,
+            _ => definition.Icon,
+        };
         
-        uiComponent.Initialize(modifier.Value, color, icon, NumberIconUI.FormatMode.PercentMult);
-        // For stats
-        // uiComponent.Initialize(modifier.Value, color, definition.Icon, (NumberIconUI.FormatMode)(int)modifier.Type);
+        uiComponent.Initialize(icon, null, default);
     }
 }

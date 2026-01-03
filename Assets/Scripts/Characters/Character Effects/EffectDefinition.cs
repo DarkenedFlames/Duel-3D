@@ -21,9 +21,6 @@ public class EffectDefinition : ScriptableObject
     [Tooltip("Determines the process used for this effect's expiration.")]
     public ExpiryType expiryType = ExpiryType.LoseAllStacks;
 
-    [Tooltip("If true, the actions performed by this effect will scale with the number of stacks it has (Does not apply to OnStackGained/Lost Actions).")]
-    public bool ScalesWithStacks = true;
-
     [Tooltip("The maximum number of stacks this effect can have."), Min(1)]
     public int maxStacks = 1;
 

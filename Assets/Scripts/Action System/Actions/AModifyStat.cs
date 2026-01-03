@@ -117,14 +117,16 @@ public class AModifyStat : IGameAction
         
         foreach (KeyValuePair<StatDefinition, List<StatModifier>> kvp in added)
             foreach (StatModifier modifier in kvp.Value)
-                SpawnModifierUI(kvp.Key, modifier, Color.blue, target.transform);
-           
+                SpawnModifierUI(kvp.Key, modifier, target.transform);
+        
+        /* For now, this just clutters the UI too much
         foreach (KeyValuePair<StatDefinition, List<StatModifier>> kvp in removed)
             foreach (StatModifier modifier in kvp.Value)
                 SpawnModifierUI(kvp.Key, modifier, Color.orange, target.transform);
+        */
     }    
     
-    void SpawnModifierUI(StatDefinition definition, StatModifier modifier, Color color, Transform targetTransform)
+    void SpawnModifierUI(StatDefinition definition, StatModifier modifier, Transform targetTransform)
     {
         if (numberIconUI == null)
             return;
@@ -135,7 +137,15 @@ public class AModifyStat : IGameAction
             Debug.LogError($"{spawnedUI.name} is missing {nameof(NumberIconUI)}");
             return;
         }
-        
-        uiComponent.Initialize(modifier.Value, color, definition.Icon, (NumberIconUI.FormatMode)(int)modifier.Type);
+
+        string text = modifier.Type switch
+        {
+            StatModifierType.Flat        => modifier.Value >= 0 ? "↑" : "↓",
+            StatModifierType.PercentAdd  => modifier.Value >= 0 ? "↑" : "↓",
+            StatModifierType.PercentMult => modifier.Value >= 1 ? "↑" : "↓",
+            _ => "",
+        };
+
+        uiComponent.Initialize(definition.Icon, text, Color.black);
     }
 }

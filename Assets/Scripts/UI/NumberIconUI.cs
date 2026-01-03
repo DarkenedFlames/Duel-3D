@@ -3,14 +3,7 @@ using UnityEngine.UI;
 using TMPro;
 
 public class NumberIconUI : MonoBehaviour
-{
-    public enum FormatMode
-    {
-        Flat,
-        PercentAdd,
-        PercentMult,
-    }
-    
+{   
     [Header("References")]
     [SerializeField] TextMeshProUGUI Text;
     [SerializeField] Image Image;
@@ -30,18 +23,15 @@ public class NumberIconUI : MonoBehaviour
     Color textStartingColor;
     bool initialized = false;
 
-    public void Initialize(float number, Color textColor, Sprite icon, FormatMode formatMode)
+    public void Initialize(Sprite icon, string text = null, Color textColor = default)
     {
         seconds = new(0, 0, duration, resetToMax: false);
         mainCamera = Camera.main;
-        Text.text = FormatNumber(number, formatMode);
+        Text.text = text ?? string.Empty;
         Image.sprite = icon;
 
         textStartingColor = textColor;
-        Text.color = textColor;
-
         imageStartingColor = Image.color;
-
 
         Vector3 randomOffset = new(
             Random.Range(-horizontalRandomRange, horizontalRandomRange),
@@ -74,43 +64,18 @@ public class NumberIconUI : MonoBehaviour
         );
 
         // Fade out
-        Color textColor = textStartingColor;
-        Color imageColor = imageStartingColor;
-        
         float alpha = fadeCurve.Evaluate(seconds.Progress);
-        textColor.a = alpha;
+        Color imageColor = imageStartingColor;
         imageColor.a = alpha;
-        
-        Text.color = textColor;
         Image.color = imageColor;
-    }
-    
-    string FormatNumber(float number, FormatMode formatMode)
-    {
-        string sign;
-        string displayNumber;
-        string suffix = "";
-        switch (formatMode)
+
+        if (Text.text != string.Empty)
         {
-            case FormatMode.Flat:
-                sign = number >= 0 ? "+" : "-";
-                displayNumber = Mathf.Round(Mathf.Abs(number)).ToString();
-                break;
-            case FormatMode.PercentAdd:
-                sign = number >= 0 ? "+" : "-";
-                displayNumber = (number * 100).ToString("F2");
-                suffix = "%";
-                break;
-            case FormatMode.PercentMult:
-                sign = "x";
-                displayNumber = Mathf.Abs(number).ToString("F2");
-                break;
-            default:
-                sign = "?";
-                displayNumber = "?";
-                break;
+            Color textColor = textStartingColor;
+            textColor.a = alpha;
+            Text.color = textColor;
         }
-        
-        return $"{sign}{displayNumber}{suffix}"; 
+        else
+            Text.color = Color.clear;
     }
 }

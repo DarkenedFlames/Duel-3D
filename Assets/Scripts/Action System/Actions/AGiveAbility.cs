@@ -27,6 +27,9 @@ public class AGiveAbility : IGameAction
     [Tooltip("With Random By Family From Set, the chosen family to choose from."), SerializeField]
     AbilityFamily family;
 
+    [Tooltip("Exclude Abilities already owned by the target."), SerializeField]
+    bool excludeOwned = true;
+
 
     public void Execute(ActionContext context)
     {
@@ -43,12 +46,8 @@ public class AGiveAbility : IGameAction
             return;
         }
 
-        if (Conditions != null)
-        {
-            foreach (IActionCondition condition in Conditions)
-                if (!condition.IsSatisfied(context))
-                    return;
-        }
+        if (Conditions?.Any(c => !c.IsSatisfied(context)) == true)
+            return;
 
         if (set == null || set.definitions.Count == 0)
         {
@@ -58,13 +57,13 @@ public class AGiveAbility : IGameAction
 
         CharacterAbilities abilities = target.CharacterAbilities;
 
-        List<AbilityDefinition> ownedAbilities = abilities.abilities.Values
-            .Select(a => a.Definition)
-            .ToList();
+        List<AbilityDefinition> ownedAbilities = excludeOwned
+            ? abilities.abilities.Values.Select(a => a.Definition).ToList()
+            : new List<AbilityDefinition>();
 
         AbilityDefinition definitionToLearn = mode switch
         {
-            GiveAbilityMode.Specific => ownedAbilities.Contains(abilityDefinition) ? null : abilityDefinition,
+            GiveAbilityMode.Specific => (excludeOwned && ownedAbilities.Contains(abilityDefinition)) ? null : abilityDefinition,
             GiveAbilityMode.RandomBySlotFromSet => set.GetAbilityWeightedByType(ownedAbilities),
             GiveAbilityMode.RandomByFamilyFromSet => set.GetAbilityOfFamily(family, ownedAbilities),
             _ => null,
